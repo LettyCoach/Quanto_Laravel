@@ -1,0 +1,19 @@
+{
+    "liveSassCompile.settings.formats": [
+        {
+            "format": "expanded", 
+            "extensionName": ".css", 
+            "savePath": "/assets/css"
+        }
+    ], 
+    "liveSassCompile.settings.excludeList": [
+        
+
+        "/css/*.scss",
+        ".vscode/**"
+    ],
+    "liveSassCompile.settings.generateMap": false, 
+    "liveServer.settings.ChromeDebuggingAttachment": false, 
+    "window.zoomLevel": 0, 
+    "liveServer.settings.donotVerifyTags": true,
+}

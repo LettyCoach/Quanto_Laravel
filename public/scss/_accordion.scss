@@ -1,0 +1,45 @@
+@charset "utf-8";
+
+/*ベース*/
+.ac_toggle {
+	display: none;
+}
+.ac_Label {		/*タイトル*/
+	padding: 1em;
+	display: block;
+	color: #fff;
+	background:#019ac6;
+}
+.ac_Label::before{		/*タイトル横の矢印*/
+	content:"";
+	width: 6px;
+	height: 6px;
+	border-top: 2px solid #fff;
+	border-right: 2px solid #fff;
+	-webkit-transform: rotate(45deg);
+	position: absolute;
+	top:calc( 50% - 3px );
+	right: 20px;
+	transform: rotate(135deg);
+}
+.ac_Label,
+.ac_content {
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+	transform: translateZ(0);
+	transition: all 0.3s;
+}
+.ac_content {		/*本文*/
+	height: 0;
+	margin-bottom:10px;
+	padding:0 20px;
+	overflow: hidden;
+}
+.ac_toggle:checked + .ac_Label + .ac_content {	/*開閉時*/
+	height: auto;
+	padding:20px ;
+	transition: all .3s;
+}
+.ac_toggle:checked + .ac_Label::before {
+	transform: rotate(-45deg) !important;
+}

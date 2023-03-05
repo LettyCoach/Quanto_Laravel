@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+/* 変数 */
+$color01: #000000;
+
+$fs-normal: 400;
+$fs-bold: 700;
+
+$delay: 0.25s;
+$func: ease;
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-center-v {
+    display: flex;
+    align-items: center;
+}

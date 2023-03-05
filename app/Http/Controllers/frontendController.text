@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Answer;
+use App\Models\AnswerType;
+use App\Models\Client;
+use App\Models\ClientAnswer;
+use App\Models\Question;
+use App\Models\QuestionType;
+use App\Models\ReferralInfo;
+use App\Models\Status;
+use App\Models\Survey;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
+use PHPMailer\PHPMailer\PHPMailer;
+use Session;
+
+class frontendController extends Controller
+{
+    public function index(Request $request, $id){
+        $query = Survey::where('token', $id)->first();
+        $question = Question::where('survey_id', $query->id)->orderBy('ord')->get();
+        $answer = Answer::where('survey_id', $query->id)->get();
+        $referral = array();
+        forEach($question as $q) {
+            $refer_id = $q->referral_info;
+
+            if ($refer_id != null && !in_array($refer_id, $referral)){
+                $referral[] = (int) $refer_id;
+            }
+        }
+        forEach($answer as $a) {
+            $refer_id = $a->referral_info;
+
+            if ($refer_id != null && !in_array($refer_id, $referral)){
+                $referral[] = (int) $refer_id;
+            }
+        }
+        $referral_info = ReferralInfo::whereIn('id', $referral)->get();
+        Log::debug($referral_info);
+        $query['referral'] = $referral_info;
+        $query['questions'] = $question;
+        $query['answers'] = $answer;
+        $query['brand_logo_path'] = $query['profile_path'];
+        $user_profile_url = '';
+	    $user_profile_name = '';
+        if($query != null) {
+            $user = User::find($query->user_id);
+            if($user != null) {
+                $user_profile_url = $user->profile_url;
+	            $user_profile_name = $user->full_name;
+            }
+        }
+        $query['user_profile_url'] = $user_profile_url;
+	    $query['user_profile_name'] = $user_profile_name;
+        //return response()->json($query);
+        $session_cart = Session::get('cart');
+        
+
+        return view('frontend.index', compact('query', 'session_cart'));
+    }
+
+    public function createCart(Request $request){
+        Session::push('cart', [
+            'id' => rand(),
+            'survey_id' => 123456,
+            'products' => $request->product_name,
+            'quantity' => $request->product_q,
+            'price' => $request->product_p,
+         ]);
+
+         return redirect()->back();
+
+    }
+
+    public function checkout(Request $request){
+        
+        $session_cart = Session::get('cart');
+
+        
+        return view('frontend.checkout', compact('session_cart'));
+    }
+}

@@ -1,0 +1,344 @@
+ul li{
+    list-style: none;
+}
+
+a{
+    text-decoration: none;
+}
+body{
+    margin: 0;
+    padding: 0;
+}
+
+table{
+    border-collapse: collapse;
+}
+
+input[type="color"]{
+    height: 30px;
+    border: none;
+    outline: none;
+}
+
+.preview{
+    height: 600px;
+}
+#preview-text{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 150px;
+    height: 36px;
+    border-radius: 10px;
+    color: #fff;
+}
+
+#preview-img{
+    margin-top: 20px;
+    width: 200px;
+}
+
+.fs-profile-image{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-position: center;
+    object-fit: cover;
+}
+
+.fs-profile-image.small{
+    width: 50px;
+    height: 50px;
+}
+
+.fs-question-image{
+    width: 320px;
+    flex-grow: unset;
+}
+
+.answer{
+    width: 100%;
+}
+
+.answer .card-img-top{
+    height: 150px;
+    object-position: center;
+    object-fit: cover;
+}
+
+.card-profile-image img {
+    margin: 0;
+    max-width: 180px;
+    border-radius: 50%;
+    transition: all .2s ease-in-out;
+}
+
+.avatar img{
+    object-fit: cover;
+    object-position: center;
+}
+
+.gradient_background {
+    width: 38px;
+    height: 22px;
+    display: block;
+    border: 1px solid #333333;
+}
+
+.wrapper{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 400px;
+    margin: 50vh auto 0;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+input[type="checkbox"].switch_1{
+    font-size: 17px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 50px;
+    height: 26px;
+    background: #ddd;
+    border-radius: 3em;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+input[type="checkbox"].switch_1:checked{
+    background: #00cc00;
+}
+
+input[type="checkbox"].switch_1:after{
+    position: absolute;
+    content: "";
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    background: #fff;
+    -webkit-box-shadow: 0 0 .25em rgba(0,0,0,.3);
+    box-shadow: 0 0 .25em rgba(0,0,0,.3);
+    -webkit-transform: scale(.7);
+    transform: scale(.7);
+    left: 0;
+    -webkit-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+}
+
+input[type="checkbox"].switch_1:checked:after{
+    left: calc(100% - 1.5em);
+}
+
+#cardPayment input[type="checkbox"].switch_1:checked{
+    background: #600cff;
+}
+
+.dropQuestion {
+    display: flex;
+}
+.dropQuestion > div {
+    border: 1px solid;
+}
+.dropQuestion .dropArea {
+    width: 60%;
+}
+.dropQuestion .dropArea .question {
+    margin: 10px;
+}
+.dropQuestion .dragArea {
+    width: 40%;
+    text-align: center;
+}
+.answerDropArea {
+    border: 1px dashed;
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+}
+
+.modal.show .modal-dialog{
+    min-width: 50%;
+}
+.modal-content {
+    min-height: 500px;
+}
+#modalAddQuestion .questionRequired {
+    background-color: lightgray;
+    border-radius: 16px;
+    cursor: pointer;
+}
+#modalAddQuestion .questionRequired.selected {
+    background-color: lightblue;
+}
+#modalAddQuestion .questionType,
+#modalAddQuestion .answerType,
+#modalAddQuestion .answerOption {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin: 10px;
+}
+#modalAddQuestion .questionType > div,
+#modalAddQuestion .answerType > div,
+#modalAddQuestion .answerOption > div {
+    border: 1px solid;
+    padding: 5px;
+    margin: 10px;
+    min-width: 50px;
+}
+
+.question .row {
+    align-items: center;
+}
+
+.answer .buttonDelete,
+.answer .buttonDeleteAnswer {
+    border: none;
+    background: none;
+}
+
+#questions-container .question {
+    border: 1px solid #8e8e8e;
+    padding: 10px;
+    margin: 10px;
+}
+
+#formularSetting textArea,
+#formularSetting .row .label,
+#formularSetting .row .list
+{
+    width: 100%;
+}
+#formularSetting .row .list > div {
+    display: inline-flex;
+    padding: 10px;
+    border: 1px solid #000;
+    min-width: 40px;
+    justify-content: space-around;
+    cursor: pointer;
+}
+
+#sendMailForm input,
+#sendMailForm textarea {
+    width: 100%;
+}
+
+.embbed-html {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #898989;
+}
+
+.ac_toggle {
+  display: none;
+}
+
+.ac_Label {
+  padding: 1em;
+  display: block;
+  color: #fff;
+  background: #019ac6;
+}
+
+.ac_Label::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-top: 2px solid #fff;
+  border-right: 2px solid #fff;
+  -webkit-transform: rotate(45deg);
+  position: absolute;
+  top: calc( 50% - 3px);
+  right: 20px;
+  -webkit-transform: rotate(135deg);
+          transform: rotate(135deg);
+}
+
+.ac_Label,
+.ac_content {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.ac_content {
+  height: 0;
+  padding: 0 20px;
+  overflow: hidden;
+}
+
+.ac_toggle:checked + .ac_Label + .ac_content {
+  height: auto;
+  padding: 20px;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+}
+
+.ac_toggle:checked + .ac_Label::before {
+  -webkit-transform: rotate(-45deg) !important;
+          transform: rotate(-45deg) !important;
+}
+.clip-toast {
+    position: fixed;
+    font-size: 12px;
+    background: #00000088;
+    width: fit-content;
+    padding: 8px 16px;
+    border-radius: 4px;
+    right: 50px;
+    bottom: 50px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 300ms cubic-bezier(0.335, 0.01, 0.03, 1.36);
+    color: white;
+}
+
+.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.while-btn-add-survey-wrapper, #btn-add-survey-area {
+    margin: 0 10px 10px 10px;
+}
+
+.while-btn-add-survey {
+    width: 100%;
+    border: 1px solid #4e73df;
+    border-radius: 0.35rem;
+    height: 2px;
+    transition: all .5s ease-out;
+}
+
+.while-btn-add-survey:hover {
+    height: 2em;
+    transition: all .5s ease-out;
+}
+
+.while-btn-add-survey:focus {
+    outline: 0;
+}
+
+#btn-add-survey {
+    width: 100%;
+}
+
+.ui-state-default:last-child .while-btn-add-survey-wrapper {
+    display: none;
+}
+
+.ui-sortable-helper .while-btn-add-survey-wrapper {
+    display:none;
+}
