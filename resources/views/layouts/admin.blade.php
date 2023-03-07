@@ -42,34 +42,54 @@
             <li class="nav-item {{ Nav::isRoute('admin.orders') }}">
                 <a class="nav-link" href="{{ route('admin.orders') }}">
                     <i class="fas fa-box"></i>
-                    <span>{{ __('注文管理') }}</span></a>
+                    <span>{{ __('注文管理') }}</span>
+                </a>
             </li>
             <li class="nav-item {{ Nav::isRoute('admin.surveys') }}">
                 <a class="nav-link" href="{{ route('admin.surveys') }}">
                     <i class="fas fa-comment"></i>
-                    <span>{{ __('設問管理') }}</span></a>
+                    <span>{{ __('設問管理') }}</span>
+                </a>
             </li>
             <li class="nav-item {{ Nav::isRoute('admin.clients') }}">
                 <a class="nav-link" href="{{ route('admin.clients') }}">
                     <i class="fas fa-user-friends"></i>
-                    <span>{{ __('回答管理') }}</span></a>
+                    <span>{{ __('回答管理') }}</span>
+                </a>
+            </li>
+            <hr class="sidebar-divider my-0">
+            <li class="nav-item {{ Nav::isRoute('admin.clients') }}">
+                <a class="nav-link" href="{{ route('admin.clients') }}">
+                    <i class="fas fa-user-friends"></i>
+                    <span>{{ __('商品管理') }}</span>
+                </a>
+                <ul>
+                    <li class="nav-item {{ Nav::isRoute('admin.userProductCategories') }}">
+                        <a class="nav-link" href="{{ route('admin.userProductCategories') }}">
+                            <span>{{ __('カテゴリー ') }}</span>
+                        </a>
+                    </li>
+                </ul>
             </li>
             @if (Auth::check())
             @if (Auth::user()->isAdmin())
             <li class="nav-item {{ Nav::isRoute('admin.lps') }}">
                 <a class="nav-link" href="{{ route('admin.lps') }}">
                     <i class="fas fa-info-circle"></i>
-                    <span>{{ __('LPページ管理') }}</span></a>
+                    <span>{{ __('LPページ管理') }}</span>
+                </a>
             </li>
             <li class="nav-item {{ Nav::isRoute('admin.users') }}">
                 <a class="nav-link" href="{{ route('admin.users') }}">
                     <i class="fas fa-user-friends"></i>
-                    <span>{{ __('ユーザ管理') }}</span></a>
+                    <span>{{ __('ユーザ管理') }}</span>
+                </a>
             </li>
             <li class="nav-item {{ Nav::isRoute('admin.referralInfo') }}">
                 <a class="nav-link" href="{{ route('admin.referralInfo') }}">
                     <i class="fas fa-info-circle"></i>
-                    <span>{{ __('関連情報管理') }}</span></a>
+                    <span>{{ __('関連情報管理') }}</span>
+                </a>
             </li>
             @endif
             @endif

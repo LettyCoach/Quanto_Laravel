@@ -11,6 +11,8 @@ use App\Http\Controllers\ReferralInfoController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserProductCategoryController;
+use App\Http\Controllers\UserProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -77,6 +79,20 @@ Route::get('/admin/referralInfo/delete/{id}', [ReferralInfoController::class,'de
 Route::post('/admin/referralInfo/save', [ReferralInfoController::class,'save'])->name('admin.referralInfo.save');
 Route::get('/admin/referralInfo/edit/{id}', [ReferralInfoController::class,'edit'])->name('admin.referralInfo.edit');
 
+///User Product Category
+Route::get('/admin/userProductCategories', [UserProductCategoryController::class,'index'])->name('admin.userProductCategories');
+Route::get('/admin/userProductCategory/create', [UserProductCategoryController::class,'create'])->name('admin.userProductCategory.create');
+Route::get('/admin/userProductCategory/edit/{id}', [UserProductCategoryController::class,'edit'])->name('admin.userProductCategory.edit');
+Route::post('/admin/userProductCategory/save', [UserProductCategoryController::class,'save'])->name('admin.userProductCategory.save');
+Route::get('/admin/userProductCategory/delete/{id}', [UserProductCategoryController::class,'delete'])->name('admin.userProductCategory.delete');
+
+///User Product 
+Route::get('/admin/userProducts', [UserProductController::class,'index'])->name('admin.userProducts');
+Route::get('/admin/userProduct/create', [UserProductController::class,'create'])->name('admin.userProdut.create');
+Route::get('/admin/userProduct/delete/{id}', [UserProductController::class,'delete'])->name('admin.userProdut.delete');
+Route::post('/admin/userProduct/save', [UserProductController::class,'save'])->name('admin.userProdut.save');
+Route::get('/admin/userProduct/edit/{id}', [UserProductController::class,'edit'])->name('admin.userProdut.edit');
+
 
 //Frontend
 Route::get('/show/{id}', [frontendController::class,'index'])->name('frontend.index')->withoutMiddleware(['auth']);
@@ -101,3 +117,6 @@ Route::post('/customer/get', [frontendController::class, 'get'])->name('frontend
 
 
 Route::get('/lp/{id}', [LPController::class,'show'])->name('frontend.lp')->withoutMiddleware(['auth']);
+
+
+//product manage

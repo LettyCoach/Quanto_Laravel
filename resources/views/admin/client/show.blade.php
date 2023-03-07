@@ -124,7 +124,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="http://localhost:9016/admin/client/sendMail" method="POST" >
+                    <form action="http://192.168.113.33:9016/admin/client/sendMail" method="POST" >
                         @csrf
                         <input type="hidden" name="id" value="{{ $client->id }}">
                         <div class="row m-5">

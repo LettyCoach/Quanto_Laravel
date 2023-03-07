@@ -29,4 +29,18 @@ Route::post('v1/client/save', [\App\Http\Controllers\ApiController::class,'saveA
 Route::post('v1/client/pdf', [ApiController::class, 'pdf']);
 Route::post('v1/client/uploadImg', [ApiController::class, 'uploadImg']);
 
+Route::get('products/getByBarcode/{barcode}', function($barcode) {
+    return response()->json([
+        'name' => 'shirt',
+        'price' => '',
+        'detail' => $barcode,
+        'amount' => '100',
+        'category' => 'clothes',
+        'option' => '',
+        'other' => '',
+        'img_url' => 'uploads/questions/33/cristiano-ronaldo-juventus-2019-20_rb0vgy1nfj8o11veyj09m1hn4.jpg',
+
+    ]);
+});
+
 // @formatter:on

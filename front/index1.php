@@ -37,7 +37,7 @@
 
 <?php
 $survey_token = (isset($_GET['id'])) ? $_GET['id'] : -1;
-$server_host = "http://localhost:9016/";
+$server_host = "http://192.168.113.33:9016/";
 ?>
 
     <!-- css -->

@@ -21,11 +21,11 @@ var isSaved = false;
     }
 
     function closeModalHandler() {
-        if ($(`#question_${currentQuestionId}_wrapper`).length > 0){
+        if ($(`#question_${currentQuestionId}_wrapper`).length > 0) {
             //edit saved question
             $(`#content-${currentQuestionId}`).html($('.dropArea .question'));
             var str = $(`#label-${currentQuestionId}`).text();
-            $(`#label-${currentQuestionId}`).text(str.slice(0,str.indexOf('：')+1) + $(`[name="questions[q_${currentQuestionId}][title]"]`).val());
+            $(`#label-${currentQuestionId}`).text(str.slice(0, str.indexOf('：') + 1) + $(`[name="questions[q_${currentQuestionId}][title]"]`).val());
         } else {
             //add new question
             $('#questions-container').append(`
@@ -48,6 +48,15 @@ var isSaved = false;
                 </section>
             `);
 
+            console.log('---id', $(`[name=questions\\[q_${q_index}\\]\\[id\\]]`).val())
+            console.log('---type', $(`[name=questions\\[q_${q_index}\\]\\[type\\]]`).val())
+            console.log('---require', $(`[name=questions\\[q_${q_index}\\]\\[required\\]]`).val())
+            console.log('---limit', $(`[name=questions\\[q_${q_index}\\]\\[limit\\]]`).val())
+
+            let questions_type = $(`[name=questions\\[q_${q_index}\\]\\[type\\]]`).val();
+            let questions_require = $(`[name=questions\\[q_${q_index}\\]\\[require\\]]`).val();
+            let questions_limit = $(`[name=questions\\[q_${q_index}\\]\\[limit\\]]`).val();
+
             $(`#content-${q_index}`).append(`
             <div class="question" id="question_${q_index}">
                 <input type="hidden" class="questionID" value="${q_index}" name="questions[q_${q_index}][id]">
@@ -69,7 +78,7 @@ var isSaved = false;
                 <div class="row form-group ">
                     <label class="ml-2 pl-1 col-form-label d-flex align-items-center">質問コード</label>
                     <div class="col-md-8">
-                        <input class="question_code" type="text" value="" name="questions[q_${q_index}][question_code]" />
+                        <input class="question_code" type="text" value="werwer" name="questions[q_${q_index}][question_code]" />
                     </div>
                 </div>
                 <div class="row form-group ">
@@ -85,11 +94,10 @@ var isSaved = false;
                     <div class="col-md-8">
                         <select class="form-control questionReferralInfo" disabled name="questions[q_${q_index}][referral_info]">
                             <option value=""></option>
-                            ${
-                                referral_info.reduce((acc, ref)=> {
-                                    return acc + ` <option value="${ref.id}">${ref.name}</option>`
-                                }, "")
-                            }
+                            ${referral_info.reduce((acc, ref) => {
+                return acc + ` <option value="${ref.id}">${ref.name}</option>`
+            }, "")
+                }
                         </select>
                     </div>
                 </div>
@@ -136,7 +144,7 @@ var isSaved = false;
                     </div>
                 </div>
             </div>
-            `); 
+            `);
             $(`#label-${q_index}`).append('：' + $(`[name="questions[q_${q_index}][title]"]`).val());
         }
 
@@ -183,7 +191,7 @@ var isSaved = false;
         $('#modalReferralInfo').modal('toggle');
     });
 
-    $(".modal").on("hidden.bs.modal", function(){
+    $(".modal").on("hidden.bs.modal", function () {
         if (isSaved) {
             closeModalHandler();
             isSaved = false;
@@ -192,7 +200,7 @@ var isSaved = false;
         $("#addQuestionDropArea").html("");
     });
 
-    $("form").on("submit", function() {
+    $("form").on("submit", function () {
         $('#questions-container').find('select').prop('disabled', false);
         $('#questions-container').find('input[type="file"]').prop('disabled', false);
         $('#questions-container').find('input[type="checkbox"]').prop('disabled', false);
@@ -246,7 +254,7 @@ function onDeleteAnswerOption(id) {
 
 function onSubDelete(id) {
     result = window.confirm('本当に削除しますか？')
-    if(result) {
+    if (result) {
         $('#_sub_que_' + id).remove();
     }
 
@@ -256,7 +264,7 @@ function onSubDelete(id) {
 $(function () {
     $("input[type=file]").on('change', function () {
         var file = $(this).prop('files')[0];
-        if(file.size > 10485760) {
+        if (file.size > 10485760) {
             alert('10MB以下のファイルを選択してください。');
             return;
         }
@@ -282,9 +290,9 @@ function formularSetting() {
         <input type="hidden" name="surveyRedirect" value="admin.formularSetting">
     `);
     var title = document.getElementsByName('title');
-    if (title[0].value !== ''){
+    if (title[0].value !== '') {
         $("#survey").submit();
-    }else {
+    } else {
         alert('フォームを入力してください');
     }
 }
@@ -296,6 +304,7 @@ function formularSetting() {
 function addNewQuestion() {
     console.log(q_index)
     q_index++;
+    console.log(q_index);
     count_questions++;
 
     currentQuestionId = q_index;
@@ -350,16 +359,16 @@ function saveQuestion() {
     formData.append('json_res', true);
     $('#edit-buttons-spinner').css('display', 'block');
 
-    for(var pair of formData.entries()) {
+    for (var pair of formData.entries()) {
         var elem = document.querySelector(`#modalAddQuestion [name="${pair[0]}"]`);
         if (elem && elem.name.includes('questions') && elem.type != 'file') {
             formData.set(pair[0], elem.value);
             document.querySelector(`[name="${pair[0]}"]`).setAttribute('value', elem.value)
         }
-    }   
+    }
 
     $.ajax({
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         url: save_url,
         data: formData,
         type: 'post',
@@ -368,7 +377,7 @@ function saveQuestion() {
         processData: false,
         dataType: 'json',
         success: (data) => {
-            setTimeout(function() {
+            setTimeout(function () {
                 var today = new Date();
                 var time = today.getHours() + "時" + today.getMinutes() + "分" + today.getSeconds() + '秒に保存しました。';
                 $('#edit-buttons-save-off').css('display', 'none');
@@ -383,7 +392,7 @@ function saveQuestion() {
 function inputListener() {
     var cbox = document.querySelectorAll("input")
     for (let i = 0; i < cbox.length; i++) {
-        cbox[i].addEventListener("input", function(e) {
+        cbox[i].addEventListener("input", function (e) {
             e.target.setAttribute('value', this.value);
             e.target.value = this.value
         });
