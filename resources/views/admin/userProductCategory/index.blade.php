@@ -23,7 +23,7 @@
                     <td>{{ $u_pCategory->other }}</td>
                     <td>
                         <a class="btn btn-primary" href="{{ route('admin.userProductCategory.edit',['id'=>$u_pCategory->id]) }}">編集</a>
-                        <a class="btn btn-danger" href="{{ route('admin.userProductCategory.delete',['id'=>$u_pCategory->id]) }}">削除</a>
+                        <a class="btn btn-danger" href="javascript:deleteData('{{ route('admin.userProductCategory.delete',['id'=>$u_pCategory->id])}}')">削除</a>
                     </td>
                 </tr>
             @endforeach
@@ -33,8 +33,11 @@
     </div>
 
     <script>
-        function deleteData(id) {
-            if (window.confirm(""))
+        function deleteData(url) {
+
+            if (window.confirm("本当に削除しますか？") == false) return;
+            location.href = url;
+            
         }
     </script>
 @endsection

@@ -6,7 +6,6 @@
             @csrf
             <div class="row" style="align-items: baseline;">
                 <input id="saveSurvey" type="submit" class="btn btn-primary float-left" value="保存" style="margin-right:50px">
-                <label class="mr-3 col-form-label" for="">利用方法: </label>
             </div>
             <div class="row mt-5" >
                 <div style = "width : 100px"></div>
@@ -14,7 +13,7 @@
                     <label class="col-form-label mr-1">カテゴリ名：</label>
                 </div>
                 <div class="d-flex col-6">
-                    <input type = "text" class = "form-control" name = "name" value="{{$u_pCategory->name}}">
+                    <input type = "text" class = "form-control" name = "name" value="{{$u_pCategory->name}}" required>
                 </div>
             </div>
             <div class="row mt-3">

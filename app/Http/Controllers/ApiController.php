@@ -31,18 +31,18 @@ class ApiController extends Controller
         $question = Question::where('survey_id', $query->id)->orderBy('ord')->get();
         $answer = Answer::where('survey_id', $query->id)->get();
         $referral = array();
-        forEach ($question as $q) {
+        foreach ($question as $q) {
             $refer_id = $q->referral_info;
 
             if ($refer_id != null && !in_array($refer_id, $referral)) {
-                $referral[] = (int)$refer_id;
+                $referral[] = (int) $refer_id;
             }
         }
-        forEach ($answer as $a) {
+        foreach ($answer as $a) {
             $refer_id = $a->referral_info;
 
             if ($refer_id != null && !in_array($refer_id, $referral)) {
-                $referral[] = (int)$refer_id;
+                $referral[] = (int) $refer_id;
             }
         }
         $referral_info = ReferralInfo::whereIn('id', $referral)->get();
@@ -62,7 +62,7 @@ class ApiController extends Controller
         $query['user_profile_url'] = $user_profile_url;
         $query['user_profile_name'] = $user_profile_name;
         $survey_settings = json_decode($query->settings, true);
-        $this->surveySettingData =  $survey_settings;
+        $this->surveySettingData = $survey_settings;
         if (isset($survey_settings['displayQrcode']) && $survey_settings['displayQrcode'] == 1) {
             $clientHost = Config::get('constants.clientHost');
             $query['qr_code'] = 'data:image/png;base64,' . base64_encode(QrCode::format('png')->size(100)->generate($clientHost . '?id=' . $id));
@@ -135,9 +135,9 @@ class ApiController extends Controller
             $file_url = "";
             if (isset($files[$key])) {
                 $file = $files[$key];
-				$file->move('uploads/options', $client_id . "_" . $key . "_" . str_replace(' ','_', $file->getClientOriginalName()));
-				$file_url = 'uploads/options/' . $client_id . "_" . $key . "_" . str_replace(' ','_', $file->getClientOriginalName());
-			}
+                $file->move('uploads/options', $client_id . "_" . $key . "_" . str_replace(' ', '_', $file->getClientOriginalName()));
+                $file_url = 'uploads/options/' . $client_id . "_" . $key . "_" . str_replace(' ', '_', $file->getClientOriginalName());
+            }
             $clientOption = new ClientOption();
             $clientOption->client_id = $client_id;
             $clientOption->question_id = $key;
@@ -218,7 +218,8 @@ class ApiController extends Controller
         }
     }
 
-    public function pdf1(Request $request){
+    public function pdf1(Request $request)
+    {
         $user = User::findOrFail($request->input('user_id'));
         $survey = Survey::where('token', $request->input('id'))->first();
         $date = date('Y年n月j日', strtotime($request->input('publish')));
@@ -245,14 +246,30 @@ class ApiController extends Controller
         $question_code = $request->input('question_code');
         $parentCategory = $request->input('parentCategory');
 
-    	$pdf = PDF::loadView('pdf', compact(
-            'user', 'survey', 'date', 'expire', 'name', 'branch',
-            'img_urls', 'titles', 'prices', 'quantities', 'taxes', 'total', 'question_code', 'parentCategory'
-        ));
-    	return $pdf->stream();
+        $pdf = PDF::loadView(
+            'pdf',
+            compact(
+                'user',
+                'survey',
+                'date',
+                'expire',
+                'name',
+                'branch',
+                'img_urls',
+                'titles',
+                'prices',
+                'quantities',
+                'taxes',
+                'total',
+                'question_code',
+                'parentCategory'
+            )
+        );
+        return $pdf->stream();
     }
     //new PDFEdit
-    public function makeArray($forString){
+    public function makeArray($forString)
+    {
         $entities = [
             '<br>' => '',
             '</br>' => '',
@@ -265,18 +282,19 @@ class ApiController extends Controller
         foreach ($entities as $search => $replace) {
             $forString = str_replace($search, $replace, $forString);
         }
-        $madeArray=explode(',', $forString);
+        $madeArray = explode(',', $forString);
         return $madeArray;
     }
 
-    public function pdf(Request $request){
+    public function pdf(Request $request)
+    {
         $user = User::findOrFail($request->input('user_id'));
         $survey = Survey::where('token', $request->input('id'))->first();
         $date = date('Y年n月j日', strtotime($request->input('publish')));
         $expire = date('Y年n月j日', strtotime($request->input('expire')));
         $name = $request->input('name');
         $this->getSurvey($request, $survey->token);
-        $display =  $this->suveyData;
+        $display = $this->suveyData;
         $mark = $this->surveySettingData;
         $branch = Branch::where('user_id', $request->input('user_id'))->where('survey_id', $survey->id)->first();
         if ($branch == null) {
@@ -298,17 +316,140 @@ class ApiController extends Controller
         $question_code = $this->makeArray($request->input('question_code'));
         $parentCategory = $this->makeArray($request->input('parentCategory'));
 
-        $pdfArray=compact(
-            'user', 'survey', 'date', 'expire', 'name', 'branch',
-            'img_urls', 'titles', 'prices', 'quantities', 'taxes', 'total', 'question_code', 'parentCategory','display', 'mark'
+        $pdfArray = compact(
+            'user',
+            'survey',
+            'date',
+            'expire',
+            'name',
+            'branch',
+            'img_urls',
+            'titles',
+            'prices',
+            'quantities',
+            'taxes',
+            'total',
+            'question_code',
+            'parentCategory',
+            'display',
+            'mark'
         );
         return view('pdfEdit/index', ['pdfArray' => $pdfArray]);
- 
-    
+
+
     }
 
-    public function uploadImg(Request $request){
-        $filename = date('ymdhis').'.png';
+
+    public function makeInvoice(Request $request)
+    {
+
+        // print_r($request->json()->all());
+        // return response()->json([
+        //     'name' => 'invoice',
+        //     'pdf_url' => 'uploads/products/sample01.pdf',
+        // ]);
+
+
+
+        $user_id = 2;
+        $survey_id = '9MRO7H6RZVNVaTjsqZ7b';
+        $date = "2022/03/08";
+        $expire = "2022/03/10";
+        $invoiceUserName = "user1"; //user name
+
+        $user = User::findOrFail($user_id);
+        $survey = Survey::where('token', $survey_id)->first();
+        $date = date('Y年n月j日', strtotime($date));
+        $expire = date('Y年n月j日', strtotime($expire));
+
+        $invoiceNumber = "Q1002-38-11";
+
+        $invoiceData = $request->json()->all();
+
+        $totalMoney = 0;
+        foreach ($invoiceData as $item) {
+            $totalMoney += $item['price'] * $item['amount'];
+        }
+
+
+        // $img_urls = $request->input('img_urls');
+
+        // $titles = $request->input('titles');
+        // $prices = $request->input('prices');
+        // $quantities = $request->input('quantities');
+        // $taxes = $request->input('taxes');
+        // $total = $request->input('total');
+        // $question_code = $request->input('question_code');
+        // $parentCategory = $request->input('parentCategory');
+
+
+
+        // print_r($img_urls);
+        // print_r($user);
+        // print_r("<br><br>");
+        // print_r($survey);
+        // print_r("<br><br>");
+        // print_r($date);
+        // print_r("<br><br>");
+        // print_r($expire);
+        // print_r("<br><br>");
+        // print_r($name);
+        // print_r("<br><br>");
+        // print_r($branch);
+        // print_r("<br><br>");
+        // print_r($img_urls);
+        // print_r("<br><br>");
+        // print_r($titles);
+        // print_r("<br><br>");
+        // print_r($prices);
+        // print_r("<br><br>");
+
+        // return;
+
+        // return view(
+        //     'invoicePDF',
+        //     compact(
+        //         'user',
+        //         'invoiceUserName',
+        //         'survey',
+        //         'date',
+        //         'expire',
+        //         'invoiceNumber',
+        //         'invoiceData',
+        //         'totalMoney'
+        //     )
+        // );
+
+
+        $invoicePDF = PDF::loadView(
+            'invoicePDF',
+            compact(
+                'user',
+                'invoiceUserName',
+                'survey',
+                'date',
+                'expire',
+                'invoiceNumber',
+                'invoiceData',
+                'totalMoney'
+            )
+        );
+        return $invoicePDF->stream();
+
+        $filePath = "/uploads/products/" . gettimeofday(true) . ".pdf";
+        $invoicePDF->save(base_path() . $filePath);
+
+        return response()->json([
+            'name' => 'invoice',
+            'pdf_url' => $filePath,
+        ]);
+
+        
+    }
+
+    public function uploadImg(Request $request)
+    {
+        $filename = date('ymdhis') . '.png';
         $file = $request->file;
         $file->move('public/pdf_img', $filename);
         return $filename;

@@ -1,0 +1,32 @@
+@font-face {
+    font-family: yugothic-medium;
+    font-style: normal;
+    font-weight: normal;
+    src: url(../../storage/fonts/yugothic-medium.otf);
+}
+
+@page {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    margin-left: 200px;
+}
+
+body {
+    font-family: yugothic-medium;
+}
+
+.container {
+    width: 900px;
+    margin: 0 auto;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+}
+
+table th,
+table td {
+    word-break: break-word;
+}
