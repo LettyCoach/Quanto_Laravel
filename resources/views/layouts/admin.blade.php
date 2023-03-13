@@ -19,6 +19,9 @@
     <!-- Styles -->
     <link href="{{ asset('public/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('public/css/make_form.css') }}" rel="stylesheet">
+    <script src="{{asset('public/js/easy-number-separator.js')}}"></script>
+
 
 </head>
 
@@ -39,62 +42,111 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
+            <!-- ******************** -->
+            <!-- 注文管理 -->
             <li class="nav-item {{ Nav::isRoute('admin.orders') }}">
                 <a class="nav-link" href="{{ route('admin.orders') }}">
                     <i class="fas fa-box"></i>
-                    <span>{{ __('注文管理') }}</span>
-                </a>
+                    <span>{{ __('注文管理') }}</span></a>
             </li>
+            <!-- 設問管理 -->
             <li class="nav-item {{ Nav::isRoute('admin.surveys') }}">
                 <a class="nav-link" href="{{ route('admin.surveys') }}">
                     <i class="fas fa-comment"></i>
-                    <span>{{ __('設問管理') }}</span>
-                </a>
+                    <span>{{ __('設問管理') }}</span></a>
             </li>
+            <!-- 回答管理 -->
             <li class="nav-item {{ Nav::isRoute('admin.clients') }}">
                 <a class="nav-link" href="{{ route('admin.clients') }}">
                     <i class="fas fa-user-friends"></i>
-                    <span>{{ __('回答管理') }}</span>
-                </a>
+                    <span>{{ __('回答管理') }}</span></a>
             </li>
-            <hr class="sidebar-divider my-0">
-            <li class="nav-item {{ Nav::isRoute('admin.clients') }}">
-                <a class="nav-link" href="{{ route('admin.clients') }}">
-                    <i class="fas fa-user-friends"></i>
-                    <span>{{ __('商品管理') }}</span>
+            <!-- LPページ管理 -->
+            <li class="nav-item {{ Nav::isRoute('admin.lps') }}">
+                <a class="nav-link" href="{{ route('admin.lps') }}">
+                    <i class="fas fa-desktop"></i>
+                    <span>{{ __('LPページ管理') }}</span></a>
+            </li>
+
+            <li class="nav-item {{ Nav::isRoute('admin.userProducts') }}">
+                <a class="nav-link" href="{{ route('admin.userProducts') }}">
+                        <i class="fas fa-book"></i>
+                        <span>{{ __('商品管理') }}</span>
                 </a>
-                <ul>
-                    <li class="nav-item {{ Nav::isRoute('admin.userProductCategories') }}">
+                <ul class="" id="">
+                    <li>
                         <a class="nav-link" href="{{ route('admin.userProductCategories') }}">
-                            <span>{{ __('カテゴリー ') }}</span>
+                            <i class="fas fa-book"></i>
+                            <span>{{ __('カテゴリー') }}</span>
                         </a>
                     </li>
                 </ul>
             </li>
-            @if (Auth::check())
-            @if (Auth::user()->isAdmin())
-            <li class="nav-item {{ Nav::isRoute('admin.lps') }}">
-                <a class="nav-link" href="{{ route('admin.lps') }}">
-                    <i class="fas fa-info-circle"></i>
-                    <span>{{ __('LPページ管理') }}</span>
-                </a>
-            </li>
-            <li class="nav-item {{ Nav::isRoute('admin.users') }}">
-                <a class="nav-link" href="{{ route('admin.users') }}">
-                    <i class="fas fa-user-friends"></i>
-                    <span>{{ __('ユーザ管理') }}</span>
-                </a>
-            </li>
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+            <!-- 関連データ管理 -->
             <li class="nav-item {{ Nav::isRoute('admin.referralInfo') }}">
                 <a class="nav-link" href="{{ route('admin.referralInfo') }}">
                     <i class="fas fa-info-circle"></i>
-                    <span>{{ __('関連情報管理') }}</span>
-                </a>
+                    <span>{{ __('関連データ管理') }}</span></a>
             </li>
+            <!-- フォーム作成 -->
+            <li class="nav-item {{ Nav::isRoute('admin.users') }}">
+                <a class="nav-link" href="{{ route('admin.users') }}">
+                        <i class="fas fa-book"></i>
+                        <span>{{ __('フォーム作成') }}</span>
+                </a>
+                <ul class="" id="">
+                    <li>
+                        <a class="nav-link" href="{{ route('admin.users') }}">
+                            <i class="fas fa-book"></i>
+                            <span>{{ __('見積書') }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ route('paper.invoice') }}">
+                            <i class="fas fa-book"></i>
+                            <span>{{ __('請求書') }}<br>(インボイス)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ route('admin.users') }}">
+                            <i class="fas fa-book"></i>
+                            <span>{{ __('納品書') }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="{{ route('admin.users') }}">
+                            <i class="fas fa-book"></i>
+                            <span>{{ __('領収書') }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <!-- クライアント管理 -->
+            <li class="nav-item {{ Nav::isRoute('admin.users') }}">
+                <a class="nav-link" href="{{ route('admin.users') }}">
+                    <i class="fas fa-user-friends"></i>
+                    <span>{{ __('クライアント管理') }}</span>
+                </a>
+                <ul class="" id="">
+                    <li>
+                        <a class="nav-link" href="{{ route('admin.users') }}">
+                            <i class="fas fa-user-friends"></i>
+                        <span>{{ __('新規登録') }}</span></a>
+                    </li>
+                </ul>
+            </li>
+          
+            @if (Auth::check())
+            @if (Auth::user()->isAdmin())
+
+
             @endif
             @endif
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+
+
+ 
 
             <!-- Heading -->
             <div class="sidebar-heading">

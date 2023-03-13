@@ -16,20 +16,20 @@
             </tr>
             </thead>
             <tbody>
-            @foreach($u_pCategories as $i => $u_pCategory)
+            @foreach($listModel as $i => $model)
                 <tr>
                     <td>{{ $i + 1 }}</td>
-                    <td>{{ $u_pCategory->name }}</td>
-                    <td>{{ $u_pCategory->other }}</td>
+                    <td>{{ $model->name }}</td>
+                    <td>{{ $model->other }}</td>
                     <td>
-                        <a class="btn btn-primary" href="{{ route('admin.userProductCategory.edit',['id'=>$u_pCategory->id]) }}">編集</a>
-                        <a class="btn btn-danger" href="javascript:deleteData('{{ route('admin.userProductCategory.delete',['id'=>$u_pCategory->id])}}')">削除</a>
+                        <a class="btn btn-primary" href="{{ route('admin.userProductCategory.edit',['id'=>$model->id]) }}">編集</a>
+                        <a class="btn btn-danger" href="javascript:deleteData('{{ route('admin.userProductCategory.delete',['id'=>$model->id])}}')">削除</a>
                     </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
-        {{ $u_pCategories->links() }}
+        {{ $listModel->links() }}
     </div>
 
     <script>

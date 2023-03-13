@@ -29,6 +29,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::post('v1/client/save', [\App\Http\Controllers\ApiController::class, 'saveAnswers']);
 Route::post('v1/client/pdf', [ApiController::class, 'pdf']);
 Route::post('v1/client/uploadImg', [ApiController::class, 'uploadImg']);
+Route::post('v1/client/uploadImgWithPath', [ApiController::class, 'uploadImgWithPath']);
+
+
+Route::post('register', function(Request $request) {
+    // print_r($request->all());
+    return response()->json([
+        'status' => 'success',
+    ]);
+});
 
 Route::post('login', function (Request $request) {
 
@@ -74,7 +83,6 @@ Route::get('products/getByBarcode/{barcode}', function ($barcode) {
         'option' => '',
         'other' => '',
         'img_url' => 'uploads/answers/480/1044246_h1_001.jpg',
-
     ]);
 });
 

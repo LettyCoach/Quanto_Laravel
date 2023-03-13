@@ -21,40 +21,40 @@ class UserProductCategoryController extends Controller
 
     public function index()
     {
-        $u_pCatetories = null;
+        $listModel = null;
         if (Auth::user()->isAdmin()) {
-            $u_pCatetories = UserProductCategory::simplePaginate(15);
+            $listModel = UserProductCategory::simplePaginate(15);
         }
-        return view('admin/UserProductCategory/index', ['u_pCategories' => $u_pCatetories]);
+        return view('admin/userProductCategory/index', ['listModel' => $listModel]);
     }
 
  
     public function create()
     {
-        $u_pCategory = new UserProductCategory();
-        return view('admin/UserProductCategory/edit', ['u_pCategory' => $u_pCategory]);
+        $model = new UserProductCategory();
+        return view('admin/userProductCategory/edit', ['model' => $model]);
     }
 
 
     public function edit($id)
     {
-        $u_pCategory = UserProductCategory::find($id);
-        return view('admin/UserProductCategory/edit', ['u_pCategory' => $u_pCategory]);
+        $model = UserProductCategory::find($id);
+        return view('admin/userProductCategory/edit', ['model' => $model]);
     }
    
     public function save(Request $request)
     {
-        $u_pCategory = new UserProductCategory();
+        $model = new UserProductCategory();
         if ($request->get('id') != null) {
-            $u_pCategory = UserProductCategory::find($request->get('id'));
+            $model = UserProductCategory::find($request->get('id'));
         }
 
-        $u_pCategory->name = $request->get('name');
-        $u_pCategory->other = $request->get('other');
-        $u_pCategory->save();
+        $model->name = $request->get('name');
+        $model->other = $request->get('other');
+        $model->save();
 
         return redirect()->route('admin.userProductCategory.edit', [
-			'id' => $u_pCategory->id,
+			'id' => $model->id,
 		]);
     }
 

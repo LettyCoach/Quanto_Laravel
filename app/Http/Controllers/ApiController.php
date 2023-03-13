@@ -454,4 +454,13 @@ class ApiController extends Controller
         $file->move('public/pdf_img', $filename);
         return $filename;
     }
+    
+    public function uploadImgWithPath(Request $request)
+    {
+        $fileName = microtime(true) . ".png";
+        $filePath = $request->get('filePath');
+        $file = $request->file;
+        $file->move($filePath, $fileName);
+        return $fileName;
+    }
 }

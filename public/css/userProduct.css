@@ -1,0 +1,115 @@
+.form_pan {
+    width: 400px;
+    min-width: 360px;
+    margin: 0 auto;
+    padding: 36px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.user_product_img_pan {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.user_product_img_pan div {
+    position: relative;
+    width: 70px;
+    height: 70px;
+}
+
+.user_product_img_pan .view_image, .add_image {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    margin: 0px 0px 10px 10px;
+    border: 1px solid rgb(23, 190, 17);
+    border-radius: 4px;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+
+.user_product_img_pan .delete_image {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: -10px;
+    right: -10px;
+    border: 1px solid rgb(10, 167, 5);
+    border-radius: 10px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.user_product_img_pan .add_image {
+    cursor: pointer;
+}
+
+.user_product_catetory_pan {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.user_product_catetory_pan div {
+    border: 1px solid gray;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.user_product_catetory_pan input {
+    border: 1px solid gray;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.user_product_material_pan {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.user_product_material_pan input {
+    border: 1px solid gray;
+    min-width: 48px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.user_product_material_pan button {
+    border: 1px solid gray;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.category_pan {
+    width : 100%;
+    max-height: 480px;
+    border:none !important;
+    overflow-y: auto;
+}
+
+.category_pan div{
+    padding-left: 30px;
+    display: flex;
+    align-items: center;
+
+}
+.category_pan input{
+    width: 24px;
+    height: 24px;
+}
+
+.category_pan label{
+    font-size: 20px;
+    padding-left: 10px;
+}

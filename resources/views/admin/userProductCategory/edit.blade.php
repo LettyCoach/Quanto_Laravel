@@ -13,7 +13,7 @@
                     <label class="col-form-label mr-1">カテゴリ名：</label>
                 </div>
                 <div class="d-flex col-6">
-                    <input type = "text" class = "form-control" name = "name" value="{{$u_pCategory->name}}" required>
+                    <input type = "text" class = "form-control" name = "name" value="{{$model->name}}" required>
                 </div>
             </div>
             <div class="row mt-3">
@@ -22,10 +22,10 @@
                     <label class="col-form-label mr-1">メモ：</label>
                 </div>
                 <div class="d-flex col-6">
-                    <textarea class = "form-control" name = "other" style="height : 160px">{{$u_pCategory->other}}</textarea>
+                    <textarea class = "form-control" name = "other" style="height : 160px">{{$model->other}}</textarea>
                 </div>
             </div>
-            <input type = "hidden" name = "id" value = "{{$u_pCategory->id}}"/>
+            <input type = "hidden" name = "id" value = "{{$model->id}}"/>
         </form>
     </div>
 </div>

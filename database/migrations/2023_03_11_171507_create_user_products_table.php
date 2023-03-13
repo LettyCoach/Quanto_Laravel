@@ -22,16 +22,20 @@ class CreateUserProductsTable extends Migration
             $table->string('img_urls', 4096);
             $table->text('detail');
             $table->string('category_ids', 2048)->nullable();
-            $table->integer('color_id');
-            $table->integer('size_id');
+            $table->foreignId('color_id')
+                    ->constrained('user_product_colors')
+                    ->onUpdate('cascade');
+            $table->foreignId('size_id')
+                ->constrained('user_product_sizes')
+                ->onUpdate('cascade');
             $table->text('materials');
             $table->text('memo')->nullable();
             $table->integer('stock')->default(0);
-            $table->tinyInteger('stockLimit')->default(0);
+            $table->string('stockLimit', 16)->default("");
             $table->string('barcode', 64)->nullable()->default('');
-            $table->tinyInteger('isDisplay')->default(1);
+            $table->string('isDisplay', 16)->default("checked");
             $table->integer('user_id');
-            $table->text('other');
+            $table->text('other')->nullable();
             $table->timestamps();
         });
     }

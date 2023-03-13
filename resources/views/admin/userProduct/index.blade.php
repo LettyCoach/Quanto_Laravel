@@ -1,8 +1,14 @@
-@extends('layouts.admin', ['title' => '商品管理/カテゴリー'])
+@extends('layouts.admin', ['title' => '商品管理/カテゴリ'])
 @section('main-content')
+
+    <style>
+        td {
+            vertical-align: middle !important;
+        }
+    </style>
     <div>
         <div class="action-container">
-            <a class="btn btn-primary" href="{{ route('admin.userProductCategory.add') }}">新規追加</a>
+            <a class="btn btn-primary" href="{{ route('admin.userProduct.create') }}">新規追加</a>
         </div>
     </div>
     <div class="mt-2">
@@ -10,46 +16,47 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th>カテゴリ名</th>
+                <th></th>
+                <th>ブランド名</th>
+                <th>商品名</th>
+                <th>SKU</th>
+                <th>金額</th>
+                <th>カラー</th>
+                <th>サイズ</th>
+                <th>Barcode</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            @foreach($u_pCategories as $i => $u_pCategory)
+            @foreach($listModel as $i => $model)
                 <tr>
-                    <td>{{ $i }}</td>
-                    <td>{{ $u_pCategory }}</td>
+                    <td>{{ $i + 1 }}</td>
+                    <td><img src="{{url($model->getImageUrlFirst())}}"  style="width : 50px; height : 50px"/></td>
+                    <td>{{ $model->brandName }}</td>
+                    <td>{{ $model->name }}</td>
+                    <td>{{ $model->sku }}</td>
+                    <td>{{ $model->price }}</td>
+                    <td>{{ $model->userProductColor->name}} </td>
+                    <td>{{ $model->userProductSize->name }}</td>
+                    <td>{{ $model->barcode }}</td>
                     <td>
-                        <a class="btn btn-primary" href="{{ route('admin.userProductCategory.edit',['id'=>$u_pCategory->id]) }}">編集</a>
-                        <a class="btn btn-danger" href="{{ route('admin.userProductCategory.delete',['id'=>$u_pCategory->id]) }}">削除</a>
+                        <a class="btn btn-primary" href="{{ route('admin.userProduct.edit',['id'=>$model->id]) }}">編集</a>
+                        <a class="btn btn-danger" href="javascript:deleteData('{{ route('admin.userProduct.delete',['id'=>$model->id])}}')">削除</a>
                     </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
-        {{ $u_pCategories->links() }}
+        {{ $listModel->links() }}
     </div>
-    <div class="clip-toast">
-        URLをコピーしました。
-    </div>
-    <style>
-        .clip-toast {
-            position: fixed;
-            font-size: 12px;
-            background: #00000088;
-            width: fit-content;
-            padding: 8px 16px;
-            border-radius: 4px;
-            right: 50px;
-            bottom: 50px;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 300ms cubic-bezier(0.335, 0.01, 0.03, 1.36);
-            color: white;
+
+
+    <script>
+        function deleteData(url) {
+
+            if (window.confirm("本当に削除しますか？") == false) return;
+            location.href = url;
+            
         }
-        .open {
-            opacity: 1;
-            visibility: visible;
-        }
-    </style>
+    </script>
 @endsection
