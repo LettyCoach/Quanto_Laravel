@@ -3,9 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Invoice</title>
-    <link href="{{ asset('public/css/invoicePDF') }}" rel="stylesheet">
-    <link href="{{ asset('public/css/pdf.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/css/pdf_table.css') }}" rel="stylesheet">
 
     <style>
         @font-face{
@@ -20,25 +17,21 @@
         }
         body {
             font-family: yugothic-medium;
-            background-color:white;
+            line-height: 0.6;
         }
-        
-        table {
+        table{
             border-collapse: collapse;
             border-spacing: 0;
-            width: 100%;
         }
-
-        table th,
+        table td,
         table td {
+            font-family: yugothic-medium;
             word-break: break-word;
         }
-
     </style>
 </head>
 <body>
     
-
     <?php
         if (isset($user->settings)) { 
             $userSettings = json_decode($user->settings);
@@ -59,192 +52,204 @@
 
         $profile_url = isset($user->profile_url) ? $user->profile_url : '';
     ?>
+    
+    <div style="position: fixed; bottom: 0px; width: 100%; text-align: center; padding-top: 10px; color: #000; margin-top: 20px; text-align: center;"><span
+            style="font-size:16px; font-weight: 800;">POWERED BY</span> <span
+            style="font-size:24px;font-weight: 800;">QUANTO</span>
+    </div>
 
-        <div class="footer" style="padding-top: 10px; color: #000; margin-top: 20px; text-align: center;"><span
-                style="font-size:16px; font-weight: 800;">POWERED BY</span> <span
-                style="font-size:24px;font-weight: 800;">QUANTO</span>
-        </div>
+    <table style = "width : 100%">
+        <tr>
+            <td style="width : 30%; vertical-align : top">
+                <div><img src="{{url('public/img/pdf_logo.png')}}" style="height:50px;"></div>
+            </td>
+            <td style="width : 40%">
+                <div style="border: solid 1px #dbdbdb; text-align:center; padding : 10px; font-size:40px ">{{ $purpose }}</div>
+            </td>
+            <td style="width : 30%; vertical-align : top">
+                <div style="text-align:right; ">発行日：{{ $date }}</div>
+            </td>
+        </tr>
+    </table>
 
-        <table>
-            <td class="pro33"><img id="logo" src="{{url('public/img/pdf_logo.png')}}" style="height:50px;" /></td>
-            <td class="pro33 p2 text-center t6">{{ $purpose }}</td>
-            <td class="pro33 t1 text-center">発行日：{{ $date }}</td>
+    <table style="padding-top:24px; width : 100%">
+        <tr>
+            <td style = "width : 50%">
+                <div style="text-decoration:underline; font-size: 28px; padding-left: 16px">{{ $invoiceUserName }}　様</div><br>
+                <div style="font-size: 20px">支払方法：{{ $payment_method }}</div>
+            </td>
+            <td style="width : 20%; text-align: right; padding-right: 10px">
+                <img id="profile" alt="profile"
+                    src="{{ url($profile_url) }}"
+                    style="border: 1px solid grey; height:50px; width:50px" />
+            </td>
+            <td style = "width : 30%; font-size: 16px">
+                <div>請求書No,{{ $invoiceNumber }}</div>
+                <div>{{ $user->full_name }}</div>
+                <div>{{ $invoice }}</div>
+            </td>
+        </tr>
+    </table>
+
+    
+    <table style="padding-top:24px; width : 100%">
+        <tr>
+            <td style = "width : 15%; text-align: center; font-size: 16px; border-bottom: 1px solid grey">
+                ご請求金額
+            </td>
+            <td style = "width : 35%; text-align: center; font-size: 40px; border-bottom: 1px solid grey">
+                {{ number_format($totalMoney) }}円
+            </td>
+            <td style="width : 10%; text-align: right; padding-right: 10px; font-size: 16px">
+                住所:
+            </td>
+            <td style = "width : 25%; font-size: 16px">
+                <div>〒{{ $user->zip_code }}</div>
+                <div>{{ $user->address }}</div>
+                <div>Tel：{{ $user->phone_number }}</div>
+            </td>
+            <td style="width : 10%;">
+                <img id="profile" alt="profile"
+                    src="{{ $stamp_url }}"
+                    style="border: 1px solid grey; height:60px; width:60px" />
+            </td>
+        </tr>
+    </table>
+
+    <table style="padding-top:24px; width : 100%">
+        <tr>
+            <td style = "width : 15%; font-size: 16px; border-bottom: 2px solid blue">
+                有効期限　{{$expire}}
+            </td>
+        </tr>
+    </table>
+
+    <?php
+
+        $line_first_page = 10;
+        $line_per_page = 14;
+        $pages = 0;
+        $cntInvoiceItem = count($invoiceData);
+        $sum = 0;
+        $sumAll = 0;
+        $cnt_per_page = 0;
+
+
+
+        $addString = "";
+        if ($cntInvoiceItem > $line_first_page){
+            $pages = 1 + ceil(($cntInvoiceItem - $line_first_page) / $line_per_page);
+            $addString = "1/$pages";
+        }
+        ?>
+
+        <p style="font-size: 20px; text-align: center;">内容明細 {{$addString}}</p>
+
+        <table cellpadding="1" cellspacing="0" style="width: 100%">
+            <thead>
+                <tr>
+                    <td style = "font-size: 16px; text-align:center; width : 5%"></td>
+                    <td style = "font-size: 16px; text-align:center; width : 45%">内容</td>
+                    <td style = "font-size: 16px; text-align:center; width : 15%">単価</td>
+                    <td style = "font-size: 16px; text-align:center; width : 15%">数量</td>
+                    <td style = "font-size: 16px; text-align:center; width : 20%">金額(円)</td>
+                </tr>
+            </thead>
+            <tbody>
+            <?php
+                foreach($invoiceData as $i => $item) {
+
+                    if ($i == $line_first_page || $i > $line_first_page && ($cntInvoiceItem - $line_first_page) % $line_per_page == 0) {
+
+            ?>  
+                <tr>
+                    <td></td>
+                    <td style = "text-align : center">小計</td>
+                    <td></td>
+                    <td style = "text-align : center">{{$cnt_per_page}} </td>
+                    <td style = "text-align : right">{{ number_format($sum) }}円</td>
+                </tr>
+            </tbody>
         </table>
-                
-        <table class="mb1">
+        
+        <div style="page-break-after:always"><span style="display:none"> </span></div>
+
+        <table style = "width : 100%">
             <tr>
-                <td class="pro60">
-                    <div id="uNameDiv" class="t4 uline-grey pb-1">{{ $invoiceUserName }}　様</div>
-                    <div id="uMethodDiv" class="uline-grey pb5 text-left t2 ufit"> 支払方法：{{ $payment_method }}</div>
+                <td style="width : 30%; vertical-align : top">
+                    <div><img src="{{url('public/img/pdf_logo.png')}}" style="height:50px;"></div>
                 </td>
-                <td class="flex-between p2">
-                    <div class="p2">
-                    @if ($profile_url != "")
-                        <img id="profile" alt="profile"
-                            src="{{ url($profile_url) }}"
-                            style="border-style:solid; border-width:1px; height:50px; width:50px" />
-                    @endif
-                    </div>
-                    <div class="t1">
-                        <div>請求書No,{{ $invoiceNumber }}</div>
-                        <div>{{ $user->full_name }}</div>
-                        <div>{{ $invoice }}</div>
-                    </div>
+                <td style="width : 40%">
+                    <div style="border: solid 1px #dbdbdb; text-align:center; padding : 10px; font-size:40px ">{{ $purpose }}</div>
+                </td>
+                <td style="width : 30%; vertical-align : top">
+                    <div style="text-align:right; ">発行日：{{ $date }}</div>
                 </td>
             </tr>
         </table>
+        <hr style="border-top:2px solid blue">
+
+        <p style="font-size: 20px; text-align: center;">内容明細 2/2</p>
         
-                <div class="flex pro100">
-                    <div class="flex-between pro60">
-                        <div class="flex-end pb3">
-                            <div class="uline-grey pb1">
-                                <span class="t1">ご請求金額&nbsp;&nbsp;</span>
-                                <span class="t5 b4" style="vertical-align: 3px;">{{ number_format($totalMoney) }}円&nbsp;</span>
-                            </div>
-                        </div>
+        
+        <table cellpadding="1" cellspacing="0" style="width: 100%">
+            <thead>
+                <tr style="border-bottom: 1px solid grey">
+                    <td style = "font-size: 16px; text-align:center; width : 5%"></td>
+                    <td style = "font-size: 16px; text-align:center; width : 45%">内容</td>
+                    <td style = "font-size: 16px; text-align:center; width : 15%">単価</td>
+                    <td style = "font-size: 16px; text-align:center; width : 15%">数量</td>
+                    <td style = "font-size: 16px; text-align:center; width : 20%">金額(円)</td>
+                </tr>
+            </thead>
+            <tbody>
 
-                    </div>
-
-                    <div class="flex-between t1 pro40">
-                        <div class="flex-center p2 text-center w60">
-                            <p>住所</p>
-                        </div>
-                        <div class="flex p2">
-                            <div>
-                                <div>〒{{ $user->zip_code }}</div>
-                                <div>{{ $user->address }}</div>
-                                <div>Tel：{{ $user->phone_number }}</div>
-                            </div>
-                        </div>
-                        <div class="flex-center p3">
-                            <img alt="stamp" id="stamp" src="{{ $stamp_url }}" style="height:70px; width:70px" />
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <?php
-
-                    $line_first_page = 10;
-                    $line_per_page = 14;
-                    $pages = 0;
-                    $cntInvoiceItem = count($invoiceData);
-                    $sum = 0;
-                    $sumAll = 0;
-                    $cnt_per_page = 0;
-
-                    
-
-                    $addString = "";
-                    if ($cntInvoiceItem > $line_first_page){
-                        $pages = 1 + ceil(($cntInvoiceItem - $line_first_page) / $line_per_page);
-                        $addString = "1/$pages";
+            <?php
+                        $sum = 0;
+                        $cnt_per_page = 0;
                     }
-                ?>
 
 
+                    $price = $item['price'];
+                    $amount = $item['amount'];
+                    $money = $price * $amount;
+                    $sum += $money;
+                    $sumAll += $money;
+                    $cnt_per_page += $amount;
+            ?>
+            <tr style="border-bottom: 1px solid grey">
+                <td style="align-items:center">
+                    <img alt="product" src="{{ url($item['imgUrl']) }}" style="width:50px; height;50px" />
+                </td>
+                <td>{{$item['name']}}</td>
+                <td style = "text-align : right"><span>{{number_format($price)}}円</span></td>
+                <td style = "text-align : center">{{$amount}}</td>
+                <td style = "text-align : right">{{ number_format($money) }}円</td>
+            </tr>
+            <?php
+                }
+            ?>
 
-                <div>
-                    <div class="t1"> 有効期間 <input id="eDate" class="input2 w200" value="2023年3月10日"></div>
-                    <hr style="border-top:2px solid blue">
-                    <p class="text-center t2">内容明細 {{$addString}}</p>
-                </div>
-                <div id="main_table">
-                    <table cellpadding="1" cellspacing="0" class="main-table">
-                        <thead>
-                            <tr>
-                                <th class="th1" style = "width : 50%">内容</th>
-                                <th class="th2" style = "width : 15%">単価</th>
-                                <th class="th3" style = "width : 15%">数量</th>
-                                <th class="th4" style = "width : 20%">金額(円)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                            foreach($invoiceData as $i => $item) {
+                <tr style="border-bottom: 1px solid grey;">
+                    <td style=" height : 54px"></td>
+                    <td style = "text-align : center">合計</td>
+                    <td></td>
+                    <td style = "text-align : center">{{$cnt_per_page}} </td>
+                    <td style = "text-align : right">{{ number_format($sumAll) }}円</td>
+                </tr>
+                <tr style="padding-top: 16px; font-size: 12px; border-bottom: 1px solid grey">
+                    <td style=" height : 54px"></td>
+                    <td style = "text-align : center">消費税(8%対象)</td>
+                    <td ></td>
+                    <td ></td>
+                    <td style = "text-align : right"> (内税){{ number_format($sumAll * 0.08) }}円</td>
+                </tr>
+            </tbody>
+        </table>
 
-                                if ($i == $line_first_page || $i > $line_first_page && ($cntInvoiceItem - $line_first_page) % $line_per_page == 0) {
+        <textarea style="width:100%; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-top:20px; font-size: 20px;"
+        placeholder="(備考)"></textarea>
 
-                        ?>  
-                                
-                            <tr>
-                                <td class="td-r1">小計</td>
-                                <td></td>
-                                <td class="td-r3">{{$cnt_per_page}} </td>
-                                <td class="td-r4">{{ number_format($sum) }}円</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div style="page-break-after:always"><span style="display:none"></span></div>
-            
-                
-                <div class="flex-between mb1">
-                    <div class="pro33"><img id="logo" src="{{url('public/img/pdf_logo.png')}}" style="height:50px;" /></div>
-                    <div class="pro33 flex-center text-center p2 text-center t6 b8">{{ $purpose }}</div>
-                    <div class="pro33 text-right t1 b2 text-center">発行日：{{ $date }}</div>
-                </div>
-                <div>
-                    <hr style="border-top:2px solid blue">
-                    <p class="text-center t2">内容明細 2/2</p>
-                </div>
-                <div id="main_table2">
-                    <table cellpadding="1" cellspacing="0" class="main-table">
-                        <thead>
-                            <tr>
-                                <th class="th1" style = "width : 50%">内容</th>
-                                <th class="th2" style = "width : 15%">単価</th>
-                                <th class="th3" style = "width : 15%">数量</th>
-                                <th class="th4" style = "width : 20%">金額(円)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-
-                        <?php
-                                    $sum = 0;
-                                    $cnt_per_page = 0;
-                                }
-
-
-                                $price = $item['price'];
-                                $amount = $item['amount'];
-                                $money = $price * $amount;
-                                $sum += $money;
-                                $sumAll += $money;
-                                $cnt_per_page += $amount;
-                        ?>
-                        <tr>
-                            <td class="td-a1" style="align-items:center">
-                                <img alt="product" src="{{ url($item['imgUrl']) }}" class="td-a1-d2-img" />
-                                {{$item['name']}}
-                            </td>
-                            <td style = "text-align : right"><span>{{number_format($price)}}円</span></td>
-                            <td class="td-a3">{{$amount}}</td>
-                            <td class="td-a4">{{ number_format($money) }}円</td>
-                        </tr>
-                        <?php
-                            }
-                        ?>
-
-                            <tr>
-                                <td class="td-r1">合計</td>
-                                <td></td>
-                                <td class="td-r3">{{$cnt_per_page}} </td>
-                                <td class="td-r4">{{ number_format($sumAll) }}円</td>
-                            </tr>
-                            <tr>
-                                <td class="td-t1" id="reduce_pro_td">消費税(8%対象)</td>
-                                <td></td>
-                                <td class="td-t3"> </td>
-                                <td class="td-t4"> (内税){{ number_format($sumAll * 0.08) }}円</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            
-            <textarea style="width:100%; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-top:20px; font-size: 20px;"
-                placeholder="(備考)"></textarea>
 </body>
 
 </html>

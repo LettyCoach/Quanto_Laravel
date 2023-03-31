@@ -4,6 +4,7 @@
     <style>
         td {
             vertical-align: middle !important;
+            text-align : center;
         }
     </style>
     <div>
@@ -16,17 +17,19 @@
             <thead>
             <tr>
                 <th>No</th>
-                <th></th>
+                <th style="width : 80px"></th>
                 <th>ブランド名</th>
                 <th>商品名</th>
                 <th>SKU</th>
                 <th>金額</th>
                 <th>カラー</th>
                 <th>サイズ</th>
+                <th>素材</th>
                 <th>Barcode</th>
                 <th></th>
             </tr>
-            </thead>
+       
+        </thead>
             <tbody>
             @foreach($listModel as $i => $model)
                 <tr>
@@ -38,6 +41,7 @@
                     <td>{{ $model->price }}</td>
                     <td>{{ $model->userProductColor->name}} </td>
                     <td>{{ $model->userProductSize->name }}</td>
+                    <td>{{ $model->getMaterialsText() }}</td>
                     <td>{{ $model->barcode }}</td>
                     <td>
                         <a class="btn btn-primary" href="{{ route('admin.userProduct.edit',['id'=>$model->id]) }}">編集</a>

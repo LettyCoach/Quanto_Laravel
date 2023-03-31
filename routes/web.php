@@ -10,6 +10,7 @@ use App\Http\Controllers\RandomController;
 use App\Http\Controllers\ReferralInfoController;
 use App\Http\Controllers\StripePaymentController;
 use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\PaperController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProductCategoryController;
 use App\Http\Controllers\UserProductController;
@@ -133,6 +134,3 @@ Route::post('/customer/get', [frontendController::class, 'get'])->name('frontend
 
 
 Route::get('/lp/{id}', [LPController::class, 'show'])->name('frontend.lp')->withoutMiddleware(['auth']);
-
-
-//product manage

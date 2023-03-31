@@ -1,8 +1,8 @@
 <?php
 use \App\Http\Controllers\ApiController;
+use \App\Http\Controllers\AppApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Mail;
 
 /*
  * |--------------------------------------------------------------------------
@@ -20,73 +20,44 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // @formatter:off
-// Route::get('callback/stripe/oauth', [\App\Http\Controllers\ApiController::class, 'callbackStripeOauth']);
+Route::get('callback/stripe/oauth', [\App\Http\Controllers\ApiController::class, 'callbackStripeOauth']);
 
-// Route::get('v1/survey/get/{id}', [\App\Http\Controllers\ApiController::class, 'getSurvey']);
-// Route::get('v1/answers/get/{id}', [\App\Http\Controllers\ApiController::class, 'getAnswer']);
-// Route::get('v1/answers/get-list/{qid}', [\App\Http\Controllers\ApiController::class, 'getAnswers']);
-// Route::get('v1/questions/get/{id}', [\App\Http\Controllers\ApiController::class, 'getQuestion']);
-// Route::post('v1/client/save', [\App\Http\Controllers\ApiController::class, 'saveAnswers']);
+Route::get('v1/survey/get/{id}', [\App\Http\Controllers\ApiController::class, 'getSurvey']);
+Route::get('v1/answers/get/{id}', [\App\Http\Controllers\ApiController::class, 'getAnswer']);
+Route::get('v1/answers/get-list/{qid}', [\App\Http\Controllers\ApiController::class, 'getAnswers']);
+Route::get('v1/questions/get/{id}', [\App\Http\Controllers\ApiController::class, 'getQuestion']);
+Route::post('v1/client/save', [\App\Http\Controllers\ApiController::class, 'saveAnswers']);
 Route::post('v1/client/pdf', [ApiController::class, 'pdf']);
 Route::post('v1/client/uploadImg', [ApiController::class, 'uploadImg']);
 Route::post('v1/client/uploadImgWithPath', [ApiController::class, 'uploadImgWithPath']);
 
 
-Route::post('register', function(Request $request) {
-    // print_r($request->all());
-    return response()->json([
-        'status' => 'success',
-    ]);
-});
+//Auth
+Route::post('login', [AppApiController::class, 'login']);
+Route::post('register', [AppApiController::class, 'register']);
+Route::post('getVerifyCode', [AppApiController::class, 'getVerifyCode']);
+Route::post('verifyCode', [AppApiController::class, 'verifyCode']);
+Route::post('resetPassword', [AppApiController::class, 'resetPassword']);
+Route::post('getUserList', [AppApiController::class, 'getUserList']);
 
-Route::post('login', function (Request $request) {
+//product
+Route::post('products/getList', [AppApiController::class, 'getProductList']);
+Route::post('products/getByBarcode', [AppApiController::class, 'getProductByBarcode']);
 
-    // print_r($request->json()->all());
-    return response()->json([
-        'id' => 2,
-        'name' => 'Papiko',
-        'full_name' => 'サンプル株式会社',
-        'email' => 'laneandyumiko@gmail.com',
-        'zip_code' => '157-0399',
-        'address' => '東京都渋谷区渋谷1-1-1',
-        'phone_number' => '03-0123-4567',
-        'profile_url' => 'https://quanto3.com/uploads/users/Free-Logo-Maker-Get-Custom-Logo-Designs-in-Minutes-Looka_(11).png',
-    ]);
-});
+//SaveItem
+Route::post('products/getSaveItemList', [AppApiController::class, 'getSaveItemList']);
+Route::post('products/addSaveItem', [AppApiController::class, 'addSaveItem']);
 
-Route::get('password/reset', function () {
+//Invoice Create
+Route::post('products/makeInvoice', [AppApiController::class, 'makeInvoice']);
 
-    Mail::send([], [], function ($message) {
-        $message->to('laneandyumiko@gmail.com')
-            ->subject('Reset Password')
-            ->setBody('<h1>0123</h1>', 'text/html');
-    });
-});
+//Follow 
+Route::post('buyer/getUserList', [AppApiController::class, 'getUserListByBuyer_id']);
+Route::post('buyer/setFollow', [AppApiController::class, 'setSupplyerFollow']);
+Route::post('buyer/unsetFollow', [AppApiController::class, 'unsetSupplyerFollow']);
 
-Route::post('products/makeInvoice', function (Request $request) {
-
-    // print_r($request->json()->all());
-    return response()->json([
-        'name' => 'invoice',
-        'pdf_url' => 'uploads/products/sample01.pdf',
-    ]);
-});
-
-Route::get('products/getByBarcode/{barcode}', function ($barcode) {
-    return response()->json([
-        'name' => 'shirt',
-        'price' => '50',
-        'detail' => $barcode,
-        'barcode' => $barcode,
-        'amount' => '100',
-        'category' => 'clothes',
-        'option' => '',
-        'other' => '',
-        'img_url' => 'uploads/answers/480/1044246_h1_001.jpg',
-    ]);
-});
-
-Route::post('products/makeInvoiceTest', [ApiController::class, 'makeInvoice']);
+Route::post('supplyer/getFollowedList', [AppApiController::class, 'getFollowListBySupplyer_id']);
+Route::post('supplyer/setFollowAccept', [AppApiController::class, 'setFollowAccept']);
 
 
 // @formatter:on

@@ -83,6 +83,9 @@
 
                     ?>
                     <td><?php foreach($answer->answerDetail as $ans) {
+
+                        if ($ans == null) continue;
+
                         ?>
                         <div>
                             <?php echo $ans->title; ?>
@@ -114,6 +117,12 @@
             </thead>
         </table>
     </div>
+
+    <?php
+        $title = "";
+
+        if(json_decode($client, true)['survey'] != null) $title = "json_decode($client, true)['survey']['title']";
+    ?>
     <div id="sendMailForm" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -145,12 +154,13 @@
                                 $content .= "<p><span>郵便番号: </span><span>$client->zip_code</span></p>\n";
                                 $content .= "<p><span>住所: </span><span>$client->address</span></p>\n";
                                 $content .= "<p><span>電話番号: </span><span>$client->phone_number</span></p>\n";
-                                $content .= "<p><span>設問: </span><span>".json_decode($client, true)['survey']['title'] ."</span></p>\n";
+                                $content .= "<p><span>設問: </span><span>" . $title . "</span></p>\n";
                                 $content .= "<table><thead><th>質問</th><th>回答</th></thead>\n<tbody>";
                                 foreach (json_decode($answers, true) as $answer) {
                                     $q_item = $answer['question']['title'];
                                     $a_item = '';
                                     foreach($answer['answerDetail'] as $ans) {
+                                        if ($ans == null) continue;
                                         $a_item .= "<div>".$ans['title'] ."-". $ans['value']."</div>\n";
                                     }
 

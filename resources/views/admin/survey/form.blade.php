@@ -295,10 +295,10 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
                 @php
                 $next_questions = [['id'=>0, 'title'=>'']];
                 foreach ($questions as $q_item){
-                    if ($question->ord < $q_item->ord){
-                        $next_questions[] = ['id' => $q_item->id, 'title'=>$q_item->title];
+                if ($question->ord < $q_item->ord){
+                    $next_questions[] = ['id' => $q_item->id, 'title'=>$q_item->title];
                     }
-                }
+                    }
                     $q_index = $question->id;
 
                     $q_settings = json_decode($question->settings, true);
@@ -655,55 +655,55 @@ $adminHost = \Illuminate\Support\Facades\Config::get('constants.adminHost');
             }
             $iFrameSource = htmlspecialchars('<iFrame src="' . $clientHost . '?id=' . $survey['token'] . '" width="500px" height="90%" name="quanto3" frameborder="0"></iFrame><style>iFrame[name=quanto3]{position:fixed;' . $widget_align_css . 'bottom:0;margin:25px;border-radius:25px;z-index:10000;}@media(max-width:550px){iFrame[name=quanto3]{width:100%;margin:0 0 25px 0;}}</style>');
             $fullSource = htmlspecialchars('
-                <div class="quanto-embbed">
-                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
-                    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-                    <link rel="stylesheet" href="' . $clientHost . 'assets/css/style.css">
-                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.js"></script>
-                    <header id="header" class="header">
-                        <div class="site-header">
-                            <div class="site-header-inner">
-                                <div class="brand-wrapper">
-                                    <div id="brand" class="brand"><img src="" alt="" /></div>
-                                    <p id="brand-name" class="brand-name"></p>
-                                </div>
-                                <div id="brand-desc" class="brand-desc"></div>
-                                <div id="title-desc" class="title-desc">
-                                    <h1 id="title" class="title"><span></span></h1>
-                                    <p id="description" class="description"></p>
-                                </div>
-                                <div id="btn-start" class="btn-start">START</div>
-                                <div id="progress-row" class="progress-row">
-                                    <div class="point"></div>
-                                    <div id="progress-inner" class="progress-inner"></div>
-                                    <div class="point"></div>
+                        <div class="quanto-embbed">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="' . $clientHost . 'assets/css/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/5.0.0/math.js"></script>
+                       <header id="header" class="header">
+                            <div class="site-header">
+                                <div class="site-header-inner">
+                                    <div class="brand-wrapper">
+                                        <div id="brand" class="brand"><img src="" alt="" /></div>
+                                        <p id="brand-name" class="brand-name"></p>
+                                    </div>
+                                    <div id="brand-desc" class="brand-desc"></div>
+                                    <div id="title-desc" class="title-desc">
+                                        <h1 id="title" class="title"><span></span></h1>
+                                        <p id="description" class="description"></p>
+                                    </div>
+                                    <div id="btn-start" class="btn-start">START</div>
+                                    <div id="progress-row" class="progress-row">
+                                        <div class="point"></div>
+                                        <div id="progress-inner" class="progress-inner"></div>
+                                        <div class="point"></div>
+                                    </div>
                                 </div>
                             </div>
+                        </header>
+                        <div id="content" class="content">
+                            <form action="' . $adminHost . '/api/v1/client/save" method="POST">
+                                <input type="hidden" name="survey_id" value="' . $survey['token'] . '" />
+                                <div id="survey" class="survey">
+                                </div>
+
+                            </form>
                         </div>
-                    </header>
-                    <div id="content" class="content">
-                        <form action="' . $adminHost . '/api/v1/client/save" method="POST">
-                            <input type="hidden" name="survey_id" value="' . $survey['token'] . '" />
-                            <div id="survey" class="survey">
-                            </div>
+                        <script type="text/javascript">
+                            var survey_id = "' . $survey['token'] . '";
+                        </script>
+                        <script src="' . $clientHost . '/assets/js/script.js"></script>
+                        <script type="text/javascript">
+                            $(document).ready(function(){
+                                $(\'[data-toggle="popover"]\').popover();
+                            });
+                        </script>
+                        </div>
 
-                        </form>
-                    </div>
-                    <script type="text/javascript">
-                        var survey_id = "' . $survey['token'] . '";
-                    </script>
-                    <script src="' . $clientHost . '/assets/js/script.js"></script>
-                    <script type="text/javascript">
-                        $(document).ready(function(){
-                            $(\'[data-toggle="popover"]\').popover();
-                        });
-                    </script>
-                </div>
-
-            ');
+                    ');
 
         ?>
             <div>

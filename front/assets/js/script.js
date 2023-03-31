@@ -5,7 +5,7 @@ function newline(str) {
     return str;
 }
 
-var serverHost = 'https://quanto3.com';
+var serverHost = 'http://localhost:9009';
 var currentTab = 0;
 var formular = '';
 var prefix = '';
@@ -97,10 +97,13 @@ $(document).ready(function() {
     url = serverHost + '/api/v1/survey/get/' + survey_id;
     var request = $.get(url, function(data) {
         /* settingsを事前にJSON.parseしておく */
+
         var settings = data.settings;
+
         if (settings != null && settings != '') {
             var settingArr = JSON.parse(settings);
             data.settings = settingArr;
+            console.log(data.settings);
             formular = settingArr['formular'] ? decodeURIComponent(settingArr['formular']) : null;
             prefix = settingArr['prefix'];
             if (settingArr.linkUrl) {

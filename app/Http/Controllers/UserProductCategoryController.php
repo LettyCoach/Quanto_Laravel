@@ -21,14 +21,15 @@ class UserProductCategoryController extends Controller
 
     public function index()
     {
+
         $listModel = null;
-        if (Auth::user()->isAdmin()) {
-            $listModel = UserProductCategory::simplePaginate(15);
-        }
+        // if (Auth::user()->isAdmin()) {
+        $listModel = UserProductCategory::simplePaginate(15);
+        // }
         return view('admin/userProductCategory/index', ['listModel' => $listModel]);
     }
 
- 
+
     public function create()
     {
         $model = new UserProductCategory();
@@ -41,7 +42,7 @@ class UserProductCategoryController extends Controller
         $model = UserProductCategory::find($id);
         return view('admin/userProductCategory/edit', ['model' => $model]);
     }
-   
+
     public function save(Request $request)
     {
         $model = new UserProductCategory();
@@ -54,8 +55,8 @@ class UserProductCategoryController extends Controller
         $model->save();
 
         return redirect()->route('admin.userProductCategory.edit', [
-			'id' => $model->id,
-		]);
+            'id' => $model->id,
+        ]);
     }
 
     public function delete($id)

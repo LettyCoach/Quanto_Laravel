@@ -113,3 +113,27 @@
     font-size: 20px;
     padding-left: 10px;
 }
+
+
+.form-group {
+    width : 100%;
+    max-height: 480px;
+    border:none !important;
+    overflow-y: auto;
+}
+
+.form-group div{
+    padding-left: 30px;
+    display: flex;
+    align-items: center;
+
+}
+.form-group input{
+    width: 24px;
+    height: 24px;
+}
+
+.form-group label{
+    font-size: 20px;
+    padding-left: 10px;
+}

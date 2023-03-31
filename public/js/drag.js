@@ -75,7 +75,7 @@ function onNewField( a_index, id, currentQ) {
             <label>税込価格</label>
             <input class="form-control" name="questions[q_${currentQ}][answers][a_${index}][value]" placeholder="税込価格" id="answer_${currentQ}_${index}_value" oninput="handleInputText('answer_${currentQ}_${index}_value',this.value)" />
             <label>税率</label>
-            <select class="form-control" name="questions[q_${currentQ}][answers][a_${a_index}][tax]" id="answer_${currentQ}_${a_index}_tax" oninput="handleInputText('answer_${currentQ}_${a_index}_tax',this.value)">
+            <select class="form-control" name="questions[q_${currentQuestionId}][answers][a_${a_index}][tax]" id="answer_${currentQuestionId}_${a_index}_tax" oninput="handleInputText('answer_${currentQuestionId}_${a_index}_tax',this.value)">
             <option value=""></option>
             <option value="8">8%</option>
             <option value="10">10%</option>
@@ -91,8 +91,6 @@ function onNewField( a_index, id, currentQ) {
             <input onchange="loadFile(event, '.modal-body .show_img_${currentQ}_${index} img')" accept="image/png, image/gif, image/jpeg" type="file" class="form-control mb-2" name="questions[q_${currentQ}][answers][a_${index}][file_url]">
         </div>
     `);
-
-    inputListener();
 }
 
 function onEdit(id) {
@@ -140,8 +138,6 @@ function onEdit(id) {
     for (var k in questionData) {
         $(`#modalAddQuestion #${k}`).val(questionData[k]);
     }
-
-    inputListener();
 
 }
 
@@ -224,8 +220,6 @@ function renderAnswer(answer) {
             </div>
         </div>
         `;
-
-    inputListener();
 
 }
 
@@ -378,8 +372,10 @@ function submitFormular(){
     $('#formularSetting').submit();
 }
 
-function handleInputText(event, value) {
-    event.target.setAttribute("value", value);
+function handleInputText(key, value) {
+    if (value) {
+        questionData[key] = value;
+    }
 }
 
 $(".sortableArea").sortable();

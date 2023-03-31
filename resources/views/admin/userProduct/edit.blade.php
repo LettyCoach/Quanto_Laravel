@@ -135,7 +135,6 @@
         </form>
     </div>
 
-    
     <!-- Modal -->
     <div class="modal fade" id="modalAddQuestion" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document" style="">
@@ -148,7 +147,10 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="col-form-label"></label>
+                        <div>
+                            <input type="checkbox" id = "categoryCheckAll" class="switch_2">
+                            <label class="col-form-label"  id = "categoryLabelAll">All Categories</label>
+                        </div>
                     </div>
                     <div class="dropQuestion">
                         <div class="category_pan">
@@ -159,8 +161,6 @@
                             </div>
                             @endforeach
                         </div>
-                        
-                        
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -272,12 +272,18 @@
 
     viewModal = () => {
 
+        let cnt = 0;
         $('[id^="categoryCheck_"]').each(function() {
+            cnt ++;
             $(this).prop('checked', false);
         });
 
         for (let i = 0; i < listCategoryId.length; i ++) {
             $('#categoryCheck_' + listCategoryId[i]).prop('checked', true);
+        }
+
+        if (cnt == listCategoryId.length) {
+            $('#categoryCheckAll').prop('checked', true);
         }
 
         if ($('#modalAddQuestion').modal) {
@@ -298,6 +304,8 @@
         formatText();
     }
 
+    
+
     makeCategoryPan = () => {
 
         let rlt = "";
@@ -310,6 +318,21 @@
         $('.user_product_catetory_pan').html(rlt);
 
     }
+
+    $(document).on('click', '#categoryCheckAll', function() {
+        $('[id^="categoryCheck_"]').each(function() {
+            $(this).prop('checked', true);
+        });
+    });
+
+    $(document).on('change', '[id^="categoryCheck_"]', function() {
+        $('#categoryCheckAll').prop('checked', true);
+        $('[id^="categoryCheck_"]').each(function() {
+            if ($(this).prop('checked') == false) {
+                $('#categoryCheckAll').prop('checked', false);
+            }
+        });
+    });
 
     $(document).on('click', '#btnSaveCategory', function() {
         listCategoryId = [];

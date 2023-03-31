@@ -68,6 +68,7 @@
                     <span>{{ __('LPページ管理') }}</span></a>
             </li>
 
+            <hr class="sidebar-divider">
             <li class="nav-item {{ Nav::isRoute('admin.userProducts') }}">
                 <a class="nav-link" href="{{ route('admin.userProducts') }}">
                         <i class="fas fa-book"></i>

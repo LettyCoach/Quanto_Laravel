@@ -13,7 +13,7 @@
                     <label class="col-form-label">質問タイプと回答を選んでください:</label>
                 </div>
                 <div class="dropQuestion">
-                    <div class="dropArea" ondrop="dropQuestion(event)" ondragover="allowDrop(event)" id="addQuestionDropArea">rrtrtyryt</div>
+                    <div class="dropArea" ondrop="dropQuestion(event)" ondragover="allowDrop(event)" id="addQuestionDropArea"></div>
                     <div class="dragArea">
                         <div>質問を選択ください</div>
                         <div class="questionType">
@@ -53,7 +53,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                <button type="button" class="btn btn-primary" id="btnAddQuestion">追加</button>
+                <button type="button" class="btn btn-primary" id="btnAddQuestion">追加213123</button>
             </div>
             <input type="hidden" id="container-id">
         </div>
@@ -65,12 +65,8 @@
         </div>
         <div class="d-flex" style="justify-content:center;">
             <div id="edit-buttons-spinner" style="display: none;" class="loadingio-spinner-ellipsis-tf43i957w4"><div class="ldio-fweak2gcswn">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+            <div></div><div></div><div></div><div></div><div></div>
+            </div></div>
         </div>
         <div id="edit-buttons-time" class="d-flex" style="justify-content:center; display: none; color: white; z-index: 1000">
             
