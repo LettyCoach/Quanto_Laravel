@@ -19,12 +19,12 @@
             <tr>
                 <th>ID</th>
                 <th style="width : 80px"></th>
-                <th>ブランド名</th>
-                <th>商品名</th>
-                <th>カテゴリー</th>
-                <th>オプション<br>（カラー/サイズ/素材）</th>
+                <th style="width: 20%">ブランド名</th>
+                <th style="width: 30%">商品名</th>
+                <th style="width: 12%">カテゴリー</th>
+                <th style="width: 20%">オプション<br>（カラー/サイズ/素材）</th>
                 <th>単価</th>
-                <th></th>
+                <th style="width: 16%"></th>
             </tr>
        
         </thead>
