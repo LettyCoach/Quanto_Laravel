@@ -97,9 +97,9 @@ function onEdit(id) {
     isModified = true;
     currentQuestionId = $(`#questions-container #${id}`).find('.questionID').val();
 
-    $('#edit-buttons-save-off').css('display', 'block');
-    $('#edit-buttons-save-on').css('display', 'none');
-    $('#edit-buttons-spinner').css('display', 'none');
+    // $('#edit-buttons-save-off').css('display', 'block');
+    // $('#edit-buttons-save-on').css('display', 'none');
+    // $('#edit-buttons-spinner').css('display', 'none');
     $('#edit-buttons-time').html('');
     
     $('#modalAddQuestion').modal('toggle');

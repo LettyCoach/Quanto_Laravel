@@ -1,4 +1,4 @@
-<!-- Modal -->
+﻿<!-- Modal -->
 <div class="modal fade" id="modalAddQuestion" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -52,16 +52,16 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
-                <button type="button" class="btn btn-primary" id="btnAddQuestion">追加213123</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 15px; width: 100px; height: 30px; font-size: 12px; font-weight: bold; color: grey; background: #e3e3e3;border: 0;">キャンセル</button>
+                <button type="button" class="btn btn-primary" id="btnAddQuestion" style="background: rgb(227, 113, 203); border-radius: 15px; width: 80px; height: 30px; font-weight: bold;font-size: 12px; border: 0;">保存</button>
             </div>
             <input type="hidden" id="container-id">
         </div>
     </div>
     <div class="edit-buttons-layout">
-        <div class="d-flex" style="justify-content:center;">
-            <img id="edit-buttons-save-off" style="width: 100px;" src="{{ asset('public/img/save_off.png') }}" onclick="saveQuestion()">
-            <img id="edit-buttons-save-on" style="width: 100px; display: none; " src="{{ asset('public/img/save_on.png') }}" onclick="saveQuestion()">
+        <div class="d-flex" style="display:none;justify-content:center;">
+            <img id="edit-buttons-save-off" style="display:none; width: 100px;" src="{{ asset('public/img/save_off.png') }}" onclick="saveQuestion()">
+            <img id="edit-buttons-save-on" style="display:none; width: 100px; display: none; " src="{{ asset('public/img/save_on.png') }}" onclick="saveQuestion()">
         </div>
         <div class="d-flex" style="justify-content:center;">
             <div id="edit-buttons-spinner" style="display: none;" class="loadingio-spinner-ellipsis-tf43i957w4"><div class="ldio-fweak2gcswn">
@@ -79,8 +79,8 @@ var save_url = "{{url('admin/survey/save')}}";
 <style>
 .edit-buttons-layout {
     position: fixed;
-    top: 30px;
-    right: 80px;
+    top: 15%;
+    right: 40%;
     width: 300px;
     height: 40px;
     z-index: 1000;
@@ -105,8 +105,8 @@ var save_url = "{{url('admin/survey/save')}}";
 }
 .ldio-fweak2gcswn div {
   position: absolute;
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   transform: translate(80px,80px) scale(1);
   background: #00eeff;

@@ -769,11 +769,12 @@ class frontendController extends Controller
         $resJson = mb_convert_encoding($resJson, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
         $res = json_decode($resJson, true);
 
-        $prefecture = $res['results'][0]['address1'];
-        $city = $res['results'][0]['address2'];
-        $street = $res['results'][0]['address3'];
-        $zipcode = $res['results'][0]['zipcode'];
-
+        if ($res['results']) {
+            $prefecture = $res['results'][0]['address1'];
+            $city = $res['results'][0]['address2'];
+            $street = $res['results'][0]['address3'];
+            $zipcode = $res['results'][0]['zipcode'];
+        }
 
         if (empty($prefecture)) {
             $postcodeError = '郵便番号が正しくありません。';
@@ -806,6 +807,8 @@ class frontendController extends Controller
             ->where('type', 1)
             ->where('status', 1)->first();
 
+        $addresses = Address::where('customer_id', $customer->id)->where('status', 1)->get();
+
         $search = $request->get('search');
         $range = $request->get('range');
 
@@ -834,7 +837,7 @@ class frontendController extends Controller
             $orders->appends($request->all());
         }
 
-        return view('frontend.mypage', compact('query' , 'customer', 'address' , 'orders'));
+        return view('frontend.mypage', compact('query' , 'customer', 'address' , 'addresses', 'orders'));
     }
 
     public function get(Request $request)
@@ -876,6 +879,167 @@ class frontendController extends Controller
         return response()->json([
             'status' => $status,
             'customer_id' => $customer_id,
+        ]);
+    }
+
+    public function updateCustomer(Request $request)
+    {
+        $status = 400;
+        $emailError = '';
+        $passwordError = '';
+        $retypeError = '';
+        $nameError = '';
+        $kanaError = '';
+
+        if (filter_var($request->email, FILTER_VALIDATE_EMAIL)) {
+            if (Customer::where('id', '<>', $request->customer_id)->where('email', $request->email)->first()) {
+                $emailError = '既に登録されているメールアドレスです。<br>';
+                $status = 400;
+            } else {
+                $status = 200;
+            }
+        } else {
+            $emailError = 'メールアドレスが正しくありません。';
+            $status = 400;
+        }
+
+        if ($status == 200) {
+            $customer = Customer::find($request->customer_id);
+            if ($customer->address != $request->address) {
+                $address = Address::where('customer_id', $request->customer_id)->where('type', 0)->first();
+                if ($address) {
+                    $address->type = 1;
+                    $address->save();
+                }
+            }
+
+            $customer->email = $request->email;
+            $customer->postcode = $request->postcode;
+            $customer->address = $request->address;
+            $customer->phone = $request->phone;
+            $response = $customer->save();
+            if ($response) {
+                $status = 200;
+            } else {
+                $status = 400;
+            }
+        }
+
+        return response()->json([
+            'status' => $status,
+            'emailError' => $emailError,
+            'passwordError' => $passwordError,
+            'retypeError' => $retypeError,
+            'nameError' => $nameError,
+            'kanaError' => $kanaError,
+        ]);
+    }
+
+    public function saveAddress(Request $request)
+    {
+        $status = 400;
+        $emailError = '';
+        $passwordError = '';
+        $retypeError = '';
+        $nameError = '';
+        $kanaError = '';
+
+        $customer = Customer::find($request->customer_id);
+        $address = new Address;
+        if ($request->address_id and $request->address_id != 0) {
+            $address = Address::find($request->address_id);
+        }
+
+        $address->customer_id = $customer->id;
+        $address->phone = $request->phone;
+        $address->name = $request->address_name;
+        $address->kana = $request->address_kana;
+        $address->postcode = $request->address_postcode;
+        $address->address = $request->address;
+        $address->address2 = $request->address2;
+        $address->address3 = $request->address3;
+        $address->type = $request->type;
+        $address->status = 1;
+        $response = $address->save();
+        if ($status = 200 and $response) {
+            $status = 200;
+        } else {
+            $status = 400;
+        }
+
+        if ($request->type == 0) {
+            $customer->postcode = $request->address_postcode;
+            $customer->address = $request->address . ' ' . $request->address2 . ' ' . $request->address3;
+            $customer->phone = $request->phone;
+            $customer->name = $request->address_name;
+            $customer->save();
+        }
+
+        return response()->json([
+            'status' => $status,
+            'emailError' => $emailError,
+            'passwordError' => $passwordError,
+            'retypeError' => $retypeError,
+            'nameError' => $nameError,
+            'kanaError' => $kanaError,
+        ]);
+    }
+
+    public function deleteAddress(Request $request)
+    {
+        $status = 400;
+        $emailError = '';
+        $passwordError = '';
+        $retypeError = '';
+        $nameError = '';
+        $kanaError = '';
+
+        $response =  Address::find($request->address_id)->delete();
+        if ($status = 200 and $response) {
+            $status = 200;
+        } else {
+            $status = 400;
+        }
+
+        return response()->json([
+            'status' => $status,
+            'emailError' => $emailError,
+            'passwordError' => $passwordError,
+            'retypeError' => $retypeError,
+            'nameError' => $nameError,
+            'kanaError' => $kanaError,
+        ]);
+    }
+
+    public function saveSameAddress(Request $request) {
+        $status = 400;
+        $emailError = '';
+        $passwordError = '';
+        $retypeError = '';
+        $nameError = '';
+        $kanaError = '';
+
+        $address =  Address::find($request->address_id);        
+        $customer = Customer::find($request->customer_id);
+        if ($address and $customer) {
+            $status = 200;
+            $customer->postcode = $address->postcode;
+            $customer->address = $address->address . ' ' . $address->address2 . ' ' . $address->address3;
+            $customer->phone = $address->phone;
+            $customer->name = $address->name;
+            $customer->save();
+
+            $address->type = 0;
+            $address->save();
+        }
+
+        return response()->json([
+            'status' => $status,
+            'emailError' => $emailError,
+            'passwordError' => $passwordError,
+            'retypeError' => $retypeError,
+            'nameError' => $nameError,
+            'kanaError' => $kanaError,
         ]);
     }
 }

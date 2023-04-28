@@ -19,13 +19,11 @@ var isModified = false;
         document.getElementById('saveSurvey').addEventListener('click', () => isModified = false);
     }
 
-    $('#btnAddQuestion').click(function () {
-        
+    $('#btnAddQuestion').click(async function () {
         if ($(`#question_${currentQuestionId}_wrapper`).length > 0){
-
         } else {
             //add new question
-            $('#questions-container').append(`
+            await $('#questions-container').append(`
                 <div class="ui-state-default">
                     <div id="question_${q_index}_wrapper">
                         <div class="while-btn-add-survey-wrapper">
@@ -37,7 +35,7 @@ var isModified = false;
                 </div>
             `);
 
-            $(`#question_${q_index}_wrapper`).append(`
+            await $(`#question_${q_index}_wrapper`).append(`
                 <section class="accordion">
                     <input id="block-${q_index}" type="checkbox" class="ac_toggle">
                     <label id="label-${q_index}" class="ac_Label" for="block-${q_index}">質問${count_questions}</label>
@@ -45,7 +43,7 @@ var isModified = false;
                 </section>
             `);
 
-            $(`#content-${q_index}`).append(`
+           await  $(`#content-${q_index}`).append(`
             <div class="question" id="question_${q_index}">
                 <input type="hidden" class="questionID" value="${q_index}" name="questions[q_${q_index}][id]">
                 <input type="hidden" value="1" name="questions[q_${q_index}][type]">
@@ -134,27 +132,35 @@ var isModified = false;
                 </div>
             </div>
             `); 
-            $(`#label-${q_index}`).append('：' + $(`[name="questions[q_${q_index}][title]"]`).val());
+            await $(`#label-${q_index}`).append('：' + $(`[name="questions[q_${q_index}][title]"]`).val());
         }
-        //edit saved question
-        $(`#content-${currentQuestionId}`).html($('.dropArea .question'));
-        console.log($(`#content-${currentQuestionId}`).html());
-        var str = $(`#label-${currentQuestionId}`).text();
-        $(`#label-${currentQuestionId}`).text(str.slice(0,str.indexOf('：')+1) + $(`[name="questions[q_${currentQuestionId}][title]"]`).val());
-        // $('#questions-container').append($('.dropArea .question'));
-        $('#questions-container').find('button').not('.while-btn-add-survey').css("display", "none");
-        $('#questions-container').find('.buttonEdit').css("display", "block");
-        $('#questions-container').find('.buttonDelete').css("display", "block");
-        $('#questions-container').find('input').prop('readonly', true);
-        $('#questions-container').find('input[type="file"]').prop('disabled', true);
-        $('#questions-container').find('input[type="checkbox"]:not(.ac_toggle)').prop('disabled', true);
-        $('#questions-container').find('select').prop('disabled', true);
-        $('#questions-container textarea').prop('readonly', true)
-        currentQuestionId = null;
-        // orderCount = null;
-        // lastQuestionId = null;
 
-        $("#modalAddQuestion .close").click();
+        $('#edit-buttons-spinner').css('display', 'block');
+        //edit saved question
+        await setTimeout(function() {
+             $(`#content-${currentQuestionId}`).html($('.dropArea .question'));
+            var str = $(`#label-${currentQuestionId}`).text();
+             $(`#label-${currentQuestionId}`).text(str.slice(0,str.indexOf('：')+1) + $(`[name="questions[q_${currentQuestionId}][title]"]`).val());
+              $('#questions-container').find('button').not('.while-btn-add-survey').css("display", "none");
+              $('#questions-container').find('.buttonEdit').css("display", "block");
+              $('#questions-container').find('.buttonDelete').css("display", "block");
+              $('#questions-container').find('input').prop('readonly', true);
+              $('#questions-container').find('input[type="file"]').prop('disabled', true);
+              $('#questions-container').find('input[type="checkbox"]:not(.ac_toggle)').prop('disabled', true);
+              $('#questions-container').find('select').prop('disabled', true);
+              $('#questions-container textarea').prop('readonly', true)
+             currentQuestionId = null;
+             // orderCount = null;
+             // lastQuestionId = null;
+             
+             
+             // return;
+     
+              $("#modalAddQuestion .close").click();
+              $("#saveSurvey").click();
+              $('#edit-buttons-spinner').css('display', 'none');
+        }, 1500);
+        // $('#questions-container').append($('.dropArea .question'));
 
     });
 
@@ -332,8 +338,12 @@ function addNewQuestion() {
 }
 
 function saveQuestion() {
-    const form = document.getElementById("survey");
-    let formData = new FormData(form);
+    alert('start');
+    var sform = document.forms.survey;
+
+    console.log(sform);
+    // return;
+    let formData = new FormData(sform);
     formData.append('json_res', true);
     $('#edit-buttons-spinner').css('display', 'block');
 
@@ -354,7 +364,9 @@ function saveQuestion() {
                 $('#edit-buttons-save-on').css('display', 'block');
                 $('#edit-buttons-spinner').css('display', 'none');
                 $('#edit-buttons-time').html(time);
+                alert(time);
             }, 1000)
         }
     });
+
 }

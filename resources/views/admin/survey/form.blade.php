@@ -9,6 +9,7 @@ let count_questions = questions.length;
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{{ asset('public/js/survey.js') }}"></script>
+<script src="{{ asset('public/js/jquery.validate.min.js') }}"></script>
 {{-- <script src="{{ asset('public/js/drag.js') }}"></script>--}}
 <script src="{{ asset('public/js/lib/clipboard.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -50,9 +51,29 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
 ?>
 @section('main-content')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" integrity="sha512-mR/b5Y7FRsKqrYZou7uysnOdCIJib/7r5QeJMFvLNHNhtye3xJp1TdJVPLtetkukFn227nKpXD9OjUc09lx97Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<div class="modal fade show" id="timeModal" style="z-index : 1000000; display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 300px; min-height: 100px;top: 70px; left: 40%;border-radius: 20px;background: rgb(241,242, 255); box-shadow: 5px 5px 10px 1px grey; padding-bottom: 10px;">
+                <div class="time-items">
+                    <div id = "save_line" class="save-line"
+                    style="color: blueviolet; font-weight: bold;   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 18px;  text-align: center;  padding: 25px 5px; padding-bottom: 10px;">
+                        
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center" style="border-top: 0; padding-bottom: 5px;">
+                    <button class="btn btn-primary m-auto" 
+                            style="background-color: rgb(105, 55, 255); font-size: 14px; width: 80px; height: 30px; border-radius: 15px; box-shadow: 2px 2px 5px 1px grey;padding: 3px;" 
+                            id="save_close" onclick="fadeSaveTime();">閉じる</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<iframe name="myResult" style="width : 100%; height: 320px; display: none;"></iframe>
 <div class="row">
     <div class="col-8">
-        <form class="" id="survey" method="post" action="{{ route('admin.survey.save') }}" enctype="multipart/form-data">
+    <p id="retOp"></p>
+        <form class="" id="survey" method="post" target= "myResult" action="{{ route('admin.survey.save') }}" enctype="multipart/form-data">
             @csrf
             <div class="row" style="align-items: baseline;">
                 <input id="saveSurvey" type="submit" class="btn btn-primary float-left" value="保存" style="margin-right:50px">
@@ -252,7 +273,7 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
                 <label class="col-md-2 col-form-label" for="">ユーザにメールを送ります: </label>
                 <div class="col-md-4 d-flex align-items-center">
                     <?php $autoSendMail = isset($surveySettings->autoSendMail) ? $surveySettings->autoSendMail : 0; ?>
-                    <input type="checkbox" class="switch_1" {{ $autoSendMail == 1 ? 'checked' : ''; }} name="autoSendMail" />
+                    <input type="checkbox" class="switch_1" {{ $autoSendMail == 1 ? 'checked' : '' }} name="autoSendMail" />
                 </div>
                 <label class="col-md-2 col-form-label" for="">画面上の配置: </label>
                 <div class="col-md-4 d-flex align-items-center">
@@ -370,7 +391,7 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
                                         <div class="row form-group">
                                             <label class="ml-2 pl-1 col-form-label d-flex align-items-center">数量の選択</label>
                                             <div class="col-md-8">
-                                                <input type="checkbox" class="switch_1" disabled {{ $selectQuantity == 1 ? 'checked' : ''; }} name="questions[q_{{$q_index}}][select_quantity]" id="questionSelectQuantity_{{$q_index}}">
+                                                <input type="checkbox" class="switch_1" disabled {{ $selectQuantity == 1 ? 'checked' : '' }} name="questions[q_{{$q_index}}][select_quantity]" id="questionSelectQuantity_{{$q_index}}">
                                             </div>
                                         </div>
                                         <div class="row show_img{{$q_index}}">
@@ -576,7 +597,7 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
                     +
                 </button>
             </div>
-    </div>
+        </div>
     @endforeach
     @endif
 </div>
@@ -733,6 +754,24 @@ $adminHost = \Illuminate\Support\Facades\Config::get('constants.adminHost');
 <div class="clip-toast">
     ソースをコピーしました。
 </div>
+
+
+<script>
+
+    var pathGlobe = "";
+    function viewResult(path, saved) {   
+        document.getElementById("save_line").innerHTML = saved;
+        document.getElementById("timeModal").style.display="block";
+        pathGlobe = path;
+    }
+
+    function fadeSaveTime(){
+        document.getElementById("timeModal").style.display="none";
+        if (pathGlobe.length > 0) {
+            location.href = pathGlobe;
+        }
+    }
+</script>
 <style>
     .clip-toast {
         position: fixed;

@@ -86,6 +86,7 @@ class SurveyController extends Controller
         $members = Member::where('user_id', Auth::user()->id)->get();
         $payment_methods = PaymentMethod::where('user_id', Auth::user()->id)->get();
 		$questions = [];
+		$saveTime="noTime";
 		return view('admin/survey/form', compact(
 			'survey', 'statuses', 'question_types',
 			'answer_types', 'answer_options', 'referral_info',
@@ -106,12 +107,17 @@ class SurveyController extends Controller
         $purposes = Purpose::where('user_id', Auth::user()->id)->get();
         $members = Member::where('user_id', Auth::user()->id)->get();
         $payment_methods = PaymentMethod::where('user_id', Auth::user()->id)->get();
+		$saveTime = "";
+		if($request->get('saveTime') == "saved"){
+			$saveTime = date('H時i分s秒に保存しました。');
+		}
 
 		return view('admin/survey/form', compact(
 			'survey', 'statuses', 'question_types',
 			'answer_types', 'answer_options',
 			'questions', 'answers', 'referral_info',
-			'purposes', 'members', 'payment_methods'
+			'purposes', 'members', 'payment_methods',
+			'saveTime'
 		));
 	}
 
@@ -123,7 +129,6 @@ class SurveyController extends Controller
 
 	public function save(Request $request)
 	{
-
 
         $survey_settings = [];
 
@@ -189,17 +194,20 @@ class SurveyController extends Controller
 
 
 
-
 		
 		$question_ids = [];
 		if($questions != null) {
-
+			
 			$q_keys = array_keys($questions);
+
 			$ord = 0;
 			$question_setting = [];
 			foreach ($q_keys as $key) {
 
 				$item = $questions[$key];
+
+				if ($key == 'q_100000') continue;
+
 				$question;
 				if (isset($item['id'])) {
 					$question = Question::find($item['id']);
@@ -232,9 +240,10 @@ class SurveyController extends Controller
 				if(isset($item['answer_align'])) {
 					$question->answer_align = $item['answer_align'];
 				}
-                $question_setting['question_code'] = $item['question_code'] ? $item['question_code'] : '';
-                $question_setting['required'] = $item['required'] ? $item['required'] : 'true';
-                $question_setting['limit'] = $item['limit'] ? $item['limit'] : 0;
+
+                $question_setting['question_code'] = isset($item['question_code']) ? $item['question_code'] : '';
+                $question_setting['required'] = isset($item['required']) ? $item['required'] : 'true';
+                $question_setting['limit'] = isset($item['limit']) ? $item['limit'] : 0;
                 $question_setting['answer_option'] = isset($item['answer_option']) ? $item['answer_option'] : 0;
 				$question_setting['selectQuantity'] = isset($item['select_quantity']) ? 1 : 0;
 				$question_setting['parentCategory'] = isset($item['parent_category']) ? $item['parent_category'] : '';
@@ -363,13 +372,29 @@ class SurveyController extends Controller
         }
 
 		// return "";
-		if ($request->get('json_res')) {
-            return response()->json([ "success" => true ]);
-        }
+		// if ($request->get('json_res')) {
+        //     return response()->json([ "success" => true ]);
+        // }
 
-        return redirect()->route('admin.survey.edit', [
-            'id' => $survey->id,
-        ]);
+		// return "<script> parent.location.href= '" . route('admin.survey.edit', ['id' => $survey->id, 'saveTime' => "saved"]) . "'</script>";
+			
+		$pTime =strtoupper(date('a h時i分'));
+		$saved = "quanto3の更新作業を <br>". $pTime ."に保存しました。";
+
+		$path = "";
+
+		if ($request->get('id') == null) {
+			$path = route('admin.survey.edit', ['id' => $survey->id]);
+		}
+
+		return "<script> parent.viewResult('" . $path . "', '" . $saved . "') </script>";
+		// return route('admin.survey.edit', [
+        //     'id' => $survey->id, 'saveTime' => "saved"
+        // ]);
+		//return view(route('admin.survey.edit', ['id' => $survey->id, 'saveTime' => "saved"]));
+		// return redirect()->route('admin.survey.edit', [
+        //     'id' => $survey->id, 'saveTime' => "saved",
+        // ]);
 	}
 
 	public function getSurvey(Request $request, $id){

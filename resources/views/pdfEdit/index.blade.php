@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 	<meta charset="utf-8">
 	<title>PDF Editor</title>
@@ -17,12 +17,20 @@
         $count=count($pdfArray['img_urls']);
         $totalPrice=0;
         $totalCount=0;
+
+        if (isset($pdfArray['user']['settings'])) { 
+            $userSettings = json_decode($pdfArray['user']['settings'], true);
+            $invoice = isset($userSettings['invoice']) ? $userSettings['invoice'] : '';
+            $stamp_url = isset($userSettings['stamp_url']) ? $userSettings['stamp_url'] : '';
+        } else { $invoice = ''; ; $stamp_url = ''; } 
+        $profile_url = $pdfArray['user']['profile_url'] != null ? $pdfArray['user']['profile_url'] : '';
+        $dis_data=isset($answers)?json_encode($answers): '';
     ?>    
 <div class="page-layout">
     <div class="footer" style="padding-top: 10px; color: #000; margin-top: 20px; text-align: center;"><span style="font-size:16px; font-weight: 800;">POWERED BY</span> <span  style="font-size:24px;font-weight: 800;">QUANTO</span></div>
     <div style="width:100%; display: flex; justify-content: flex-end;">
         <div class="fix-btns flex-center" style="z-index: 10">
-            <div class="btn-grad" id="btn_print"><img id="btn_pr_img" src="{{ asset('public/img/print1.png') }}" style="height:30px;"></div>
+            <div class="btn-grad" id="btn_print"><img id="btn_pr_img" src="{{ asset('public/img/ic_print.png') }}" style="height:30px;"></div>
             <select class="select-resize" id="select_resize">
                 <option value="8">ページに 8行</option>
                 <option value="9">ページに 9行</option>
@@ -51,12 +59,12 @@
                 </div>
                 <div class="flex-between p2">
                     <div class="p2">
-                        <img id="profile" alt="profile" src="{{ $pdfArray['user']['profile_url'] }}" style="border-style:solid; border-width:1px; height:50px; width:50px" />
+                        <img id="profile" alt="profile" src="{{ $profile_url }}" style="border-style:solid; border-width:1px; height:50px; width:50px" />
                     </div>
                     <div class="t1">
                         <div>請求書No,Q{{ $pdfArray['user']['id'] + 1000 }}-{{ $pdfArray['survey']['id']}}-{{ $pdfArray['branch']['count'] }}</div>
                         <input id="company" class="input2 w200" value="{{ $pdfArray['user']['full_name'] }}">
-                        <div id="invoice">{{ json_decode($pdfArray['user']['settings'],true)['invoice']}}</div>
+                        <div id="invoice">{{ $invoice}}</div>
                     </div>
                 </div>
             </div>
@@ -83,7 +91,7 @@
                     <div class="flex-center p3">
                         <img
                             alt="stamp" id="stamp"
-                            src="{{ asset(json_decode($pdfArray['user']['settings'],true)['stamp_url']) }}" 
+                            src="{{ $stamp_url }}" 
                             style="height:70px; width:70px" />
                     </div>
                 </div>
@@ -147,16 +155,16 @@
             <div class="flex mb1">
                 <div class="pro60">
                     <div id="uNameDiv" class="t4 uline-grey pb-1"><input id="uName" class="input9 text-right" value="{{$pdfArray['name']}}"> 様</div>
-                    <div id="uMethodDiv" class="uline-grey pb5 text-left t2 ufit"> 支払方法：<input id="uMethod" class="input1 w200" value="{{ json_decode($pdfArray['user']['settings'],true)['payment_method']}}"></div>
+                    <div id="uMethodDiv" class="uline-grey pb5 text-left t2 ufit"> 支払方法：<input id="uMethod" class="input1 w200" value="{{ $pdfArray['mark']['payment_method']}}"></div>
                 </div>
                 <div class="flex-between p2">
                     <div class="p2">
-                        <img id="profile" alt="profile" src="{{ $pdfArray['user']['profile_url'] }}" style="border-style:solid; border-width:1px; height:50px; width:50px" />
+                        <img id="profile" alt="profile" src="{{ $profile_url }}" style="border-style:solid; border-width:1px; height:50px; width:50px" />
                     </div>
                     <div class="t1">
                     <div>請求書No,Q{{ $pdfArray['user']['id'] + 1000 }}-{{ $pdfArray['survey']['id']}}-{{ $pdfArray['branch']['count'] }}</div>
                         <input id="company" class="input2 w200" value="{{ $pdfArray['user']['full_name'] }}">
-                        <div id="invoice">{{ json_decode($pdfArray['user']['settings'],true)['invoice']}}</div>
+                        <div id="invoice">{{ $invoice}}</div>
                     </div>
                 </div>
             </div>
@@ -183,7 +191,7 @@
                     <div class="flex-center p3">
                         <img
                             alt="stamp" id="stamp"
-                            src="{{ asset(json_decode($pdfArray['user']['settings'],true)['stamp_url']) }}"
+                            src="{{ $stamp_url }}"
                             style="height:70px; width:70px" />
                     </div>
                 </div>

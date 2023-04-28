@@ -41,6 +41,7 @@
             @endforeach
             </tbody>
         </table>
+        {{ $papers->links() }}
     </div>
     
     <script>

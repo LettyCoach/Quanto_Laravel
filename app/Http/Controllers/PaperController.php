@@ -50,6 +50,7 @@ class PaperController extends Controller
         $date = strval(date('Y-m-d'));
         $expire = strval(date('Y-m-d',strtotime('+1 day')));
         return view('paper/invoiceNew', [
+			'edit_id'=>0,
 			'cDate'=>$date,
 			'eDate'=>$expire,
 			'answers'=>$answers,
@@ -58,7 +59,7 @@ class PaperController extends Controller
 
 	public function invoiceSave(Request $request){
 		$user_id=Auth::user()->id;
-		$subject='myInvoice';
+		$subject=$request->invoiceName;
 		$category='invoice';
 		$content=$request->file;
 
@@ -69,11 +70,13 @@ class PaperController extends Controller
 			$paper->category = $category;
 			$paper->content = $content;
 			$paper->save();
-			return "Invoice Saved!!!";
+			$edit_id=$paper->id;
+			return ['edit_id'=>$edit_id,'inv_state'=>'add'];
 		}
 		else{
-			Paper::where('id',$request->paper_id)->update(['content'=>$content]);
-			return "Invoice Updated!!!";
+			Paper::where('id',$request->paper_id)->update(['content'=>$content,'subject'=>$subject]);
+			$edit_id=$request->paper_id;
+			return ['edit_id'=>$edit_id,'inv_state'=>'edit'];
 		}
 	}
 
@@ -86,20 +89,16 @@ class PaperController extends Controller
 
 	public function invoiceDelete(Request $request, $id){
 		Paper::where('id', $id)->delete();
-		$papers = Paper::where('user_id',Auth::user()->id)->get();
+		$papers = Paper::where('user_id',Auth::user()->id)->paginate(15);
 		$user=User::where('id',Auth::user()->id)->first();
-		//dd($user);
 		$userName=$user->name;
 		return view('paper/invoice',['papers' => $papers, 'userName'=>$userName,]);
 		
 	}
 
 	public function invoice(Request $request){
-		
-
-		$papers = Paper::where('user_id',Auth::user()->id)->get();
+		$papers = Paper::where('user_id',Auth::user()->id)->paginate(15);
 		$user=User::where('id',Auth::user()->id)->first();
-		//dd($user);
 		$userName=$user->name;
 		return view('paper/invoice',['papers' => $papers, 'userName'=>$userName,]);
 	}

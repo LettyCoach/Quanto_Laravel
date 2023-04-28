@@ -1,9 +1,9 @@
-@extends('layouts.admin')
+@extends('layouts.paper')
 
 @section('main-content')
     <!-- Page Heading -->
-    <h1 class="h3 mb-4 text-gray-800">{{ __('請求書作成') }}</h1>
-
+    <div class="" 
+    style="background-color: rgb(105, 55, 255);line-height: 30px; border-radius: 15px; width: 120px; height: 30px; text-align:center; color: white;font-size: 14px; position:fixed; left: 250px;top: 80px;">{{ __('請求書作成') }}</div>
     @if ($errors->any())
         <div class="alert alert-danger border-left-danger" role="alert">
             <ul class="pl-4 my-2">
@@ -30,10 +30,12 @@
 
     <div class="modal fade show" id="previewModal" style="display: block;">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
+            <div class="modal-content" 
+            style="width: 520px; top: 200px; height: 300px; left: 20%; border-radius: 20px; min-height: 320px;background: rgb(241,242, 255); box-shadow: 5px 5px 10px 1px grey; padding-bottom: 10px;">
+                <div class="modal-header" style="border-bottom: 0; padding: 0;">
+                    <button type="button" class="close" data-dismiss="modal" style="opacity:1;">
+                        <img src="{{ asset('public/img/ic_modal_close.png') }}" 
+                        style="position: absolute; top: -33px; right: -30px; width: 40px; height: 40px; ">
                     </button>
                 </div>
                 <div class="first-items">
@@ -42,7 +44,7 @@
                         <div class="first-content"><input type="date" id="first_cDate" name="publish" value="{{$cDate}}"></div>
                     </div>
                     <div class="first-line">
-                        <div class="first-label">有効期限の設定</div>
+                        <div class="first-label">有効日の設定</div>
                         <div class="first-content"><input type="date" id="first_eDate" name="expire" value="{{$eDate}}"></div>
                     </div>
                     <div class="first-line">
@@ -58,39 +60,83 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer justify-content-center">
-                    <button id="first_ok" class="btn btn-primary m-auto" style="background-color: #6962FF; font-size: 24px;">確認</button>
+                <div class="modal-footer justify-content-center" style="border-top: 0; padding: 0;">
+                    <button id="first_ok" class="btn btn-primary m-auto" 
+                    style="background-color: rgb(105, 55, 255); font-size: 16px; height: 35px; width: 80px; border-radius: 10px; box-shadow: 5px 5px 10px 1px grey; opacity:1;">登録</button>
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal fade show" id="saveModal" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 500px; min-height: 200px;top: 150px; left: 40%;border-radius: 20px;background: rgb(241,242, 255); box-shadow: 5px 5px 10px 1px grey; padding-bottom: 10px;">
+                <div class="save-items">
+                    <div class="save-line">
+                        請求書を 保存しました
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center" style="border-top: 0;">
+                    <button class="btn btn-primary m-auto" 
+                            style="background-color: rgb(105, 55, 255); font-size: 20px; width: 100px; height: 40px; border-radius: 15px; box-shadow: 5px 5px 10px 1px grey;" 
+                            id="save_close" onclick="javascript:change_toEdit('{{route('paper.invoice.edit',['id'=>0])}}')">閉じる</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade show" id="linkModal" style="display: none;">
+        <div class="link-modal-content" style="position:fixed; width: 800px; min-height: 100px;bottom: 50px; left: 30%;">
+            <div class="link-items">
+                <input type='text' class="link-line-input" value="https://">
+            </div>
+            <div class="link-modal-buttons">
+                <button class="btn btn-primary m-auto" style=" font-size: 16px; width: 60px;" id="link_close">追加</button>
+                <button class="btn btn-secondary m-auto" style=" font-size: 16px; width: 60px;" id="link_close">取消</button>
+            </div>
+        </div>
+    </div>
             <div style="width:100%; display: flex; justify-content: center;">
-                <div class=" top-bar" style="z-index: 10">
-                    <div class="fix-tool">
-                        <input type="checkbox" class="image-check-box" id="image_show" name="image_show" value="imgOK" checked>
-                        <label class="image-show" for="image_show">画像をみる</label>
-                        <div class="set-div"><div style="text-align: center; margin-left: 50px;margin-right: 10px;">会社名の<br>フォントサイズ</div><input type='number' value="28" id="uName_font_size" class="set-font-size"><div style="font-size: 20px;">px</div></div>
-                        <div class="set-div"><div style="text-align: center; margin-left: 50px;margin-right: 10px;">タイトル名の<br>フォントサイズ</div><input type='number' value="40" id="uTitle_font_size" class="set-font-size"><div style="font-size: 20px;">px</div></div>
+                <div class=" top-bar">
+                    <div class="fix-tool" >
+                        <div style="margin: 5px 40px 5px 40px; text-align: center!important;">
+                            <div>
+                                <input type="checkbox" class="image-check-box" id="image_show" name="image_show" value="imgOK" checked>
+                                <label class="image-show" for="image_show">&nbsp;</label>    
+                            </div>
+                            <div class="image-show" for="image_show">画像表示</div>
+                        </div>
+                        <div class="set-div">
+                            <input type='number' value="28" id="uName_font_size" class="set-font-size">
+                            <div style="font-size: 11px;font-weight: bold;padding-top:2px;">会社名</div>
+                            <div class="set-font-size-px">px</div>
+                        </div>
+                        <div class="set-div">
+                            <input type='number' value="40" id="uTitle_font_size" class="set-font-size">
+                            <div style="font-size: 11px;font-weight: bold;padding-top:2px;">タイトル</div>
+                            <div class="set-font-size-px">px</div>
+                        </div>
                     </div>
                     <div class="fix-btns">
-                        <div class="btn-grad" id="btn_mail"><img id="btn_mail_img" src="{{ asset('public/img/ic_mail.png') }}" style="height:30px;"></div>
-                        <div class="btn-grad" id="btn_save"><img id="btn_save_img" src="{{ asset('public/img/ic_save.png') }}" style="height:26px;"></div>
-                        <div class="btn-grad" id="btn_print"><img id="btn_pr_img" src="{{ asset('public/img/ic_print.png') }}" style="height:30px;"></div>
-                        <select class="select-resize" id="select_resize">
-                            <option value="8">8行表示</option>
-                            <option value="9">9行表示</option>
-                            <option value="10" selected>10行表示</option>
-                            <option value="11">11行表示</option>
-                            <option value="12">12行表示</option>
-                            <option value="13">13行表示</option>
-                            <option value="14">14行表示</option>
-                            <option value="15">15行表示</option>
-                        </select>
+                        <div class="fix-btn"><div class="btn-grad" id="btn_mail"><img id="btn_mail_img" src="{{ asset('public/img/ic_mail.png') }}" style="height:50px;"></div><p>メール</p></div>
+                        <div class="fix-btn"><div class="btn-grad" id="btn_print"><img id="btn_mail_img" src="{{ asset('public/img/ic_print.png') }}" style="height:40px;"></div><p>印刷</p></div>
+                        <div class="fix-btn"><div class="btn-grad" id="btn_save"><img id="btn_mail_img" src="{{ asset('public/img/ic_save.png') }}" style="height:40px;"></div><p>保存</p></div>        
+                        <div style="position: relative;">
+                            <select class="select-resize" id="select_resize" style="background: url({{ asset('public/img/ic_select_arrow.png') }}) no-repeat center center;">
+                                <option value="8">&nbsp;&nbsp;8行表示</option>
+                                <option value="9">&nbsp;&nbsp;9行表示</option>
+                                <option value="10" selected>10行表示</option>
+                                <option value="11">11行表示</option>
+                                <option value="12">12行表示</option>
+                                <option value="13">13行表示</option>
+                                <option value="14">14行表示</option>
+                                <option value="15">15行表示</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="blank" id="blank"></div>
     <div class="form-body" id="form_body">
-        <div class="blank" id="blank"></div>
+
         <div class="print-content" id="invoice">
             <div id="page1" class="page1">
                 <div class="flex-between mb1">
@@ -167,13 +213,16 @@
                         <tr>
                             <?php $currentPrice=0; $i=0; ?>
                             <?php $totalPrice=0; $totalCount=1;?>
-                            <td class="td-a1">  
-                                    <div class="td-a1-d1 tooltip"><img src="{{ asset('public/img/edit_query.png') }}" class="img1"/>
+                            <td class="td-a1"> &nbsp; 
+                                    <div class="td-a1-d1 tooltipimg">
+                                        <img src="{{ asset('public/img/edit_query.png') }}" class="img1"/>
                                         <div class="tooltiptext">
+                                            <div><img src="{{ asset('public/img/ic_add.png') }}" id="row_{{ $i }}" class="img2 tooltip-row"/></div><p>画像追加</p>
+                                            <div><img src="{{ asset('public/img/ic_link.png') }}" id="link_{{ $i }}" class="img2 tooltip-link"/></div><p>URLリンク</p>
                                             <div><img src="{{ asset('public/img/ic_delete.png')}}" id="del_{{ $i }}" class="img2 tooltip-del"/></div>
-                                            <div><img src="{{ asset('public/img/ic_link.png') }}" id="link_{{ $i }}" class="img2 tooltip-link"/></div>
-                                            <div><img src="{{ asset('public/img/ic_add.png') }}" id="row_{{ $i }}" class="img2 tooltip-row"/></div>
                                         </div>
+                                        <img src="{{ asset('public/img/ic_modal_close.png') }}" id="tooltip_close_{{ $i }}" class="tooltip-close"/>
+                                        <div class="tooltip-edit-div"><img src="{{ asset('public/img/edit_query_m.png') }}" id="tooltip_edit_{{ $i }}" class="tooltip-edit"/><p>編集</p></div>
                                     </div>
                                     <div class="flex-center"><img alt="product" id="timg_{{ $i }}"
                                             src="" onerror="this.onerror=null; this.onload=null; if (!this.attributes.src.value) this.attributes.src.value='{{ asset("public/img/blank-plus.png") }}';"
@@ -206,7 +255,7 @@
             </div>
         </div>
         <div style="position: relative;">
-            <textarea style="width:700px; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-top:20px; font-size: 20px;" placeholder="(備考)" text="afaefafe"></textarea>
+            <textarea style="width:680px; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-left: 10px;margin-top:30px; font-size: 20px;" placeholder="(備考)" text="afaefafe"></textarea>
             <div class="detail_price">
                 <div>
                     <p>10%対象&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="sinput"id="totalAmount10" value="0">円</p>
@@ -242,7 +291,6 @@
             </div> 
         </div>
         <?php $i=1; ?>
-        <input type="hidden" id="hostUrl" value="{{ url('/') }}">
         <input type="hidden" id="hostUrl" value="{{ url('/') }}">
         <input type="hidden" id="rowCount" value="{{ $i }}">
         <input type="hidden" id="ic_add" src="{{ asset('public/img/ic_add.png') }}">

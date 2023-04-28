@@ -114,10 +114,10 @@ class StripePaymentController extends Controller
             $order->save();
         }
 
-        if($total<100){
-            Session::flash('error_message', 'お支払いが失敗しました.');
-            return back()->withInput($request->input());
-        }
+        // if($total<100){
+        //     Session::flash('error_message', 'お支払いが失敗しました.');
+        //     return back()->withInput($request->input());
+        // }
 
         $survey_settings = json_decode($survey->settings, true);
 
@@ -223,6 +223,8 @@ class StripePaymentController extends Controller
                         ]
                     ]);
                 } catch (\Exception $e) {
+                    echo $e;
+                    return;
                 }
                 if (!isset($charge['id'])) {
                     Session::flash('error_message', 'お支払いが失敗しました.');

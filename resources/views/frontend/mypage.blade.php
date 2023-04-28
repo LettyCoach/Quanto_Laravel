@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>QUANTO</title>
 
     <style>
@@ -523,6 +523,23 @@
         h5 {
             font-size: 1.2rem;
         }
+
+        
+        .btn-outline-quanto {
+            color: #000000;
+            border-radius: 5px;
+            padding: 5px 15px;
+            border: solid 2px #3a7ad9;
+        }
+
+        .btn-outline-quanto:hover {
+            border: solid 2px #1155bb;
+        }
+
+        input[type='radio'] {
+            transform: scale(2);
+        }
+
     </style>
 </head>
 
@@ -531,60 +548,105 @@
     <div class="position-fixed" style="z-index: 1000;right:40px; top:30px">
         {{session('customer_name')}}さん　<a class="btn btn-quanto py-2 px-5" href="../show/{{ $query->token }}">マイページ</a>
     </div>
-    <div class="container bg-white p-5 my-5 mx-auto border border-2" id="body-content" style="max-width:1200px; border-radius:30px; margin-top:100px !important">
-        <div class="mt-2"">
-            <div class=" row border-bottom mb-3">
-            <div class="col-sm-4 py-2 px-4">
-                <h5>お名前</h5>
-            </div>
-            <div class="col-sm-8 py-2 px-4">
-                <h5>{{$customer->name}}</5>
+    <div class="row mx-auto" style="max-width:1200px; text-align:center;">
+        <div class="col-md-7">
+            <div class="container bg-white p-5 my-5 mx-auto border border-2" id="body-content" style="border-radius:30px; margin-top:100px !important">
+                <div class="mt-2">
+                    <div class=" row border-bottom mb-3">
+                        <div class="col-sm-4"> 
+                        </div>
+                        <div class="col-sm-8 py-2 px-4 d-flex"  style="justify-content: end;" id="edit_info_btn">
+                            <i class="fas fa-edit" style='font-size: 22px; margin-right: 5px;'></i><a href="javascript:editInfo()" style="color: #212529;">編集</a>
+                        </div>
+                    </div>
+                    <div class=" row border-bottom mb-3">
+                        <div class="col-sm-4 py-2 px-4">
+                            <h5>お名前</h5>
+                        </div>
+                        <div class="col-sm-8 py-2 px-4">
+                            <h5>{{$customer->name}}</h5>
+                        </div>
+                    </div>
+                    <div class="row border-bottom mb-3">
+                        <div class="col-sm-4 py-2 px-4">
+                            <h5>ご住所</h5>
+                        </div>
+                        <div class="col-sm-8 py-2 px-4" id="address_wrapper">
+                            @if(!empty($customer->address))
+                                <h5>{{$customer->address}}</h5>
+                            @else
+                                <h5>未登録</5>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row border-bottom mb-3">
+                        <div class="col-sm-4 py-2 px-4">
+                            <h5>お電話番号</h5>
+                        </div>
+                        <div class="col-sm-8 py-2 px-4" id="phone_wrapper">
+                            @if(!empty($customer->phone))
+                                <h5>{{$customer->phone}}</h5>
+                            @else
+                                <h5>未登録</5>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row border-bottom mb-3">
+                        <div class="col-sm-4 py-2 px-4">
+                            <h5>メール</h5>
+                        </div>
+                        <div class="col-sm-8 py-2 px-4" id="email_wrapper">
+                            <h5>{{$customer->email}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 py-2 px-4">
+                            <h5>ステータス</h5>
+                        </div>
+                        <div class="col-sm-8 py-2 px-4">
+                            <h5>間もなく公開</h5>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row border-bottom mb-3">
-            <div class="col-sm-4 py-2 px-4">
-                <h5>ご住所</h5>
-            </div>
-            <div class="col-sm-8 py-2 px-4">
-                @if(!empty($address))
-                <h5>{{$address->address}}{{$address->address2}}</5>
-                    <h5>{{$address->address3}}</5>
-                @else
-                    <h5>未登録</5>
-                @endif
-            </div>
-        </div>
-        <div class="row border-bottom mb-3">
-            <div class="col-sm-4 py-2 px-4">
-                <h5>お電話番号</h5>
-            </div>
-            <div class="col-sm-8 py-2 px-4">
-                @if(!empty($address))
-                <h5>{{$address->phone}}</h5>
-                @else
-                <h5>未登録</5>
-                @endif
-            </div>
-        </div>
-        <div class="row border-bottom mb-3">
-            <div class="col-sm-4 py-2 px-4">
-                <h5>メール</h5>
-            </div>
-            <div class="col-sm-8 py-2 px-4">
-                <h5>{{$customer->email}}</h5>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-4 py-2 px-4">
-                <h5>ステータス</h5>
-            </div>
-            <div class="col-sm-8 py-2 px-4">
-                <h5>間もなく公開</h5>
+        <div class="col-md-5">
+            <div class="container bg-white p-5 my-5 mx-auto border border-2" id="body-content" style="border-radius:30px; margin-top:100px !important; min-height: 500px;">
+                <div class=" row border-bottom mb-3">
+                    <div class="col-sm-12 py-2 px-4 d-flex"  style="justify-content: center;">
+                        お届け先情報
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6" style="padding: 1px!important; margin: 1px; width: 48%">
+                        <div onclick="openAddressModal(event, -1)" class="card bg-white p-2 mx-auto border border-2" style="border-radius:10px; border-color: #6962ff!important; min-height: 100px; justify-content: center;">
+                            住所に同じ
+                        </div>
+                    </div>
+                    @foreach($addresses as $item)
+                    @if($item->type != 0)
+                    <div class="col-md-6" style="padding: 1px!important; margin: 1px; width: 48%">
+                        <div class="card bg-white p-2 mx-auto border border-2" style="border-radius:10px; min-height: 100px; align-items: start; justify-content: start;font-size:12px;">
+                            {{ $item->address }}</br> 
+                            {{ $item->address2 }} </br> 
+                            {{ $item->address3 }}</br> 
+                            {{ $item->phone }}
+                            <a type="button" style="color: blue;position: absolute;bottom: 2px;right: 40px;" onclick="openAddressModal(event, {{ $item->id }})">変更する</a>
+                            <a type="button" style="color: red;position: absolute;bottom: 2px;right: 4px;" onclick="deleteAddress(event, {{ $item->id }})">削除</a>
+                        </div>
+                    </div>
+                    @endif
+                    @endforeach
+                    <div class="col-md-6" style="padding: 1px!important; margin: 1px; width: 48%">
+                        <div onclick="openAddressModal(event, 0)" class="card bg-white p-2 mx-auto border border-2" style="cursor: pointer; border-radius:10px; min-height: 100px; justify-content: center;">
+                            <i class="fas fa-plus" style='font-size: 22px; margin-right: 5px;'></i>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    </div>
-
+    
     <div class="container bg-white p-5 my-5 mx-auto border border-2" id="body-content" style="max-width:1200px; border-radius:30px;">
 
         <form action="" name="search" method="GET">
@@ -765,6 +827,101 @@
             </div>
         </div>
 
+         <!-- Modal -->
+         <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content rounded">
+                    <div class="modal-header">
+                        <h5 class="modal-title" >お届け先情報</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body m-2">
+                        <div class="card mb-5" style="border-radius:13px;">
+                            <div class="card-header text-center position-relative" style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
+                                <h4>お届け先情報</h4>
+                            </div>
+                            <div class="card-body p-5">
+                                <input type="text" hidden id="address_id_input">
+                                <div class="form-check mb-5 d-flex pe-2">
+                                    <div class="me-2">
+                                        <input class="form-check-shipping" type="radio" name="shippingAddress" id="shipping_same" checked>
+                                    </div>
+                                    <div>
+                                        <label class="form-check-label ms-3">
+                                            ご注文者と同じ
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-check mb-5 d-flex pe-2">
+                                    <div class="me-2">
+                                        <input class="form-check-shipping" type="radio" name="shippingAddress" id="shipping_diff" value="1">
+                                    </div>
+                                    <div>
+                                        <label class="form-check-label ms-3">
+                                            新規お届け先を追加する
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group row py-2">
+                                    <label for="postcode" class="col-sm-3 col-form-label" >郵便番号</label>
+                                    <div class="col-sm-9 d-flex">
+                                        <input type="text" class="form-control d-inline me-2" style="width:80px; margin-top:2px" pattern="[0-9]{3,3}" maxlength="3" id="postcodeFirstNew" placeholder="11" value="">
+                                        <input type="text" class="form-control d-inline me-3" style="width:80px; margin-top:2px" pattern="[0-9]{4,4}" maxlength="4" id="postcodeLastNew" placeholder="111" value="">
+                                        <button type="button" class="btn btn-outline-quanto d-inline mt-0" style="color:blue" id="postcodeSearchNew">検索する</button>
+                                    </div>
+                                    <div id="postcodeError" style="display: none;">郵便番号が正しくありません。</div>
+                                </div>
+
+                                <div class="form-group row py-2">
+                                    <label for="address" class="col-sm-3 col-form-label">住所</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="address_address_input" placeholder="都道府県 市区町村">
+                                    </div>
+                                </div>
+                                <div class="form-group row py-2">
+                                    <label for="address" class="col-sm-3 col-form-label"></label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control"  id="address_address2_input" placeholder="番地・部屋番号など">
+                                    </div>
+                                </div>
+                                <div class="form-group row py-2">
+                                    <label for="address" class="col-sm-3 col-form-label"></label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="address_address3_input" placeholder="建物名・マンション名（任意）">
+                                    </div>
+                                </div>
+                                <div class="form-group row py-2">
+                                    <label for="name" class="col-sm-3 col-form-label">お名前</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="address_name_input" placeholder="山田 太郎">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row py-2">
+                                    <label for="name" class="col-sm-3 col-form-label">フリガナ</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="address_kana_input" placeholder="ヤマダタロウ">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row py-2">
+                                    <label for="cell" class="col-sm-3 col-form-label">ご連絡先</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="address_phone_input" placeholder="03-1234-5678">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer p-1 d-flex" style="justify-content: center">
+                                <button onclick="saveAddress()" class="btn btn-quanto py-2 px-5">保存する</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     </div>
@@ -859,6 +1016,221 @@
                     },
                     error: function(response) {},
                 });
+            });
+        });
+
+        function editInfo() {
+            $('#edit_info_btn').html(`
+                <i class="fas fa-save" style='font-size: 22px; margin-right: 5px;'></i><a href="javascript:saveCustomer()" style="color: #212529;">保存</a>
+            `);
+
+            $('#address_wrapper').html(`
+                <input id="postcode_input" value="{{ $customer->postcode }}" style="width: 100px"></input>   
+                <input id="address_input" value="{{ $customer->address }}" style="width: 200px"></input>   
+            `);
+
+            $('#phone_wrapper').html(`
+                <input id="phone_input" value="{{ $customer->phone }}" style="width: 300px"></input>   
+            `);
+
+            $('#email_wrapper').html(`
+                <input id="email_input" value="{{ $customer->email }}" style="width: 300px"></input>   
+            `);
+        }
+
+        var addresses = @json($addresses);
+
+        function openAddressModal(event, address_id) {
+            let address = addresses.find(item => address_id == item.id);
+            $('#addressModal').modal('show');
+            if (address_id > 0) {
+                $('#address_id_input').val(address.id);
+                $('#address_name_input').val(address.name);
+                $('#address_kana_input').val(address.kana);
+                $('#address_address_input').val(address.address);
+                $('#address_address2_input').val(address.address2);
+                $('#address_address3_input').val(address.address3);
+                $('#address_phone_input').val(address.phone);
+                $('#postcodeFirstNew').val(address.postcode && address.postcode.length > 0? address.postcode.split("-")[0]: '');
+                $('#postcodeLastNew').val(address.postcode && address.postcode.length > 0? address.postcode.split("-")[1]: '');
+                $('#shipping_same').prop("checked", address.type == 0? true: false);
+                $('#shipping_diff').prop("checked", address.type == 1? true: false);
+            }
+            else if (address_id == -1) { // 住所に同じ
+                let address = addresses.find(item => item.type == 0);
+                if (address) {
+                    $('#address_id_input').val(address.id);
+                    $('#address_name_input').val(address.name);
+                    $('#address_kana_input').val(address.kana);
+                    $('#address_address_input').val(address.address);
+                    $('#address_address2_input').val(address.address2);
+                    $('#address_address3_input').val(address.address3);
+                    $('#address_phone_input').val(address.phone);
+                    $('#postcodeFirstNew').val(address.postcode && address.postcode.length > 0? address.postcode.split("-")[0]: '');
+                    $('#postcodeLastNew').val(address.postcode && address.postcode.length > 0? address.postcode.split("-")[1]: '');
+                    $('#shipping_same').prop("checked", true);
+                    $('#shipping_diff').prop("checked", false);
+                }
+                else {
+                    const customer = @json($customer);
+                    $('#address_id_input').val(0);
+                    $('#address_name_input').val(customer.name);
+                    $('#address_kana_input').val(customer.kana);
+                    $('#address_address_input').val(customer.address.split(' ')[0] ?? '');
+                    $('#address_address2_input').val(customer.address.split(' ')[1] ?? '');
+                    $('#address_address3_input').val(customer.address.split(' ')[2] ?? '');
+                    $('#address_phone_input').val(customer.phone);
+                    $('#postcodeFirstNew').val(customer.postcode && customer.postcode.length > 0? customer.postcode.split("-")[0]: '');
+                    $('#postcodeLastNew').val(customer.postcode && customer.postcode.length > 0? customer.postcode.split("-")[1]: '');
+                    $('#shipping_same').prop("checked", true);
+                    $('#shipping_diff').prop("checked", false);
+                }
+            }
+            else {
+                $('#address_id_input').val(0);
+                $('#address_name_input').val('');
+                $('#address_kana_input').val('');
+                $('#address_address_input').val('');
+                $('#address_address2_input').val('');
+                $('#address_address3_input').val('');
+                $('#address_phone_input').val('');
+                $('#postcodeFirstNew').val('');
+                $('#postcodeLastNew').val('');
+                $('#shipping_same').prop("checked", false);
+                $('#shipping_diff').prop("checked", true);
+            }
+        }
+
+        function saveCustomer() {
+            var url = '../customer/update_customer';
+            var data = {
+                customer_id: "{{ $customer->id }}",
+                postcode: $('#postcode_input').val(),
+                address: $('#address_input').val(),
+                phone: $('#phone_input').val(),
+                email: $('#email_input').val(),
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                data: data,
+                type: "POST",
+                dataType: 'json',
+                success: function(response) {
+                   location.href = location.href;
+                },
+                error: function(response) {},
+            });
+        }
+
+        function saveAddress() {
+            var url = '../customer/save_address';
+            var data = {
+                address_id: $('#address_id_input').val(),
+                address_name: $('#address_name_input').val(),
+                address_kana: $('#address_kana_input').val(),
+                address_postcode: $('#postcodeFirstNew').val() + '-' + $('#postcodeLastNew').val(),
+                customer_id: "{{ $customer->id }}",
+                address: $('#address_address_input').val(),
+                address2: $('#address_address2_input').val(),
+                address3: $('#address_address3_input').val(),
+                phone: $('#address_phone_input').val(),
+                type: Number($('#shipping_diff').prop("checked"))
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                data: data,
+                type: "POST",
+                dataType: 'json',
+                success: function(response) {
+                   location.href = location.href;
+                },
+                error: function(response) {},
+            });
+        }
+
+        function saveAddressSame(address_id) {
+            var url = '../customer/save_same_address';
+            var data = {
+                address_id: address_id,
+                customer_id: "{{ $customer->id }}",
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                data: data,
+                type: "POST",
+                dataType: 'json',
+                success: function(response) {
+                   location.href = location.href;
+                },
+                error: function(response) {},
+            });
+        }
+
+        function deleteAddress(event, address_id) {
+            var url = '../customer/delete_address';
+            var data = {
+                address_id: address_id,
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                data: data,
+                type: "POST",
+                dataType: 'json',
+                success: function(response) {
+                   location.href = location.href;
+                },
+                error: function(response) {},
+            });
+        }
+
+
+        $(document.body).on('click', '#postcodeSearchNew', function(e) {
+            e.preventDefault();
+            $('#postcodeError').hide();
+            var data = {
+                'postcodeFirst': $('#postcodeFirstNew').val(),
+                'postcodeLast': $('#postcodeLastNew').val(),
+            };
+            var url = '../customer/postcode';
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url,
+                data: data,
+                type: "POST",
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status == 200) {
+                        $('#address_address_input').val(response.prefecture + response.city + response.street);
+                    } else {
+                        $('#postcodeError').show();
+                    }
+
+                },
+                error: function(response) {},
             });
         });
     </script>

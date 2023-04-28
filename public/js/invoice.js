@@ -16,6 +16,7 @@ var uNameCss = 175;
 var uNameDivCss = 220;
 var uTitleCss = 280;
 var iHtml = '';
+var inv_state='';
 //get ic Url
 var delUrl = $("#ic_del").attr('src');
 var addUrl = $("#ic_add").attr('src');
@@ -26,6 +27,8 @@ var checkUrl = $("#ic_check").attr('src');
 var stamp = $("#stamp").attr('src');
 var profile = $("#profile").attr('src');
 var logoSrc = $("#logo").attr('src');
+var t_editUrl=$("#tooltip_edit_0").attr('src');
+var t_closeUrl=$("#tooltip_close_0").attr('src');
 dis_data = JSON.parse(dis_data);
 var iHtml = '';
 for (const [key, value] of Object.entries(dis_data)) {
@@ -110,7 +113,9 @@ function make_tr(i, k, cId) {
     else if (cId < 0) { }
     else { if (i == cId + 1) { imgUrl = blankUrl; title = "タイトル"; price = 0; quantity = 1; current_price = 0; current_reduce = 0; } }
     //making html
-    rHtml = '<tr><td class="td-a1"><div class="td-a1-d1 tooltip"><img src="' + editUrl + '" class="img1"/><div class="tooltiptext"><div><img src="' + delUrl + '" id="del_' + i + '" class="img2 tooltip-del"/></div><div><img src="' + linkUrl + '" id="link_' + i + '" class="img2 tooltip-link"/></div><div><img src="' + addUrl + '" class="img2 tooltip-row" id="row_' + i + '"/></div></div>';
+    rHtml = '<tr><td class="td-a1"><div class="td-a1-d1 tooltipimg"><img src="' + editUrl + '" class="img1"/><div class="tooltiptext"><div><img src="' + addUrl + '" class="img2 tooltip-row" id="row_' + i + '"/></div><p>画像追加</p><div><img src="' + linkUrl + '" id="link_' + i + '" class="img2 tooltip-link"/></div><p>URLリンク</p><div><img src="' + delUrl + '" id="del_' + i + '" class="img2 tooltip-del"/></div></div>';
+    rHtml +='<img src="'+t_closeUrl+'" id="tooltip_close_'+i+'" class="tooltip-close"/>';
+    rHtml +='<div class="tooltip-edit-div"><img src="'+t_editUrl+'" id="tooltip_edit_'+i+'" class="tooltip-edit"/><p>編集</p></div>';
     rHtml += '</div><div class="flex-center"><img alt="product" id="timg_' + i + '"src="' + imgUrl + '" class="td-a1-d2-img" /></div><textarea class="td-a1-input" id="title_' + i + '">' + title + '</textarea></td>';
     rHtml += '<td class="td-a2"><input class="td-a2-input" id="price_' + i + '" value="' + price + '"><span>円</span></td><td class="td-a3"><input class="td-a3-input"   id="quantity_' + i + '" value="' + quantity + '"></td><td class="td-a4"> <input class="td-a4-input"  id="current_price_' + i + '" value="' + current_price + '">円</td>';
     rHtml += '<td class="td-a5 reduce-pro-td"><select name="pets" class="reduce-pro" id="reduce_pro_' + i + '">';
@@ -285,8 +290,6 @@ function pdfRender(type, cId, tId, rows) {
         var thisFont = 12 + (15 - rows) * (20 - 12) / (15 - 8);
         $(this).css('font-size', thisFont + "px");
         $(this).css('height', thisHeight + "px");
-        if (txtrows < 2) $(this).css('padding-top', thisHeight / 4 + "px");
-        else $(this).css('padding-top', thisHeight / 8 + "px");
     });
     updateTextView($('#reduce_price'));
     updateTextView($('#display_reduce'));
@@ -305,16 +308,16 @@ $(document).ready(function () {
         var thisFont = 12 + (15 - rows) * (20 - 12) / (15 - 8);
         $(this).css('font-size', thisFont + "px");
         $(this).css('height', thisHeight + "px");
-        if (txtrows < 2) $(this).css('padding-top', thisHeight / 4 + "px");
-        else $(this).css('padding-top', thisHeight / 8 + "px");
     });
 
     //delete row and render table
     $(document).on('click', '.tooltip-del', function () {
+
         //get currnt count
         var cId = parseInt($(this).attr('id').replaceAll(/del_/g, ''));
         var tId = parseInt($("#rowCount").val());
         var rows = parseInt($("#select_resize").val());
+        if(tId<2) return;
         //re-render pdf
         pdfRender('del', cId, tId, rows);
     });
@@ -526,16 +529,46 @@ $(document).ready(function () {
     /////////////////////////////////////////////////////////////////
 
     //画像ホバート
-    $(document).on('mouseenter', '.tooltip', function (e) {
-        $(this).css("opacity", "1");
-    }).on('mouseleave', '.tooltip', function (e) {
-        $(this).animate({ opacity: '0' }, 500);
+    $(document).on('click', '.tooltipimg', function (e) {
+        if(e.target.id.search("tooltip_close_")>=0) return;
+        if(e.target.id.search("tooltip_edit_")>=0) return;
+        else{
+            $(".tooltipimg").each(function(){
+                $(this).find(".tooltiptext").css("visibility", "hidden");
+            });
+            $(this).find(".tooltip-edit").css("visibility", "visible");
+        }
+    });
+    $(document).on('click', '.tooltip-edit', function (e) {
+        if(e.target.id.search("tooltip_close_")>=0) return;
+        else{
+            $(".tooltipimg").each(function(){
+                $(this).find(".tooltiptext").css("visibility", "hidden");
+            });
+            $(this).parent().parent().find(".tooltiptext").css("visibility", "visible");
+            $(this).parent().parent().find(".tooltip-close").css("visibility", "visible");
+        }
+    });
+    $(document).on('click', '.tooltip-close', function (e) {
+
+            $(".tooltiptext").css("visibility", "hidden");
+            $(".tooltip-close").css("visibility", "hidden");
+    });
+    $(document).on('click', 'input, img,textarea, select', function (e) {
+        if(e.target.id.search("tooltip_close_")>=0) return;
+        if(e.target.id.search("tooltip_edit_")>=0) return;
+        $(".tooltipimg").each(function(){
+            $(this).find(".tooltiptext").css("visibility", "hidden");
+            $(this).find(".tooltip-close").css("visibility", "hidden");
+        });
     });
 
+
+
     $(document).on('mouseenter', '.img2', function (e) {
-        $(this).css("opacity", "1");
+        $(this).css("opacity", "0.7");
     }).on('mouseleave', '.img2', function (e) {
-        $(this).animate({ opacity: '0.5' }, 300);
+        $(this).animate({ opacity: '1' }, 300);
     });
 
     $(document).on('change', "#image_show", function (e) {
@@ -569,23 +602,20 @@ $(document).ready(function () {
                 }
             });
         });
+        $(".tooltipimg").each(function(){
+            $(this).css('visibility', 'hidden');
+        });
         var printContents = document.getElementById("form_body").innerHTML;
         var originalContents = document.body.innerHTML;
         document.body.innerHTML = printContents;
-        $(".image-check-box").css("display", "none");
-        $(".image-show").css("display", "none");
-        $("#btn_print").css("display", "none");
-        $("#select_resize").css("display", "none");
-        $('[src*="logo.png"]').each(function () { $(this).css("display", "none"); });
-        $("#blank").css("display", "none");
+        
         window.print();
         document.body.innerHTML = originalContents;
-        $(".image-check-box").css("display", "block");
-        $(".image-show").css("display", "block");
-        $("#btn_print").css("display", "flex");
-        $("#select_resize").css("display", "block");
-        $("#blank").css("display", "block");
-        $('[src*="logo.png"]').each(function () { $(this).css("display", "block"); });
+
+        $(".tooltipimg").each(function(){
+            $(this).css('visibility', 'visible');
+        });
+ 
     });
     $(document).on('click', '#btn_save', function () {
         $("input").each(function () {
@@ -606,14 +636,15 @@ $(document).ready(function () {
             });
         });
         var htmlElement = document.querySelector("html").innerHTML;
+        var invoiceNameElement = $("#purpose_1").val();
 
         //upload invoice html
         var hostUrl = $("#hostUrl").val();
         var postUrl = hostUrl + '/paper/invoice/save';
         var fd = new FormData();
         fd.append('file', htmlElement);
-        //fd.append('paper_id', paper_id)
-
+        fd.append('invoiceName', invoiceNameElement);
+        fd.append('paper_id', paper_id);
         $.ajax({
             type: 'POST',
             url: postUrl,
@@ -623,7 +654,9 @@ $(document).ready(function () {
             cache: false,
             processData: false,
             success: function (data, status) {
-                alert(data);
+                paper_id=data.edit_id;
+                inv_state=data.inv_state;
+                $('#saveModal').css('display', 'block');
             }
         }); // close ajax
     });
@@ -725,7 +758,6 @@ $(document).ready(function () {
     ///////////////////////////////////////////////
 
     $(document).on('click', '#first_ok', function () {
-        console.log($("#first_cDate").val());
         var cd = $("#first_cDate").val().replace('-', '年').replace('-', '月') + '日';
         var ed = $("#first_eDate").val().replace('-', '年').replace('-', '月') + '日';
         $("#cDate").val(cd);
@@ -734,12 +766,26 @@ $(document).ready(function () {
         $("#previewModal").css('display', 'none');
         $("#uName").keyup();
     });
+    $(document).on('click', '#save_close', function(){
+        $("#saveModal").css('display', 'none');
+    });
+    $(document).on('click','[id^="link_"]', function(){
+        $("#linkModal").css('display', 'block');
+    });
+    $(document).on('click', '#link_close', function(){
+        $("#linkModal").css('display', 'none');
+    });
 
 
 
     ///////////////////////////////////////////
 });
-
+function change_toEdit(toEdit_url){
+    if(inv_state=="edit") return;
+    to_router=toEdit_url.substr(0, toEdit_url.length-1);
+    to_router+=paper_id;
+    window.location.href = to_router; 
+}
 
 var modal = document.getElementById("q_modal");
 window.onclick = function (event) {
