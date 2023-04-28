@@ -5,6 +5,7 @@
         td {
             vertical-align: middle !important;
             text-align : center;
+            font-size : 12px;
         }
     </style>
     <div>
@@ -16,16 +17,13 @@
         <table class="table">
             <thead>
             <tr>
-                <th>No</th>
+                <th>ID</th>
                 <th style="width : 80px"></th>
                 <th>ブランド名</th>
                 <th>商品名</th>
-                <th>SKU</th>
-                <th>金額</th>
-                <th>カラー</th>
-                <th>サイズ</th>
-                <th>素材</th>
-                <th>Barcode</th>
+                <th>カテゴリー</th>
+                <th>オプション<br>（カラー/サイズ/素材）</th>
+                <th>単価</th>
                 <th></th>
             </tr>
        
@@ -33,16 +31,12 @@
             <tbody>
             @foreach($listModel as $i => $model)
                 <tr>
-                    <td>{{ $i + 1 }}</td>
+                    <td>Q{{1000000 + $model->id}}</td>
                     <td><img src="{{url($model->getImageUrlFirst())}}"  style="width : 50px; height : 50px"/></td>
                     <td>{{ $model->brandName }}</td>
                     <td>{{ $model->name }}</td>
-                    <td>{{ $model->sku }}</td>
+                    <td>{{ $model->userProductColor->name}} <br>{{ $model->userProductSize->name }}<br>{{ $model->getMaterialsText() }}</td>
                     <td>{{ $model->price }}</td>
-                    <td>{{ $model->userProductColor->name}} </td>
-                    <td>{{ $model->userProductSize->name }}</td>
-                    <td>{{ $model->getMaterialsText() }}</td>
-                    <td>{{ $model->barcode }}</td>
                     <td>
                         <a class="btn btn-primary" href="{{ route('admin.userProduct.edit',['id'=>$model->id]) }}">編集</a>
                         <a class="btn btn-danger" href="javascript:deleteData('{{ route('admin.userProduct.delete',['id'=>$model->id])}}')">削除</a>
