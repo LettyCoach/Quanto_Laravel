@@ -47,7 +47,7 @@ products / getList(user_id){
 }
 
 
-products / getByBarcode(user_id, barcode) {
+products / getByBarcode(user_id, user_type, barcode) {
     return {
         id, name, brandName, category, sku, price, amount, color, size, material, detail, img_url, img_urls, barcode, other, isSaved, isFavorite
     }

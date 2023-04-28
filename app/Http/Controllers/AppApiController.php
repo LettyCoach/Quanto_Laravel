@@ -399,7 +399,8 @@ class AppApiController extends Controller
     public function getProductList(Request $request)
     {
         $user_id = $request->get('user_id');
-        $listModel = UserProduct::where('user_id', $user_id)->get();
+        // $listModel = UserProduct::where('user_id', $user_id)->get();
+        $listModel = UserProduct::all();
 
         $rlt = array();
         foreach ($listModel as $i => $model) {
@@ -413,7 +414,16 @@ class AppApiController extends Controller
     {
         $user_id = $request->get('user_id');
         $barcode = $request->get('barcode');
-        $model = UserProduct::where('barcode', $barcode)->first();
+        $user_type = $request->get('user_type');
+
+        $model = UserProduct::where('barcode', $barcode);
+
+        if ($user_type == 'seller') {
+            $model = $model->where('user_id', $user_id);
+        }
+
+        $model = $model->first();
+
         if (strlen($barcode) < 3) {
             $model = null;
         }
