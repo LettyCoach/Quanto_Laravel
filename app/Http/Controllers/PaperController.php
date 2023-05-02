@@ -35,7 +35,7 @@ class PaperController extends Controller
 		//
         $listModel = null;
         $user_id = Auth::user()->id;
-        $listModel = UserProduct::where('user_id', $user_id)->get();
+        $listModel = UserProduct::all();
 
 		$listDataTmp = array();
 		foreach($listModel as $i => $model) {

@@ -97,7 +97,7 @@
             <div style="width:100%; display: flex; justify-content: center;">
                 <div class=" top-bar">
                     <div class="fix-tool" >
-                        <div style="margin: 5px 40px 5px 40px; text-align: center!important;">
+                        <div style="margin: 5px 20px; text-align: center!important;">
                             <div>
                                 <input type="checkbox" class="image-check-box" id="image_show" name="image_show" value="imgOK" checked>
                                 <label class="image-show" for="image_show">&nbsp;</label>    
@@ -116,21 +116,65 @@
                         </div>
                     </div>
                     <div class="fix-btns">
-                        <div class="fix-btn"><div class="btn-grad" id="btn_mail"><img id="btn_mail_img" src="{{ asset('public/img/ic_mail.png') }}" style="height:50px;"></div><p>メール</p></div>
+                        <div class="fix-btn"><div class="btn-grad" id="btn_mail"><img id="btn_mail_img" src="{{ asset('public/img/ic_mail.png') }}" style="height:40px;"></div><p>メール</p></div>
                         <div class="fix-btn"><div class="btn-grad" id="btn_print"><img id="btn_mail_img" src="{{ asset('public/img/ic_print.png') }}" style="height:40px;"></div><p>印刷</p></div>
-                        <div class="fix-btn"><div class="btn-grad" id="btn_save"><img id="btn_mail_img" src="{{ asset('public/img/ic_save.png') }}" style="height:40px;"></div><p>保存</p></div>        
-                        <div style="position: relative;">
-                            <select class="select-resize" id="select_resize" style="background: url({{ asset('public/img/ic_select_arrow.png') }}) no-repeat center center;">
-                                <option value="8">&nbsp;&nbsp;8行表示</option>
-                                <option value="9">&nbsp;&nbsp;9行表示</option>
-                                <option value="10" selected>10行表示</option>
-                                <option value="11">11行表示</option>
-                                <option value="12">12行表示</option>
-                                <option value="13">13行表示</option>
-                                <option value="14">14行表示</option>
-                                <option value="15">15行表示</option>
-                            </select>
+                        <div class="fix-btn"><div class="btn-grad" id="btn_save"><img id="btn_mail_img" src="{{ asset('public/img/ic_save.png') }}" style="height:40px;"></div><p>保存</p></div>
+
+                        <div class="fix-opt">
+                            <div style="position: relative;">
+                                <select class="opt-grad" id="select_resize" style="background: url({{ asset('public/img/ic_select_arrow.png') }}) no-repeat center center;background-size: cover;">
+                                    <option value="8">&nbsp;&nbsp;8行表示</option>
+                                    <option value="9">&nbsp;&nbsp;9行表示</option>
+                                    <option value="10" selected>10行表示</option>
+                                    <option value="11">11行表示</option>
+                                    <option value="12">12行表示</option>
+                                    <option value="13">13行表示</option>
+                                    <option value="14">14行表示</option>
+                                    <option value="15">15行表示</option>
+                                </select>
+                            </div>
+                            <p>表示行数</p>
                         </div>
+                        <div class="fix-dropdown">
+                            <button onclick="myFunction()" class="fix-dropbtn" style="background: url({{ asset('public/img/ic_select_arrow.png') }}) no-repeat center center;background-size: cover;">バリエーション</button>
+                            <div id="barient_resize" class="fix-dropdown-content">
+                                <div class="fix-dropdown-item">
+                                    <div>
+                                        <input type="checkbox" class="image-check-box-small" id="color_show" name="color_show" value="colorOK" checked>
+                                        <label class="image-show-small" for="color_show">&nbsp;</label>    
+                                    </div>
+                                    <p>カラー</p>
+                                </div>
+                                <div class="fix-dropdown-item">
+                                    <div>
+                                        <input type="checkbox" class="image-check-box-small" id="size_show" name="size_show" value="sizeOK" checked>
+                                        <label class="image-show-small" for="size_show">&nbsp;</label>    
+                                    </div>
+                                    <p>サイズ</p>
+                                </div>
+                                <div class="fix-dropdown-item">
+                                    <div>
+                                        <input type="checkbox" class="image-check-box-small" id="metiarial_show" name="metiarial_show" value="metiarialOK" checked>
+                                        <label class="image-show-small" for="metiarial_show">&nbsp;</label>    
+                                    </div>
+                                     <p>素材</p>
+                                </div>
+                            </div>
+                            <p>バリエーシヨン</p>
+                        </div>
+                        <div class="fix-opt">
+                            <div style="position: relative;">
+                                <select class="opt-grad" id="style_resize" style="background: url({{ asset('public/img/ic_select_arrow.png') }}) no-repeat center center;background-size: cover;">
+                                    <option value="1" selected>スタンダード</option>
+                                    <option value="2">ワイド</option>
+                                </select>
+                            </div>
+                            <p>スタイル</p>
+                        </div>
+
+ 
+
+
                     </div>
                 </div>
             </div>
@@ -202,8 +246,11 @@
                 <table cellpadding="1" cellspacing="0" class="main-table">
                     <thead>
                         <tr>
-                            <th class="th1">内容</div></th>
-                            <th class="th2">単価</div></th>
+                            <th class="th1">内容</th>
+                            <th class="th-color">カラー</th>
+                            <th class="th-size">サイズ</th>
+                            <th class="th-metiarial">コットン</th>
+                            <th class="th2">単価</th>
                             <th class="th3">数量</th>
                             <th class="th4">金額(円)</th>
                             <th class="th5">消費税</th>
@@ -230,6 +277,9 @@
                                     </div>
                                     <textarea class="td-a1-input" id="title_{{ $i }}">タイトル</textarea>
                             </td>
+                            <td class="td-color"><textarea class="td-color-input" id="subt_color_{{ $i }}">カラー</textarea></td>
+                            <td class="td-size"><textarea class="td-size-input" id="subt_size_{{ $i }}">サイズ</textarea></td>
+                            <td class="td-metiarial"><textarea class="td-metiarial-input" id="subt_metiarial_{{ $i }}">コットン</textarea></td>                 
                             <td class="td-a2"><input class="td-a2-input" id="price_{{ $i }}" value="0"><span>円</span></td>
                             <td class="td-a3"><input class="td-a3-input"   id="quantity_{{ $i }}" value="1"></td>
                             <td class="td-a4"> <input class="td-a4-input"  id="current_price_{{ $i }}" value="0">円</td>
@@ -247,8 +297,8 @@
                             <td class="td-r1">合計</td>
                             <td ></td>
                             <td class="td-r3"><input  class="td-r3-input" id="total_count" value="{{ $totalCount }}"> </td>
-                            <td class="td-r4"> <input  class="td-r4-input" id="total_price" value="{{ $totalPrice }}">円</td>
-                            <td class="td-r5"> 消費税(内税)<input  class="td-r5-input" id="reduce_price" value="0">円</td>
+                            <td class="td-r4" colspan="2"> <input  class="td-r4-input" id="total_price" value="{{ $totalPrice }}">円</td>
+                            <td class="td-r5" colspan="3"> 消費税(内税)<input  class="td-r5-input" id="reduce_price" value="0">円</td>
                         </tr>
                     </tbody>
                 </table>
@@ -279,7 +329,12 @@
                     <div class="img-modal-title">
                         <div class="img-modal-title-text">画像を選択</div>
                     </div>
-                    <input type="text" id="search_input" placeholder="Search for names..">
+                    <div class="img-modal-search-bar">
+                        <input type="text" id="search_input" placeholder="Search for names..">
+                        <input type="button" class="img-modal-probtn img-modal-search-btn" id="img_modal_probtn">
+                        <input type="button" class="img-modal-xybtn img-modal-search-btn" id="img_modal_xybtn">
+                        <input type="button" class="img-modal-xbtn img-modal-search-btn" id="img_modal_xbtn">
+                    </div>
                     <div class="img-view" id="img_view">
                     </div>
                     <div class="img-upload">
