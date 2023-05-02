@@ -48,7 +48,7 @@ input {
 }
 
 td {
-    font-size: 20px;
+    font-size: 16px;
     height: 62.7px;
 }
 
@@ -358,7 +358,7 @@ th {
 .tooltip-edit-div{
     visibility: visible;
     width: 40px;
-    color: blueviolet;
+    color: #6423fe;
     text-align: center;
     padding: 0;
     position: absolute;
@@ -421,9 +421,39 @@ th {
 
 .image-show {
     font-size: 12px;
-    color: blueviolet;
+    color: #6423fe;
     font-weight: bold;
     cursor: pointer;
+    width: 50px;
+}
+
+.image-check-box-small {
+    
+    display: none!important;
+}
+.image-check-box-small + label {
+    display:inline-block;
+    padding: 0 0 0 0px;
+    background:url("../img/image_off.png") no-repeat;
+    height: 20px;
+    width: 20px;;
+    background-size: 100%;
+}
+
+.image-check-box-small:checked + label {
+    background:url("../img/image_on.png") no-repeat;
+    height: 20px;
+    width: 20px;
+    display:inline-block;
+    background-size: 100%;
+}
+
+.image-show-small {
+    font-size: 12px;
+    color: #6423fe;
+    font-weight: bold;
+    cursor: pointer;
+    width: 24px;
 }
 
 .set-font-size {
@@ -446,9 +476,9 @@ th {
     flex-direction: column;
     justify-content: center;
     font-size: 12px;
-    margin: 5px 30px;
+    margin: 5px 10px;
     text-align: center;
-    color: blueviolet;
+    color: #6423fe;
     position: relative;
 }
 .set-font-size-px{
@@ -467,13 +497,26 @@ th {
     padding-top: 10px;
 }
 .fix-btn{
-    margin: auto 15px;
+    margin-left: 20px;
     cursor: pointer;
 }
 .fix-btn p{
     text-align: center;
     margin: 0;
-    color: blueviolet;
+    color: #6423fe;
+    font-size: 11px;
+    font-weight: bold;
+    padding-top: 2px;
+}
+
+.fix-opt{
+    margin-left: 10px;
+    cursor: pointer;
+}
+.fix-opt p{
+    text-align: center;
+    margin: 0;
+    color: #6423fe;
     font-size: 11px;
     font-weight: bold;
     padding-top: 2px;
@@ -483,47 +526,99 @@ th {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 90px;
+    width: 60px;
     height: 50px;
     background: white;
     box-shadow: rgb(38, 57, 77) 5px 4px 10px -3px;
     background-size: 200% auto;
-    color: blueviolet;
+    color: #6423fe;
     border-radius: 7px;
     margin: 0 5px;
-
 }
 
-.select-resize {
-    width: 140px;
+.opt-grad {
+    width: 120px;
     height: 40px;
     padding: 5px;
     padding-right: 15px;
     text-align: center;
     transition: 0.5s;
-    color: blueviolet;
+    color: #6423fe;
     border-radius: 10px;
     border: 0;
-    margin: 15px 10px;
-    margin-top: 5px;
+    margin: 5px 10px;
     display: block;
     font-size: 16px;
     font-weight: bold;
     appearance: none;
     background-size: cover;
     box-shadow: rgb(38, 57, 77) 5px 4px 10px -3px;
+    font-size: 14px;
 }
-.select-resize option{
+
+.opt-grad option{
     font-weight: bold;
+    background: #f8faff;
 }
-.select-resize-arrow{
+
+.fix-dropbtn {
+    width: 130px;
+    height: 40px;
+    padding: 5px;
+    padding-right: 15px;
+    text-align: center;
+    transition: 0.5s;
+    color: #6423fe;
+    border-radius: 10px;
+    border: 0;
+    margin: 5px 10px;
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    appearance: none;
+    background-size: cover;
+    box-shadow: rgb(38, 57, 77) 5px 4px 10px -3px;
+    font-size: 14px;
+}
+.fix-dropdown p{
+    text-align: center;
+    margin: 0;
+    color: #6423fe;
+    font-size: 11px;
+    font-weight: bold;
+    padding-top: 2px;
+    padding-left: 10px;
+}
+
+.fix-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.fix-dropdown-content {
+    display: none;
+    
     position: absolute;
-    right: 15px;
-    top: 5px;
+    left: 10px;
+    top: 50px;
+    background-color: #f8faff;
+    border-radius: 10px;
+    box-shadow: rgb(38, 57, 77) 5px 4px 10px -3px;
+    width: 130px;
+    z-index: 1;
 }
-.select-resize-arrow img{
-    width: 30px;
+
+.fix-dropdown-content .fix-dropdown-item {
+    width: 130px;
+    color: #6423fe;
+    background: #f8faff;
+    padding: 5px 16px;
+    text-decoration: none;
+    display: flex;
+    border-radius: 10px;
+    line-height: 16px;
 }
+.show {display: block;}
 
 .img-modal-main {
     width: 100%;
@@ -535,10 +630,29 @@ th {
 }
 
 .img-modal-title-text {
-    text-align: center;
+    text-align: left;
     font-size: 32px;
     font-weight: 600;
-    color: rgb(12, 12, 12);
+    color: rgb(51, 51, 51);
+
+}
+.img-modal-search-bar{
+    display: flex;
+}
+
+.img-modal-search-btn{
+
+}
+
+.img-modal-probtn{
+    background: url("../img/image_off.png") no-repeat;
+}
+
+.img-modal-xybtn{
+
+}
+
+.img-modal-xbtn{
 
 }
 
@@ -684,8 +798,8 @@ th {
 }
 
 .img-modal {
-    width: 520px;
-    max-height: 700px;
+    width: 800px;
+    max-height: 810px;
     border: 2px solid grey;
     border-radius: 10px;
     padding: 15px;
@@ -744,17 +858,24 @@ th {
     padding: 0;
     margin: 0;
     background-color: white;
-    font-size: 14px;
-    width: 90px;
+    font-size: 12px;
+    width: 80px;
     height: 20px;
     border: 0px;
     appearance: none;
     text-align: right;
 }
 
-.th1 {
-    width: 340px;
+.th-color{
+    width: 60px;
 }
+.th-size{
+    width: 60px;
+}
+.th-metiarial{
+    width: 60px;
+}
+
 
 .reduce-pro-td {
     text-align: center;
@@ -770,12 +891,42 @@ th {
 }
 .td-a1-input {
     border: 0px;
-    font-size: 20px;
-    width: 250px;
+    font-size: 14px;
+    width: 120px;
     margin-left: 10px;
     overflow: hidden;
 }
+.td-color {
+    width: 60px;
+}
+.td-size {
+    width: 60px;
+}
+.td-metiarial {
+    width: 60px;
+}
 
+.td-color-input {
+    border: 0px;
+    font-size: 14px;
+    width: 60px;
+    margin-left: 10px;
+    overflow: hidden;
+}
+.td-size-input {
+    border: 0px;
+    font-size: 14px;
+    width: 60px;
+    margin-left: 10px;
+    overflow: hidden;
+}
+.td-metiarial-input {
+    border: 0px;
+    font-size: 14px;
+    width: 60px;
+    margin-left: 10px;
+    overflow: hidden;
+}
 textarea {
     resize: none;
     display: table-cell;
@@ -790,37 +941,37 @@ textarea {
 }
 
 .td-a2 {
-    width: 150px;
+    width: 130px;
 }
 
 .td-a2-input {
     border: 0px;
-    font-size: 20px;
-    width: 120px;
+    font-size: 16px;
+    width: 80px;
     text-align: right;
 }
 
 .td-a3 {
     text-align: center;
-    width: 60px;
+    width: 50px;
 }
 
 .td-a3-input {
     border: 0px;
-    font-size: 20px;
-    width: 60px;
+    font-size: 16px;
+    width: 50px;
     text-align: center;
 }
 
 .td-a4 {
     text-align: right;
-    width: 150px;
+    width: 130px;
 }
 
 .td-a4-input {
     border: 0px;
-    font-size: 20px;
-    width: 120px;
+    font-size: 16px;
+    width: 100px;
     text-align: right;
 }
 

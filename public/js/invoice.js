@@ -500,9 +500,9 @@ $(document).ready(function () {
             var pindex = $(this).attr('id').replaceAll(/reduce_plus_/g, '');
             var pcat = $('#reduce_pro_' + pindex).prop('selectedIndex');
 
-            if (pcat == 0) { totalAmount10 += thisval; totalAmount10s += Math.round(thisval * 0.01); }
-            else if (pcat == 1) { totalAmount88 += thisval; totalAmount88s += Math.round(thisval * 0.008); }
-            else if (pcat == 2) { totalAmount8 += thisval; totalAmount8s += Math.round(thisval * 0.008); }
+            if (pcat == 0) { totalAmount10 += thisval; totalAmount10s += Math.round(thisval * 0.1); }
+            else if (pcat == 1) { totalAmount88 += thisval; totalAmount88s += Math.round(thisval * 0.08); }
+            else if (pcat == 2) { totalAmount8 += thisval; totalAmount8s += Math.round(thisval * 0.08); }
             else { totalAmount0 += thisval; }
             totalAmount += thisval;
 
@@ -795,4 +795,22 @@ window.onclick = function (event) {
 }
 function resize_main_title(_obj) {
     $("#uTitle_font_size").change();
+}
+
+function myFunction() {
+    document.getElementById("barient_resize").classList.toggle("show");
+}
+  
+  // Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+    if (!event.target.matches('.fix-dropbtn')) {
+        var dropdowns = document.getElementsByClassName("fix-dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
 }
