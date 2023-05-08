@@ -19,16 +19,11 @@ class CreateUserProductsTable extends Migration
             $table->string('name', 256);
             $table->string('sku', 64);
             $table->integer('price')->default(0);
+            $table->integer('price2')->default(0);
+            $table->integer('flagPrice2')->default("");
             $table->string('img_urls', 4096);
+            $table->string('options', '4096');
             $table->text('detail');
-            $table->string('category_ids', 2048)->nullable();
-            $table->foreignId('color_id')
-                    ->constrained('user_product_colors')
-                    ->onUpdate('cascade');
-            $table->foreignId('size_id')
-                ->constrained('user_product_sizes')
-                ->onUpdate('cascade');
-            $table->text('materials');
             $table->text('memo')->nullable();
             $table->integer('stock')->default(0);
             $table->string('stockLimit', 16)->default("");
