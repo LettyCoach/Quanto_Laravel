@@ -165,15 +165,12 @@
                         <div class="fix-opt">
                             <div style="position: relative;">
                                 <select class="opt-grad" id="style_resize" style="background: url({{ asset('public/img/ic_select_arrow.png') }}) no-repeat center center;background-size: cover;">
-                                    <option value="1" selected>スタンダード</option>
-                                    <option value="2">ワイド</option>
+                                    <option value="A4" selected>スタンダード</option>
+                                    <option value="A4 landscape">ワイド</option>
                                 </select>
                             </div>
                             <p>スタイル</p>
                         </div>
-
- 
-
 
                     </div>
                 </div>
@@ -305,7 +302,7 @@
             </div>
         </div>
         <div style="position: relative;">
-            <textarea style="width:680px; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-left: 10px;margin-top:30px; font-size: 20px;" placeholder="(備考)" text="afaefafe"></textarea>
+            <textarea style="width:680px; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-left: 10px;margin-top:30px; font-size: 20px;" placeholder="(備考)" text="afaefafe" id="memo_text"></textarea>
             <div class="detail_price">
                 <div>
                     <p>10%対象&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="sinput"id="totalAmount10" value="0">円</p>
@@ -331,9 +328,9 @@
                     </div>
                     <div class="img-modal-search-bar">
                         <input type="text" id="search_input" placeholder="Search for names..">
-                        <input type="button" class="img-modal-probtn img-modal-search-btn" id="img_modal_probtn">
-                        <input type="button" class="img-modal-xybtn img-modal-search-btn" id="img_modal_xybtn">
-                        <input type="button" class="img-modal-xbtn img-modal-search-btn" id="img_modal_xbtn">
+                        <button class="img-modal-probtn img-modal-search-btn" id="img_modal_probtn">&nbsp;</button>
+                        <button class="img-modal-xybtn img-modal-search-btn" id="img_modal_xybtn">&nbsp;</button>
+                        <button class="img-modal-xbtn img-modal-search-btn" id="img_modal_xbtn">&nbsp;</button>
                     </div>
                     <div class="img-view" id="img_view">
                     </div>
@@ -354,6 +351,7 @@
         <input type="hidden" id="ic_blank" src="{{ asset('public/img/blank-plus.png')}}">
         <input type="hidden" id="ic_link" src="{{ asset('public/img/ic_link.png')}}">
         <input type="hidden" id="ic_check" src="{{ asset('public/img/ic_check.png')}}">
+        <input type="hidden" id="ic_newblank" src="{{ asset('public/img/blank.png')}}">
 
 @endsection
 

@@ -44,6 +44,7 @@ class ProfileController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $user->name = $request->input('name');
         $user->full_name = $request->input('full_name');
+        $user->shop_name = $request->input('shop_name');
         $user->email = $request->input('email');
         $user->profile_url = $request->input('profile_url');
         $user->zip_code = $request->input('zip_code');
