@@ -4,10 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class UserProduct extends Model
 {
     use HasFactory;
+
+    /**
+     * The roles that belong to the UserProduct
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(UserProductCategory::class, 'product2_categories', 'product_id', 'category_id');
+    }
 
     public function userProductColor()
     {
@@ -39,8 +52,8 @@ class UserProduct extends Model
     public function getImageUrlsFullPath()
     {
         $rlt = $this->getImageUrls();
-        foreach($rlt as $i => $item) {
-            $rlt[$i] = url('/public/user_product/'. $item);
+        foreach ($rlt as $i => $item) {
+            $rlt[$i] = url('/public/user_product/' . $item);
         }
         return $rlt;
     }
@@ -53,47 +66,94 @@ class UserProduct extends Model
         return $rlt[0];
     }
 
-    public function getCategoryIds()
+    public function getCategoryIds_()
     {
+        $models = $this->categories;
+        $rlt = "_";
+        foreach($models as $i => $model) {
+            $rlt .= $model->id . "_";
+        }
 
-        $rlt = explode("_", $this->category_ids);
-        array_shift($rlt);
-        array_pop($rlt);
         return $rlt;
     }
 
     public function getCategoryText()
     {
-        $listCategoryId = $this->getCategoryIds();
+        $models = $this->categories;
 
         $rlt = "";
-        foreach ($listCategoryId as $i => $id) {
+        foreach ($models as $i => $model) {
             if ($i > 0)
                 $rlt .= '、';
-            $rlt .= UserProductCategory::find($id)->name;
+            $rlt .= $model->name;
         }
 
         return $rlt;
     }
 
-    public function getMaterials()
-    {
-        $rlt = explode("_m_", $this->materials);
-        array_shift($rlt);
-        array_pop($rlt);
-        return $rlt;
+    public function getOptionsText() {
+
+        $options = $this->options;
+        print_r($options);
+        return json_encode($this->options);
     }
 
-    public function getMaterialsText()
-    {
-        $tmp = $this->getMaterials();
-        $rlt = "";
-        if (count($tmp) > 0)
-            $rlt = $tmp[0];
-        for ($i = 1; $i < count($tmp); $i++) {
-            $rlt .= '、' . $tmp[$i];
+    public function getAllOptionNames() {
+        $models = self::get();
+        $rlt = ['カラー', 'サイズ', '素材'];
+
+        foreach($models as $model) {
+            if ($model->options == '') continue;
+            $options = json_decode($model->options);
+            if (count($options) == 0) continue;
+            foreach($options as $option) {
+                $name = $option->name;
+                if (array_search($name, $rlt) != false) continue;
+                array_push($rlt, $name);
+            }
         }
 
         return $rlt;
     }
+
+    public function getOptions() {
+        $rlt = [];
+        $options = $this->options;
+        if ($options == '') return $rlt;
+
+        $options = json_decode($options);
+        foreach($options as $option) {
+            $name = $option->name;
+            $descriptions = $option->description;
+            $dscString = "";
+            foreach($descriptions as $i => $description) {
+                if ($i > 0) $dscString .= ", ";
+                $dscString .= $description;
+            }
+            $rlt[$name] = $dscString;
+        }
+
+        return $rlt;
+    }
+
+    // public function getMaterials()
+    // {
+    //     $rlt = explode("_m_", $this->materials);
+    //     array_shift($rlt);
+    //     array_pop($rlt);
+    //     return $rlt;
+    // }
+
+    // public function getMaterialsText()
+    // {
+    //     $tmp = $this->getMaterials();
+    //     $rlt = "";
+    //     if (count($tmp) > 0)
+    //         $rlt = $tmp[0];
+    //     for ($i = 1; $i < count($tmp); $i++) {
+    //         $rlt .= '、' . $tmp[$i];
+    //     }
+
+    //     return $rlt;
+    // }
 }

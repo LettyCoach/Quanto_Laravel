@@ -138,7 +138,7 @@
                     </li>
                 </ul>
             </li>
-          
+
             @if (Auth::check())
             @if (Auth::user()->isAdmin())
 
@@ -147,7 +147,7 @@
             @endif
 
 
- 
+
 
             <!-- Heading -->
             <div class="sidebar-heading">
