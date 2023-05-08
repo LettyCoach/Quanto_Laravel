@@ -30,11 +30,11 @@
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="background: #3A00FF;">
 
             <!-- Sidebar - Brand -->
             <a class="align-items-center justify-content-center text-decoration-none" href="{{ asset('/') }}">
-                <img src="{{ asset('public/img/logo.png') }}" class="m-2" style="width: 100%; margin: 0!important; padding: .5rem;">
+                <img src="{{ asset('public/img/quanto_logo.png') }}" class="m-2" style="width: 100%; margin: 0!important; padding: .5rem;">
                 <p class="text-white text-center mr-4">クライアント質問管理</p>
             </a>
 

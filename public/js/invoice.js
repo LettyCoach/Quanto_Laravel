@@ -23,6 +23,7 @@ var addUrl = $("#ic_add").attr('src');
 var editUrl = $("#ic_edit").attr('src');
 var linkUrl = $("#ic_link").attr('src');
 var blankUrl = $("#ic_blank").attr('src');
+var newblankUrl = $("#ic_newblank").attr('src');
 var checkUrl = $("#ic_check").attr('src');
 var stamp = $("#stamp").attr('src');
 var profile = $("#profile").attr('src');
@@ -36,17 +37,25 @@ for (const [key, value] of Object.entries(dis_data)) {
         var hostUrl = $("#hostUrl").val();
         var select_img_url = hostUrl + '/' + answer.file_url;
         if (answer.file_url == null) select_img_url = blankUrl;
-        var item_title = answer.title;
-        if (item_title.length > 40) { item_title.slice(0, 20); item_title += "..." }
+        var item_productName = answer.product;
+        var item_brandName = answer.brand;
+        console.log(item_productName, "--------" ,item_productName.length);
+        if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
 
-        var item_price = answer.value;
-        iHtml += '<div class="img-view-item"><div class="img-item-img"><input type="hidden" id="img_upload_url_1" value="' + select_img_url + '"><img alt="' + select_img_url + '" src="' + select_img_url + '" style="width:190px; height: 190px;" ></div>';
-        iHtml += '<div class="img-item-title">' + item_title + '</div><div class="img-item-price">' + item_price + '円</div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 50px;"></div></div>';
+        var item_sub = answer.value;
+        iHtml += '<div class="img-view-item"><div class="img-item-img"><input type="hidden" id="img_upload_url_1" value="' + select_img_url + '"><img alt="' + select_img_url + '" src="' + select_img_url + '" ></div>';
+        iHtml += '<div class="img-item-down"><div class="img-item-brandName">' + item_brandName + '</div><div class="img-item-productName">' + item_productName + '</div><input type="hidden" class="img-item-sub" value="' + item_sub + '"></div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 30px;"></div></div>';
     }
 }
 $("#img_view").html('');
 $("#img_view").append(iHtml);
+$("#img_view").append(makeNew_item_view());
 
+function makeNew_item_view(){
+    var new_item_html = '<div class="img-view-item" id="new_item_blank"><div class="img-item-img"><input type="hidden" id="img_upload_url_1" value="' + blankUrl + '"><img alt="' + blankUrl + '" src="' + newblankUrl + '" ></div>';
+    new_item_html += '<div class="img-item-down"><div class="img-item-brandName">' + " " + '</div><div class="img-item-productName">' + " " + '</div><input type="hidden" class="img-item-sub" value="' + "タイトル" + '"></div></div>';
+    return new_item_html;
+}
 
 function getNumber(_str) {
     if (_str == null) return '0';
@@ -132,7 +141,8 @@ function make_tr(i, k, cId) {
 }
 function detail_make() {
     var subHtml = '';
-    subHtml += '<div style="position: relative;"><textarea style="width:700px; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-top:20px; font-size: 20px;" placeholder="(備考)"></textarea><div class="detail_price">';
+    var memo_text_val = $("#memo_text").val();
+    subHtml += '<div style="position: relative;"><textarea style="width:700px; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-top:20px; font-size: 20px;" placeholder="(備考)" id="memo_text">'+ memo_text_val +'</textarea><div class="detail_price">';
     subHtml += '<div><p>10%対象&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="sinput"id="totalAmount10" value="0">円</p><p>&nbsp;&nbsp;消費税(内税)<input class="sinput"id="totalAmount10s" value="0">円</p></div>';
     subHtml += '<div><p>8%(軽減税率)<input class="sinput"id="totalAmount88" value="0">円</p><p>&nbsp;&nbsp;消費税(内税)<input class="sinput"id="totalAmount88s" value="0">円</p></div>';
     subHtml += '<div><p>8%対象 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="sinput"id="totalAmount8" value="0">円</p><p>&nbsp;&nbsp;消費税(内税)<input class="sinput" id="totalAmount8s" value="0">円</p></div></div></div>';
@@ -636,7 +646,12 @@ $(document).ready(function () {
             });
         });
         var htmlElement = document.querySelector("html").innerHTML;
-        var invoiceNameElement = $("#purpose_1").val();
+        var invoiceNameElement = $("#purpose_1").val();console.log(invoiceNameElement);
+        var invoice_cDateElement = $("#cDate").val();console.log(invoice_cDateElement);
+        var invoice_eDateElement = $("#eDate").val();console.log(invoice_eDateElement);
+        var invoice_uNameElement = $("#uName").val();console.log(invoice_uNameElement);
+        var invoice_total_priceElement = parseInt($("#display_total_price").val().replaceAll(',', ''));console.log(invoice_total_priceElement);
+        var invoice_memoElement = $("#memo_text").val();console.log(invoice_memoElement);
 
         //upload invoice html
         var hostUrl = $("#hostUrl").val();
@@ -644,6 +659,11 @@ $(document).ready(function () {
         var fd = new FormData();
         fd.append('file', htmlElement);
         fd.append('invoiceName', invoiceNameElement);
+        fd.append('invoice_cDate', invoice_cDateElement);
+        fd.append('invoice_eDate', invoice_eDateElement);
+        fd.append('memo_text', invoice_memoElement);
+        fd.append('total_price', invoice_total_priceElement);
+        fd.append('send_name', invoice_uNameElement);
         fd.append('paper_id', paper_id);
         $.ajax({
             type: 'POST',
@@ -729,19 +749,66 @@ $(document).ready(function () {
     });
     updateTextView($('#reduce_plus'));
     $("#uName").keyup();
-
+///////////////////////////////////////////////////////////////////////////
     $(document).on('keyup', '#search_input', function () {
         var filter = $(this).val();
         $(".img-view-item").each(function () {
             var title = $(this).find(".img-item-title").text();
             if (title.indexOf(filter) > -1) {
-                $(this).css('display', 'block');
+                $(this).css('display', 'flex');
             }
             else {
                 $(this).css('display', 'none');
             }
         });
     });
+
+    $(document).on('click', '#img_modal_xbtn', function(){
+        $(".img-view-item").css('flex-direction', 'row');
+        $(".img-view-item").css('margin-bottom', '0');
+        $(".img-view-item").css('width', '720px');
+        $(".img-item-img").find("img").css("width", '70px');
+        $(".img-item-img").find("img").css("height", '70px');
+        $(".img-item-img").css("margin-bottom", '0');
+        $(".img-item-down").css('width', '660px');
+        $(".img-item-down").css('height', '70px');
+        $(".img-item-down").css('flex-direction', 'row');
+        $(".img-item-down").css('padding-left', '20px');
+
+        $(".img-item-brandName").css('width', '200px');
+        $(".img-item-brandName").css('font-size', '16px');
+        $(".img-item-productName").css('justify-content', 'flex-start');
+        $(".img-item-productName").css('width', '530px');
+        $(".img-item-productName").css('font-size', '16px');
+
+        $(".img-modal-xbtn").css("background-image","url('../../public/img/img_03/grid_list.png')");
+        $(".img-modal-xybtn").css("background-image","url('../../public/img/img_03/grid_mobile.png')");
+    });
+    $(document).on('click', '#img_modal_xybtn', function(){
+        $(".img-view-item").css('flex-direction', 'column');
+        $(".img-view-item").css('margin-bottom', 'auto');
+        $(".img-view-item").css('width', '120px');
+        $(".img-item-img").find("img").css("width", '120px');
+        $(".img-item-img").find("img").css("height", '120px');
+        $(".img-item-img").css("margin-bottom", '10px');
+        $(".img-item-down").css('width', '120px');
+        $(".img-item-down").css('height', 'auto');
+        $(".img-item-down").css('flex-direction', 'column');
+        $(".img-item-down").css('padding-left', '0');
+        
+        $(".img-item-brandName").css('width', '120');
+        $(".img-item-brandName").css('font-size', '12px');
+        $(".img-item-productName").css('justify-content', 'center');
+        $(".img-item-productName").css('width', '120');
+        $(".img-item-productName").css('font-size', '12px');
+
+        $(".img-modal-xbtn").css("background-image","url('../../public/img/img_03/grid_soting_1.png')");
+        $(".img-modal-xybtn").css("background-image","url('../../public/img/img_03/grid_sorting.png')");
+        
+    });
+
+
+
     ///////////////////////////////////////////////////
 
 

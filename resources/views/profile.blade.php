@@ -134,12 +134,20 @@
                                             value="{{ 'Q' . (Auth::user()->id + 1000) }}" disabled>
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-control-label" for="full_name">会社名</label>
                                         <input type="text" id="full_name" class="form-control" name="full_name"
                                                placeholder="会社名"
                                                value="{{ old('full_name', Auth::user()->full_name) }}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label" for="shop_name">ショップ名</label>
+                                        <input type="text" id="shop_name" class="form-control" name="shop_name"
+                                               placeholder="会社名"
+                                               value="{{ old('shop_name', Auth::user()->shop_name) }}">
                                     </div>
                                 </div>
                                 <div class="col-lg-3">

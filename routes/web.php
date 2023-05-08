@@ -100,6 +100,7 @@ Route::get('/paper/invoice', [PaperController::class, 'invoice'])->name('paper.i
 Route::post('/paper/invoice/save', [PaperController::class, 'invoiceSave'])->name('paper.invoice.save');
 Route::get('/paper/invoice/new', [PaperController::class, 'invoiceNew'])->name('paper.invoice.new');
 Route::get('/paper/invoice/edit/{id}', [PaperController::class, 'invoiceEdit'])->name('paper.invoice.edit');
+Route::get('/paper/invoice/duplicate/{id}', [PaperController::class, 'duplicate_invoice'])->name('paper.invoice.duplicate');
 Route::get('/paper/invoice/delete/{id}', [PaperController::class, 'invoiceDelete'])->name('paper.invoice.delete');
 
 

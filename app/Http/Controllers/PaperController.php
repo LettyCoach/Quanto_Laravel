@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Paper;
 use Illuminate\Http\Request;
 use App\Models\Survey;
+use App\Models\FollowClient;
 use App\Models\Answer;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserProduct;
@@ -25,22 +26,17 @@ class PaperController extends Controller
 
 		$surveys = Survey::where('user_id', Auth::user()->id)->get();
 		$answers=[];
-		// $i = 0;
-		// foreach($surveys as $survey){
-		// 	if ($i ++ > 5) break;
-        //     if($survey->id==null) continue;
-		// 	$key=$survey->id;
-		// 	$answers[$key]=Answer::where('survey_id', $key)->get();
-		// }
-		//
         $listModel = null;
         $user_id = Auth::user()->id;
         $listModel = UserProduct::all();
 
+
 		$listDataTmp = array();
 		foreach($listModel as $i => $model) {
 
-			$listDataTmp[$i]['title'] = $model->name . ' (' . $model->sku . ')' . '、 ' . $model->userProductColor->name . '/ ' . $model->userProductSize->name . '/ ' . $model->getMaterialsText();
+			$listDataTmp[$i]['product'] = $model->name;
+			//add selections...
+			$listDataTmp[$i]['brand'] = $model->brandName;
 			$listDataTmp[$i]['file_url'] = $model->getImageUrlFirst();
 			$listDataTmp[$i]['value'] = $model->price;
 		}
@@ -62,6 +58,11 @@ class PaperController extends Controller
 		$subject=$request->invoiceName;
 		$category='invoice';
 		$content=$request->file;
+		$cDate=$request->invoice_cDate;
+		$eDate=$request->invoice_eDate;
+		$memo_text=$request->memo_text;
+		$total_price=$request->total_price;
+		$send_name=$request->send_name;
 
 		if($request->paper_id==0){  
 			$paper= new Paper();
@@ -69,12 +70,26 @@ class PaperController extends Controller
 			$paper->subject = $subject;
 			$paper->category = $category;
 			$paper->content = $content;
+			$paper->cDate = $cDate;
+			$paper->eDate = $eDate;
+			$paper->total_price = $total_price;
+			$paper->memo_text = $memo_text;
+			$paper->send_name = $send_name;
 			$paper->save();
 			$edit_id=$paper->id;
 			return ['edit_id'=>$edit_id,'inv_state'=>'add'];
 		}
 		else{
-			Paper::where('id',$request->paper_id)->update(['content'=>$content,'subject'=>$subject]);
+			Paper::where('id',$request->paper_id)->update([
+				'content'=>$content,
+				'subject'=>$subject,
+				'category'=>$category,
+				'cDate'=>$cDate,
+				'eDate'=>$eDate,
+				'total_price'=>$total_price,
+				'memo_text'=>$memo_text,
+				'send_name'=>$send_name,
+			]);
 			$edit_id=$request->paper_id;
 			return ['edit_id'=>$edit_id,'inv_state'=>'edit'];
 		}
@@ -86,18 +101,22 @@ class PaperController extends Controller
 			'editData'=>$editInvoice,
 		]);
 	}
+	public function duplicate_invoice(Request $request, $id){
+		$editInvoice = Paper::where('id', $id)->first();
+		$newInvoice = $editInvoice -> replicate();
+		$newInvoice -> save();
+
+		return redirect(route('paper.invoice'));
+
+	}
 
 	public function invoiceDelete(Request $request, $id){
 		Paper::where('id', $id)->delete();
-		$papers = Paper::where('user_id',Auth::user()->id)->paginate(15);
-		$user=User::where('id',Auth::user()->id)->first();
-		$userName=$user->name;
-		return view('paper/invoice',['papers' => $papers, 'userName'=>$userName,]);
-		
+		return redirect(route('paper.invoice'));
 	}
 
 	public function invoice(Request $request){
-		$papers = Paper::where('user_id',Auth::user()->id)->paginate(15);
+		$papers = Paper::where('user_id',Auth::user()->id)->get();
 		$user=User::where('id',Auth::user()->id)->first();
 		$userName=$user->name;
 		return view('paper/invoice',['papers' => $papers, 'userName'=>$userName,]);
