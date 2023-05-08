@@ -109,7 +109,6 @@
                                         <div class="option_description"><div></div></div>
                                     </div>
                                 </div>
-                                {{ $model->getOptions() }}
                                 <img src = "{{url('public/img/img_03/add_plus.png')}}" id="img_add_option" alt = "img" class = "add_option">
                                 <input type="hidden" name="options" id="options" value="{{ $model->options }}">
                             </div>
