@@ -3,14 +3,9 @@
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.8/tagify.css">
 <link href="{{ asset('public/css/userProduct.css') }}" rel="stylesheet">
-@php
-    $QId = "";
-    if ($model->id > 0)
-        $QId = $model->id + 100000;
-@endphp
 
 <div class="product_mana_pan">
-    <h2 class="product_add_title">新規登録</h2>
+    <h2 class="product_add_title">{{ $caption }}</h2>
     <form class="" id="userProduct" method="post" action="{{ route('admin.userProduct.save') }}" enctype="multipart/form-data" onsubmit="return checkData()">
         @csrf
 
@@ -19,7 +14,10 @@
                 <div class="row m-0">
                     <div class="form_pan">
                         <h4>画像</h4>
-                        <div class = "row m-0">
+                        <div class = "row m-0 flex flex-row">
+                            <div class="user_product_img_first">
+                                <img src = "{{url('public/img/img_03/grid_list.png')}}" alt = "img" class = "add_image">
+                            </div>
                             <div class = "user_product_img_pan">
                             @php
                                 $listImageURL = $model->getImageUrls();
@@ -36,7 +34,7 @@
                             @php
                                 }
                             @endphp
-                                <div>
+                                <div>werwe
                                     <img src = "{{url('public/img/img_03/add_plus.png')}}" id="img_upload_img" alt = "img" class = "add_image">
                                 </div>
                                 <input type="hidden" name="img_urls" id="img_urls" value="{{$model->img_urls}}">
@@ -51,7 +49,7 @@
                             <div class="row m-0 mt-3">
                                 <div class="col-5 p-0 pr-2">
                                     <h5 class="font-weight-bold">商品ID</h5>
-                                    <input type = "text" class = "form-control" value="Q{{$QId}}" readonly>
+                                    <input type = "text" class = "form-control" value={{ $productID }} readonly>
                                 </div>
                                 <div class="col-7 p-0 pl-2">
                                     <h5 class="font-weight-bold">ブランド名</h5>
@@ -475,8 +473,11 @@
     }
 
     $(document).on('click', '#categoryCheckAll', function() {
+
+        const state = $('#categoryCheckAll').prop('checked');
+        console.log(state);
         $('[id^="categoryCheck_"]').each(function() {
-            $(this).prop('checked', true);
+            $(this).prop('checked', state);
         });
     });
 
