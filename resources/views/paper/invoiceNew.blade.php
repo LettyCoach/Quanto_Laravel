@@ -138,27 +138,15 @@
                         <div class="fix-dropdown">
                             <button onclick="myFunction()" class="fix-dropbtn" style="background: url({{ asset('public/img/ic_select_arrow.png') }}) no-repeat center center;background-size: cover;">バリエーション</button>
                             <div id="barient_resize" class="fix-dropdown-content">
-                                <div class="fix-dropdown-item">
+                            @foreach($productOptions as $productOption)
+                                <div class="fix-dropdown-item">        
                                     <div>
-                                        <input type="checkbox" class="image-check-box-small" id="color_show" name="color_show" value="colorOK" checked>
+                                        <input type="checkbox" class="image-check-box-small" id="barient_{{array_search($productOption, $productOptions)}}" name="" value="" checked>
                                         <label class="image-show-small" for="color_show">&nbsp;</label>    
                                     </div>
-                                    <p>カラー</p>
+                                    <p>{{$productOption}}</p>
                                 </div>
-                                <div class="fix-dropdown-item">
-                                    <div>
-                                        <input type="checkbox" class="image-check-box-small" id="size_show" name="size_show" value="sizeOK" checked>
-                                        <label class="image-show-small" for="size_show">&nbsp;</label>    
-                                    </div>
-                                    <p>サイズ</p>
-                                </div>
-                                <div class="fix-dropdown-item">
-                                    <div>
-                                        <input type="checkbox" class="image-check-box-small" id="metiarial_show" name="metiarial_show" value="metiarialOK" checked>
-                                        <label class="image-show-small" for="metiarial_show">&nbsp;</label>    
-                                    </div>
-                                     <p>素材</p>
-                                </div>
+                            @endforeach
                             </div>
                             <p>バリエーシヨン</p>
                         </div>

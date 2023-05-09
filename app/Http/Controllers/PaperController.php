@@ -24,7 +24,6 @@ class PaperController extends Controller
 	public function invoiceNew(Request $request)
 	{
 
-		$surveys = Survey::where('user_id', Auth::user()->id)->get();
 		$answers=[];
         $listModel = null;
         $user_id = Auth::user()->id;
@@ -39,17 +38,24 @@ class PaperController extends Controller
 			$listDataTmp[$i]['brand'] = $model->brandName;
 			$listDataTmp[$i]['file_url'] = $model->getImageUrlFirst();
 			$listDataTmp[$i]['value'] = $model->price;
+			$listDataTmp[$i]['options'] = $model->getOptions();
 		}
 		$answers[0]=$listDataTmp;
 
 
         $date = strval(date('Y-m-d'));
         $expire = strval(date('Y-m-d',strtotime('+1 day')));
+
+		$productFormat = new UserProduct;
+		$productOptions = $productFormat->getAllOptionNames();
+
+
         return view('paper/invoiceNew', [
 			'edit_id'=>0,
 			'cDate'=>$date,
 			'eDate'=>$expire,
 			'answers'=>$answers,
+			'productOptions' => $productOptions,
         ]);
 	}
 
