@@ -30,7 +30,7 @@
             <tbody>
             @foreach($models as $i => $model)
                 <tr>
-                    <td>Q{{1000000 + $model->id}}</td>
+                    <td>{{ $model->getProductID() }}</td>
                     <td><img src="{{url($model->getImageUrlFirst())}}"  style="width : 50px; height : 50px"/></td>
                     <td>{{ $model->brandName }}</td>
                     <td>{{ $model->name }}</td>

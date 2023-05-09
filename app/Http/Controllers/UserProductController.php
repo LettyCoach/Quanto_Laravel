@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductOption;
-use App\Models\UserProductColor;
-use App\Models\UserProductSize;
+
 use App\Models\UserProductCategory;
 use App\Models\Product2Category;
 use App\Models\UserProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use DB;
 
 
 class UserProductController extends Controller
@@ -37,14 +36,16 @@ class UserProductController extends Controller
     public function create()
     {
         $model = new UserProduct();
+        $model->options = json_encode([]);
+        $model->flagPrice2 = "checked";
         $model->isDisplay = "checked";
-        $listUPColor = UserProductColor::all();
-        $listUPSize = UserProductSize::all();
+        $max_id = DB::table('user_products')->max('id');
+        $productID = sprintf("Q%05d%03d", Auth::user()->id, $max_id + 1);
         $listCategory = UserProductCategory::all();
         return view('admin/userProduct/edit', [
+            'caption' => "新規登録",
             'model' => $model,
-            'listUPColor' => $listUPColor,
-            'listUPSize' => $listUPSize,
+            'productID' => $productID,
             'listCategory' => $listCategory,
         ]);
     }
@@ -52,13 +53,12 @@ class UserProductController extends Controller
     public function edit($id)
     {
         $model = UserProduct::find($id);
-        $listUPColor = UserProductColor::all();
-        $listUPSize = UserProductSize::all();
         $listCategory = UserProductCategory::all();
+        $productID = $model->getProductID();
         return view('admin/userProduct/edit', [
+            'caption' => "商品情報編集",
             'model' => $model,
-            'listUPColor' => $listUPColor,
-            'listUPSize' => $listUPSize,
+            'productID' => $productID,
             'listCategory' => $listCategory,
         ]);
     }

@@ -22,14 +22,18 @@ class UserProduct extends Model
         return $this->belongsToMany(UserProductCategory::class, 'product2_categories', 'product_id', 'category_id');
     }
 
-    public function userProductColor()
-    {
-        return $this->belongsTo(UserProductColor::class, 'color_id');
-    }
+    // public function userProductColor()
+    // {
+    //     return $this->belongsTo(UserProductColor::class, 'color_id');
+    // }
 
-    public function userProductSize()
-    {
-        return $this->belongsTo(UserProductSize::class, 'size_id');
+    // public function userProductSize()
+    // {
+    //     return $this->belongsTo(UserProductSize::class, 'size_id');
+    // }
+
+    public function getProductID() {
+        return sprintf("Q%05d%03d", $this->user_id, $this->id);
     }
 
     public function getImageUrls()
