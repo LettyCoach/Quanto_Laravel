@@ -51,6 +51,8 @@ $("#img_view").html('');
 $("#img_view").append(iHtml);
 $("#img_view").append(makeNew_item_view());
 
+
+
 function makeNew_item_view(){
     var new_item_html = '<div class="img-view-item" id="new_item_blank"><div class="img-item-img"><input type="hidden" id="img_upload_url_1" value="' + blankUrl + '"><img alt="' + blankUrl + '" src="' + newblankUrl + '" ></div>';
     new_item_html += '<div class="img-item-down"><div class="img-item-brandName">' + " " + '</div><div class="img-item-productName">' + " " + '</div><input type="hidden" class="img-item-sub" value="' + "タイトル" + '"></div></div>';
