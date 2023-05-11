@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use  App\Notifications\CustomResetPassword ;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -58,5 +59,15 @@ class User extends Authenticatable
      */
     public function sendPasswordResetNotification ($token){
         $this->notify( new CustomResetPassword ($token));
+    }
+
+    /**
+     * The roles that belong to the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function productes(): BelongsToMany
+    {
+        return $this->belongsToMany(UserProduct::class, 'save_items', 'user_id', 'product_id');
     }
 }

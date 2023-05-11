@@ -346,7 +346,7 @@ class ApiController extends Controller
         $file->move('public/pdf_img', $filename);
         return $filename;
     }
-    
+
     public function uploadImgWithPath(Request $request)
     {
         $fileName = microtime(true) . ".png";
@@ -354,5 +354,20 @@ class ApiController extends Controller
         $file = $request->file;
         $file->move($filePath, $fileName);
         return $fileName;
+    }
+
+    public function uploadImgWithPathes(Request $request)
+    {
+        $filePath = $request->get('filePath');
+        $files = $request->file;
+
+        $fileNames = [];
+        for ($i = 0; $i < count($files); $i ++){
+            $file = $files[$i];
+            $fileName = microtime(true) . ".png";
+            $file->move($filePath, $fileName);
+            array_push($fileNames, $fileName);
+        }
+        return json_encode($fileNames);
     }
 }

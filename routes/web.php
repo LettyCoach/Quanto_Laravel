@@ -85,13 +85,17 @@ Route::get('/admin/userProductCategories', [UserProductCategoryController::class
 Route::get('/admin/userProductCategory/create', [UserProductCategoryController::class, 'create'])->name('admin.userProductCategory.create');
 Route::get('/admin/userProductCategory/edit/{id}', [UserProductCategoryController::class, 'edit'])->name('admin.userProductCategory.edit');
 Route::post('/admin/userProductCategory/save', [UserProductCategoryController::class, 'save'])->name('admin.userProductCategory.save');
+Route::get('/admin/userProductCategory/duplicate/{id}', [UserProductCategoryController::class, 'duplicate'])->name('admin.userProductCategory.duplicate');
 Route::get('/admin/userProductCategory/delete/{id}', [UserProductCategoryController::class, 'delete'])->name('admin.userProductCategory.delete');
 
-///User Product 
+///User Product
 Route::get('/admin/userProducts', [UserProductController::class, 'index'])->name('admin.userProducts');
+Route::get('/admin/userProduct/show/{id}', [UserProductController::class, 'show'])->name('admin.userProduct.show');
+Route::get('/admin/userProduct/setTag', [UserProductController::class, 'setTag'])->name('admin.userProduct.setTag');
 Route::get('/admin/userProduct/create', [UserProductController::class, 'create'])->name('admin.userProduct.create');
 Route::get('/admin/userProduct/edit/{id}', [UserProductController::class, 'edit'])->name('admin.userProduct.edit');
 Route::post('/admin/userProduct/save', [UserProductController::class, 'save'])->name('admin.userProduct.save');
+Route::get('/admin/userProduct/duplicate/{id}', [UserProductController::class, 'duplicate'])->name('admin.userProduct.duplicate');
 Route::get('/admin/userProduct/delete/{id}', [UserProductController::class, 'delete'])->name('admin.userProduct.delete');
 
 //Invoice

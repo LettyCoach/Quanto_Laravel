@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/user_product
+/public/user_product_category
 /storage
 /storage/*.key
 /vendor

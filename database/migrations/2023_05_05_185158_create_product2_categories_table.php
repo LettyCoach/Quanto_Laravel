@@ -14,7 +14,7 @@ class CreateProduct2CategoriesTable extends Migration
     public function up()
     {
         Schema::create('product2_categories', function (Blueprint $table) {
-            $table->id();
+            // $table->id();
             $table->foreignId('product_id')
                 ->constrained('user_products')
                 ->onUpdate('cascade');

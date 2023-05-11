@@ -15,6 +15,7 @@ class CreateUserProductCategoriesTable extends Migration
     {
         Schema::create('user_product_categories', function (Blueprint $table) {
             $table->id();
+            $table->string('main_img_url', 1024);
             $table->string('name', 256);
             $table->string('other');
             $table->timestamps();

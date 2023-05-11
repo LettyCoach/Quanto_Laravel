@@ -30,6 +30,7 @@ Route::post('v1/client/save', [\App\Http\Controllers\ApiController::class, 'save
 Route::post('v1/client/pdf', [ApiController::class, 'pdf']);
 Route::post('v1/client/uploadImg', [ApiController::class, 'uploadImg']);
 Route::post('v1/client/uploadImgWithPath', [ApiController::class, 'uploadImgWithPath']);
+Route::post('v1/client/uploadImgWithPathes', [ApiController::class, 'uploadImgWithPathes']);
 
 
 //Auth
@@ -51,7 +52,7 @@ Route::post('products/addSaveItem', [AppApiController::class, 'addSaveItem']);
 //Invoice Create
 Route::post('products/makeInvoice', [AppApiController::class, 'makeInvoice']);
 
-//Follow 
+//Follow
 Route::post('buyer/getUserList', [AppApiController::class, 'getUserListByBuyer_id']);
 Route::post('buyer/setFollow', [AppApiController::class, 'setSupplyerFollow']);
 Route::post('buyer/unsetFollow', [AppApiController::class, 'unsetSupplyerFollow']);
