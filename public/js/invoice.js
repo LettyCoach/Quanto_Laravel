@@ -9,6 +9,7 @@ dis_data = dis_data.replaceAll('\n', '');
 dis_data = dis_data.replaceAll('\r', '').replaceAll(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/<[^>]*>/g, '');
 
 //global values
+var like_flag = false;
 var count_option_checked = 3;
 var page_direction = true;
 var varient_array = [];
@@ -44,12 +45,13 @@ var iHtml = '';
 for (const [key, value] of Object.entries(dis_data)) {
     for (const [kkey, answer] of Object.entries(value)) {
         var hostUrl = $("#hostUrl").val();
-        var select_img_url = hostUrl + '/' + answer.file_url;
+        var select_img_url = answer.file_url;
         if (answer.file_url == null) select_img_url = blankUrl;
         var item_productName = answer.product;
         var item_brandName = answer.brand;
         var item_productID = answer.productID;
         var item_price = answer.value;
+        var item_like = answer.productLike;
         if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
 
         var item_sub = answer.value;
@@ -57,6 +59,7 @@ for (const [key, value] of Object.entries(dis_data)) {
         iHtml += '<input type="hidden" id="img_upload_url_1" value="' + select_img_url + '">';
         iHtml += '<input type="hidden" id="item_productID" value="' + item_productID + '">';
         iHtml += '<input type="hidden" id="item_price" value="' + item_price + '">';
+        iHtml += '<input type="hidden" id="item_like" value="' + item_like + '">';
         for (const [kkkey, option] of Object.entries(answer.options)) {
             iHtml += '<input type="hidden" id="item_'+ kkkey +'" value="' + option + '">';
         }
@@ -354,6 +357,13 @@ function pdfRender(type, cId, tId, rows) {
     });
     $('[id^="title_"]').each(function () {
         var txtrows = $(this).text().split("\n").length;
+        var rows = parseInt($("#select_resize").val());
+        var thisHeight = 40 + (15 - rows) * (65 - 40) / (15 - 8);
+        var thisFont = 12 + (15 - rows) * (20 - 12) / (15 - 8);
+        $(this).css('font-size', thisFont + "px");
+        $(this).css('height', thisHeight + "px");
+    });
+    $(".td-subt-input").each(function(){
         var rows = parseInt($("#select_resize").val());
         var thisHeight = 40 + (15 - rows) * (65 - 40) / (15 - 8);
         var thisFont = 12 + (15 - rows) * (20 - 12) / (15 - 8);
@@ -853,6 +863,31 @@ $(document).ready(function () {
             }
         });
     });
+
+    $(document).on('click', '#img_modal_probtn', function () {
+        like_flag = !like_flag;
+        if(like_flag){
+            $(this).css("background-image","url('../../public/img/img_03/tag_on.png')");
+            var filter = 'LIKE';
+            $(".img-view-item").each(function () {
+                var title = $(this).find("#item_like").val();
+                if (title == filter) {
+                    $(this).css('display', 'flex');
+                }
+                else {
+                    $(this).css('display', 'none');
+                }
+            });
+        }
+        else{
+            $(this).css("background-image","url('../../public/img/img_03/tag_off.png')");
+            $(".img-view-item").each(function () {
+                $(this).css('display', 'flex');
+            });
+        }
+    });
+
+
 
     $(document).on('click', '#img_modal_xbtn', function(){
         $(".img-view-item").css('flex-direction', 'row');

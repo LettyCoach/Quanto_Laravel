@@ -28,17 +28,21 @@ class PaperController extends Controller
         $listModel = null;
         $user_id = Auth::user()->id;
         $listModel = UserProduct::all();
-
+		$user_model = User::find(Auth::user()->id);
+		$user_like_products = $user_model->productes;
 
 		$listDataTmp = array();
 		foreach($listModel as $i => $model) {
 			$listDataTmp[$i]['product'] = $model->name;
 			//add selections...
 			$listDataTmp[$i]['brand'] = $model->brandName;
-			$listDataTmp[$i]['file_url'] = $model->getImageUrlFirst();
+			$listDataTmp[$i]['file_url'] = $model->getImageUrlFirstFullPath(true);
 			$listDataTmp[$i]['value'] = $model->price;
 			$listDataTmp[$i]['options'] = $model->getOptions();
 			$listDataTmp[$i]['productID'] = $model->getProductID();
+			$tp_collection = $user_like_products->find($model->id);
+			if($tp_collection != null) $listDataTmp[$i]['productLike'] = 'LIKE';
+			else $listDataTmp[$i]['productLike'] = 'NOLIKE';
 		}
 		$answers[0]=$listDataTmp;
 

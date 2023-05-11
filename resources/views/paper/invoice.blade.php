@@ -4,7 +4,7 @@
 <script src="{{ asset('public/js/lib/jquery.min.js') }}"></script>
     <div style="display: flex; justify-content: space-between; padding-right: 100px;">
         <div class="img-modal-search-bar">
-            <input type="text" id="search_invoice" placeholder="Search for names.." style="width: 400px">
+            <input type="text" id="search_invoice" placeholder="取引先名.." style="width: 400px; padding-left: 20px;">
         </div>
         <div class="action-container">
             <a class="btn btn-primary" href="{{ route('paper.invoice.new') }}">新規追加</a>
@@ -39,7 +39,7 @@
                     </td>
                     <td class="text-center send_name">{{ $paper->send_name }}</td>
                     <td class="text-center">{{ $paper->cDate }}</td>
-                    <td class="text-center">{{ $paper->total_price }}</td>
+                    <td class="text-center">{{ $paper->total_price }}円</td>
                     <td class="text-center">{{ $paper->eDate }}</td>
                     <td class="text-center">{{ "ステイタス" }}</td>
                     <td class="text-center">{{ "取引状況" }}</td>
