@@ -2,6 +2,7 @@
 @section('main-content')
 
 <link href="{{ asset('public/css/userProduct/index.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 
     <div>
         <div class="action-container">
@@ -70,14 +71,36 @@
                         <div class="col-6 p-0 flex flex-column align-items-center">
                             <img src="{{  url('public/img/img_03/delete.png') }}" alt="" class="main_img">
                             <div class="img_pan">
-                                <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                <div class="swiper mySwiper">
+                                    <div class="swiper-wrapper" id = "slide_img_pan">
+                                        <div class="swiper-slide">
+                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                        </div>
+                                    </div>
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-6 p-0 pr-4" id="info_pan">
@@ -125,7 +148,7 @@
         </div>
     </div>
 
-
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
     <script>
         var product_id = 0;
         function viewData(id) {
@@ -134,12 +157,18 @@
                 const obj = JSON.parse(data);
                 $('#productID').html(obj.productID);
                 $('.main_img').attr('src', obj.main_img);
+                let rlt = "";
+                obj.img_urls.forEach((e, i) => {
+                    rlt += `<div class="swiper-slide"><img src="${e}" alt="" ></div>`;
+                })
+                $('#slide_img_pan').html(rlt);
+
                 $('#name').html(obj.name);
                 $('#price').html(obj.price + '円');
                 $('#detail').html(obj.detail);
                 $('#brandName').html(obj.brandName);
                 $('#sku').html(obj.sku);
-                let rlt = "";
+                rlt = "";
                 obj.options.forEach((e, i) => {
                     rlt += `<div class="row m-0 mt-3 info"><div class="col-3 p-0">${e.name}</div><div class="col-9 p-0">${e.descriptions}</div></div>`;
                 })
@@ -179,5 +208,20 @@
             location.href = url;
 
         }
+
+        var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 4,
+            loop: true,
+            spaceBetween: 30,
+            freeMode: true,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            autoplay: {
+                delay: 2000,
+                disableOnInteraction: false,
+            },
+        });
     </script>
 @endsection
