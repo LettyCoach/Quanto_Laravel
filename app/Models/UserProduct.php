@@ -87,7 +87,13 @@ class UserProduct extends Model
     {
         $rlt = $this->getImageUrls();
         foreach ($rlt as $i => $item) {
-            $rlt[$i] = url($this->imgPath . $item);
+            if ($item == "" || !File::exists($this->imgPath . $item)) {
+                $rlt[$i] = url($this->blankImgURL);
+            }
+            else {
+                $rlt[$i] = url($this->imgPath . $item);
+            }
+
         }
         return $rlt;
     }

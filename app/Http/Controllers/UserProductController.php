@@ -41,6 +41,7 @@ class UserProductController extends Controller
         $rlt = [
             'productID' => $model->getProductID(),
             'main_img' => $model->getImageUrlFirstFullPath(true),
+            'img_urls' => $model->getImageUrlsFullPath(),
             'name' => $model->name,
             'price' => $model->price,
             'detail' => $model->detail,
