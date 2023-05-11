@@ -9,6 +9,15 @@ dis_data = dis_data.replaceAll('\n', '');
 dis_data = dis_data.replaceAll('\r', '').replaceAll(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/<[^>]*>/g, '');
 
 //global values
+var count_option_checked = 3;
+var page_direction = true;
+var varient_array = [];
+$('.fix-dropdown-item').each(function(){
+    varient_array.push($(this).find('p').text());
+});
+
+
+
 //Set main css properties
 var uMethodDivCss = 300;
 var uMethodCss = 200;
@@ -39,11 +48,19 @@ for (const [key, value] of Object.entries(dis_data)) {
         if (answer.file_url == null) select_img_url = blankUrl;
         var item_productName = answer.product;
         var item_brandName = answer.brand;
-        console.log(item_productName, "--------" ,item_productName.length);
+        var item_productID = answer.productID;
+        var item_price = answer.value;
         if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
 
         var item_sub = answer.value;
-        iHtml += '<div class="img-view-item"><div class="img-item-img"><input type="hidden" id="img_upload_url_1" value="' + select_img_url + '"><img alt="' + select_img_url + '" src="' + select_img_url + '" ></div>';
+        iHtml += '<div class="img-view-item"><div class="img-item-img">';
+        iHtml += '<input type="hidden" id="img_upload_url_1" value="' + select_img_url + '">';
+        iHtml += '<input type="hidden" id="item_productID" value="' + item_productID + '">';
+        iHtml += '<input type="hidden" id="item_price" value="' + item_price + '">';
+        for (const [kkkey, option] of Object.entries(answer.options)) {
+            iHtml += '<input type="hidden" id="item_'+ kkkey +'" value="' + option + '">';
+        }
+        iHtml += '<img alt="' + select_img_url + '" src="' + select_img_url + '" ></div>';
         iHtml += '<div class="img-item-down"><div class="img-item-brandName">' + item_brandName + '</div><div class="img-item-productName">' + item_productName + '</div><input type="hidden" class="img-item-sub" value="' + item_sub + '"></div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 30px;"></div></div>';
     }
 }
@@ -112,6 +129,7 @@ $(document).on('click', ".img-close-btn", function (ev) {
 function make_tr(i, k, cId) {
     //set variables
     var rHtml = "";
+    var product_tr_ID = $('#ID_' + (i - k)).val();
     var imgUrl = $('#timg_' + (i - k)).attr('src');
     var title = $('#title_' + (i - k)).val();
     var price = $('#price_' + (i - k)).val();
@@ -122,12 +140,37 @@ function make_tr(i, k, cId) {
     var selk = ($('#reduce_pro_' + (i - k)).prop('selectedIndex') != null) ? $('#reduce_pro_' + (i - k)).prop('selectedIndex') : 0;
     if (k < 0) { }
     else if (cId < 0) { }
-    else { if (i == cId + 1) { imgUrl = blankUrl; title = "タイトル"; price = 0; quantity = 1; current_price = 0; current_reduce = 0; } }
+    else { if (i == cId + 1) {product_tr_ID='Q0000'; imgUrl = blankUrl; title = "タイトル"; price = 0; quantity = 1; current_price = 0; current_reduce = 0; } }
     //making html
-    rHtml = '<tr><td class="td-a1"><div class="td-a1-d1 tooltipimg"><img src="' + editUrl + '" class="img1"/><div class="tooltiptext"><div><img src="' + addUrl + '" class="img2 tooltip-row" id="row_' + i + '"/></div><p>画像追加</p><div><img src="' + linkUrl + '" id="link_' + i + '" class="img2 tooltip-link"/></div><p>URLリンク</p><div><img src="' + delUrl + '" id="del_' + i + '" class="img2 tooltip-del"/></div></div>';
-    rHtml +='<img src="'+t_closeUrl+'" id="tooltip_close_'+i+'" class="tooltip-close"/>';
-    rHtml +='<div class="tooltip-edit-div"><img src="'+t_editUrl+'" id="tooltip_edit_'+i+'" class="tooltip-edit"/><p>編集</p></div>';
-    rHtml += '</div><div class="flex-center"><img alt="product" id="timg_' + i + '"src="' + imgUrl + '" class="td-a1-d2-img" /></div><textarea class="td-a1-input" id="title_' + i + '">' + title + '</textarea></td>';
+    rHtml += '<tr>';
+    rHtml += '<td class="td-ID">';
+    rHtml += '<div class="td-a1-d1 tooltipimg">';
+    rHtml += '<img src="' + editUrl + '" class="img1"/>';
+    rHtml += '<div class="tooltiptext">';
+    rHtml += '<div><img src="' + addUrl + '" class="img2 tooltip-row" id="row_' + i + '"/></div><p>画像追加</p><div><img src="' + linkUrl + '" id="link_' + i + '" class="img2 tooltip-link"/></div><p>URLリンク</p><div><img src="' + delUrl + '" id="del_' + i + '" class="img2 tooltip-del"/></div></div>';
+    rHtml += '<div class="tooltip-edit-div"><img src="'+t_editUrl+'" id="tooltip_edit_'+i+'" class="tooltip-edit"/><p>編集</p></div>';
+    rHtml += '<img src="'+t_closeUrl+'" id="tooltip_close_'+i+'" class="tooltip-close"/>';
+    rHtml += '<input class="td-ID-input" id="ID_'+ i +'" value="'+ product_tr_ID +'"></div>';
+    rHtml += '</td>';
+
+
+
+    rHtml += '<td class="td-a1">';
+    rHtml += '<div class="flex-center"><img alt="product" id="timg_' + i + '"src="' + imgUrl + '" class="td-a1-d2-img" /></div><textarea class="td-a1-input" id="title_' + i + '">' + title + '</textarea></td>';
+
+    rHtml += '';
+    varient_array.forEach(varient_element=>{
+        let ik = i-k;
+        let varient_element_value = $("#subt_"+ varient_element + '_' + ik).val();
+        
+        if (typeof(varient_element_value) == "undefined") varient_element_value = '';
+        rHtml += '<td class="td-plus td-plus-'+ varient_element +'">';
+        rHtml += '<textarea class="td-subt-input td-input-'+ varient_element +'" id="subt_'+ varient_element +'_'+ i +'">'+ varient_element_value +'</textarea></td>';
+        $('#subt_'+varient_element+ '_' + current_img_index).text($(this).parent().find('#item_'+varient_element).val());
+    })
+
+
+
     rHtml += '<td class="td-a2"><input class="td-a2-input" id="price_' + i + '" value="' + price + '"><span>円</span></td><td class="td-a3"><input class="td-a3-input"   id="quantity_' + i + '" value="' + quantity + '"></td><td class="td-a4"> <input class="td-a4-input"  id="current_price_' + i + '" value="' + current_price + '">円</td>';
     rHtml += '<td class="td-a5 reduce-pro-td"><select name="pets" class="reduce-pro" id="reduce_pro_' + i + '">';
     //////////////////////////////////////////////
@@ -169,8 +212,8 @@ function make_before(ci) {
     pdfHtml += '<div id="page1" class="page1"><div class="flex-between mb1"><div class="pro33"></div><div class="pro33 flex-center text-center p2 text-center t6 b8"><input id="purpose_1" class="input10" style="height: 60px;" value="' + purpose + '"></div><div class="pro33 text-right t1 b2">発行日:<input id="cDate" class="input2 w125 text-right" value="' + cDate + '"> </div></div>';
     pdfHtml += '<div class="flex mb1"><div class="pro60"><div id="uNameDiv" class="t4 uline-grey pb1"><input id="uName" class="input9 text-right" value="' + uName + '"> 様</div><div id="uMethodDiv" class="uline-grey pb5 text-left t2 ufit"> 支払方法：<input id="uMethod" class="input1 w200" value="' + payMethod + '"></div></div>';
     pdfHtml += '<div class="flex-between p2"><div class="p2"><img id="profile" alt="profile" src="' + profile + '" style="border-style:solid; border-width:1px; height:50px; width:50px" /></div>';
-    pdfHtml += '<div class="t1"><input id="serial" class="input2 w200" value="' + serial + '"><input id="company" class="input2 w200" value="' + company + '"><div id="invoice_num">' + invoice + '</div></div></div></div><div class="flex pro100"><div class="flex-between pro60"><div class="flex-end pb3"><div class="uline-grey pb1"><span class="t1">ご請求金額&nbsp;</span><input class="input4 w250 " id="display_total_price" value="' + display_total + '"><span class="t5 b4" style="vertical-align: 3px;">円&nbsp;</span><span>(税込)</span><input type="text" class="display-reduce " value="' + display_reduce + '" id="display_reduce">円</div></div></div>';
-    pdfHtml += '<div class="flex-between t1 pro40"><div class="flex-center p2 text-center w150"><p>住所</p></div><div class="flex p2"><div><input id="zipCode" class="input2 w200" value="' + zipCode + '"><input id="adress" class="input2 w200" value="' + adress + '"><input id="phone" class="input2 w200" value="' + phone + '"></div></div><div class="flex-center p3"><img alt="stamp" id="stamp" src="' + stamp + '" style="height:70px; width:70px" /></div></div></div>';
+    pdfHtml += '<div class="t1-col"><input id="serial" class="input2 w200" value="' + serial + '"><input id="company" class="input2 w200" value="' + company + '"><div id="invoice_num">' + invoice + '</div></div></div></div><div class="flex pro100"><div class="flex-between pro60"><div class="flex-end pb3"><div class="uline-grey pb1"><span class="t1">ご請求金額&nbsp;</span><input class="input4 w250 " id="display_total_price" value="' + display_total + '"><span class="t5 b4" style="vertical-align: 3px;">円&nbsp;</span><span>(税込)</span><input type="text" class="display-reduce " value="' + display_reduce + '" id="display_reduce">円</div></div></div>';
+    pdfHtml += '<div class="profile-block t1 pro40"><div class="flex-center p2 text-center w150"  style="width: 80px;"><p>住所</p></div><div class="profile-sub-block flex p2"><div><input id="zipCode" class="input2 w200" value="' + zipCode + '"><input id="adress" class="input2 w200" value="' + adress + '"><input id="phone" class="input2 w200" value="' + phone + '"></div></div><div class="flex-center p3"><img alt="stamp" id="stamp" src="' + stamp + '" style="height:70px; width:70px" /></div></div></div>';
     pdfHtml += '<div><div class="t1"> 有効期間 <input id="eDate" class="input2 w200" value="' + eDate + '"></div>';
     pdfHtml += make_line_des(ci)
     pdfHtml += '<div  id="main_table">';
@@ -222,18 +265,24 @@ function pdfRender(type, cId, tId, rows) {
     if (tId + k <= rows) {
         pdfHtml += make_before(' ');
         //make table HTML
-        var rHtml = '<table cellpadding="1" cellspacing="0" class="main-table"><thead><tr><th class="th1">内容</div></th><th class="th2">単価</div></th><th class="th3">数量</th><th class="th4">金額(円)</th><th class="th5">消費税</th></tr></thead><tbody>';
+        var rHtml = '<table cellpadding="1" cellspacing="0" class="main-table"><thead>';
+        rHtml+= $(".main-table").find("thead").html();//  '<tr><th class="th1">内容</div></th><th class="th2">単価</div></th><th class="th3">数量</th><th class="th4">金額(円)</th><th class="th5">消費税</th></tr>';
+        rHtml+='</thead><tbody>';
         //make main rows
         for (var i = 0; i < tId + k; i++) {
             if (i > cId + k) { rHtml += make_tr(i, k, cId); }
             else { rHtml += make_tr(i, 0, cId); }
         }
         //make last row
-        rHtml += '<tr><td class="td-r1">合計</td><td ></td><td class="td-r3"><input  class="td-r3-input" id="total_count" value="' + total_count + '"></td><td class="td-r4"><input class="td-r4-input" id="total_price" value="' + total_price + '">円</td><td class="td-r5"> 消費税<input  class="td-r5-input" id="reduce_price" value="' + reduce_price + '">円</td></tr>';
+        let x_ct_option = count_option_checked+2;
+        rHtml += '<tr><td class="td-r1" colspan="'+ x_ct_option +'">合計</td><td ></td><td class="td-r3"><input  class="td-r3-input" id="total_count" value="' + total_count + '"></td><td class="td-r4"><input class="td-r4-input" id="total_price" value="' + total_price + '">円</td><td class="td-r5"> 消費税<input  class="td-r5-input" id="reduce_price" value="' + reduce_price + '">円</td></tr>';
         rHtml += '</tbody></table>';
         pdfHtml += rHtml;
         pdfHtml += '</div>';
         pdfHtml += detail_make();
+        pdfHtml += '<style id="page_style">';
+        pdfHtml += $("#page_style").text();
+        pdfHtml += '</style>';
         pdfHtml += '</div>';
     }
     else {
@@ -242,7 +291,11 @@ function pdfRender(type, cId, tId, rows) {
         //make table HTML
         var rHtml1 = '';
         var rHtml2 = '';
-        var rHtml = '<table cellpadding="1" cellspacing="0" class="main-table"><thead><tr><th class="th1">内容</div></th><th class="th2">単価</div></th><th class="th3">数量</th><th class="th4">金額(円)</th><th class="th5">消費税</th></tr></thead><tbody>';
+        var rHtml = '<table cellpadding="1" cellspacing="0" class="main-table"><thead>';
+        rHtml+= $(".main-table").find("thead").html();
+        
+        //'<tr><th class="th1">内容</div></th><th class="th2">単価</div></th><th class="th3">数量</th><th class="th4">金額(円)</th><th class="th5">消費税</th></tr>
+        rHtml+='</thead><tbody>';
         rHtml1 = rHtml2 = rHtml;
         //make main rows
         for (var i = 0; i < tId + k; i++) {
@@ -255,10 +308,11 @@ function pdfRender(type, cId, tId, rows) {
                 else { rHtml2 += make_tr(i, 0, cId); }
             }
         }
-        //make last row            
-        rHtml1 += '<tr><td class="td-r1">小計</td><td ></td><td class="td-r3"><input  class="td-r3-input" id="total_count" value="' + total_count_sub + '"></td><td class="td-r4"><input class="td-r4-input" id="total_price_sub" value="' + total_price_sub + '">円</td><td class="td-r5"> 消費税<input  class="td-r5-input" id="reduce_price_sub" value="' + reduce_price_sub + '">円</td></tr>';
+        //make last row    
+        let x_ct_option = count_option_checked+2;        
+        rHtml1 += '<tr><td class="td-r1" colspan="'+ x_ct_option +'">小計</td><td ></td><td class="td-r3"><input  class="td-r3-input" id="total_count" value="' + total_count_sub + '"></td><td class="td-r4"><input class="td-r4-input" id="total_price_sub" value="' + total_price_sub + '">円</td><td class="td-r5"> 消費税<input  class="td-r5-input" id="reduce_price_sub" value="' + reduce_price_sub + '">円</td></tr>';
         rHtml1 += '</tbody></table>';
-        rHtml2 += '<tr><td class="td-r1">合計</td><td ></td><td class="td-r3"><input  class="td-r3-input" id="total_count" value="' + total_count + '"></td><td class="td-r4"><input class="td-r4-input" id="total_price" value="' + total_price + '">円</td><td class="td-r5"> 消費税<input  class="td-r5-input" id="reduce_price" value="' + reduce_price + '">円</td></tr></tbody></table>';
+        rHtml2 += '<tr><td class="td-r1" colspan="'+ x_ct_option +'">合計</td><td ></td><td class="td-r3"><input  class="td-r3-input" id="total_count" value="' + total_count + '"></td><td class="td-r4"><input class="td-r4-input" id="total_price" value="' + total_price + '">円</td><td class="td-r5"> 消費税<input  class="td-r5-input" id="reduce_price" value="' + reduce_price + '">円</td></tr></tbody></table>';
         //render
         pdfHtml += rHtml1;
         pdfHtml += '</div></div>';
@@ -270,6 +324,9 @@ function pdfRender(type, cId, tId, rows) {
         pdfHtml += rHtml2;
         pdfHtml += '</div>';
         pdfHtml += detail_make();
+        pdfHtml += '<style id="page_style">';
+        pdfHtml += $("#page_style").text();
+        pdfHtml += '</style>';
         pdfHtml += '</div>';
     }
     if (type == 'add') {
@@ -310,6 +367,28 @@ function pdfRender(type, cId, tId, rows) {
     $("#uName_font_size").change();
     $('[id^="title_"]').each(function () {
         $(this).change();
+    });
+    $(".image-show-small").each(function(){
+        var category_text = $(this).parent().find('[id^="varient_check_"]').attr('id').replaceAll(/varient_check_/g, '');
+        //$(this).parent().find('[id^="varient_check_"]').prop('checked', !$(this).parent().find('[id^="varient_check_"]').prop('checked'));
+        if($(this).parent().find('[id^="varient_check_"]').prop('checked') == true){
+            $(this).css("background-image","url('../../public/img/image_on.png')");
+            $(".td-plus-" + category_text).each(function (){
+                $(this).css('display', 'table-cell');
+            });
+            $(".th-plus-" + category_text).each(function (){
+                $(this).css('display', 'table-cell');
+            });
+        } 
+        else {
+            $(this).css("background-image","url('../../public/img/image_off.png')");
+            $(".td-plus-" + category_text).each(function (){
+                $(this).css('display', 'none');
+            });
+            $(".th-plus-" + category_text).each(function (){
+                $(this).css('display', 'none');
+            });
+        }
     });
 }
 $(document).ready(function () {
@@ -562,7 +641,6 @@ $(document).ready(function () {
         }
     });
     $(document).on('click', '.tooltip-close', function (e) {
-
             $(".tooltiptext").css("visibility", "hidden");
             $(".tooltip-close").css("visibility", "hidden");
     });
@@ -648,12 +726,12 @@ $(document).ready(function () {
             });
         });
         var htmlElement = document.querySelector("html").innerHTML;
-        var invoiceNameElement = $("#purpose_1").val();console.log(invoiceNameElement);
-        var invoice_cDateElement = $("#cDate").val();console.log(invoice_cDateElement);
-        var invoice_eDateElement = $("#eDate").val();console.log(invoice_eDateElement);
-        var invoice_uNameElement = $("#uName").val();console.log(invoice_uNameElement);
-        var invoice_total_priceElement = parseInt($("#display_total_price").val().replaceAll(',', ''));console.log(invoice_total_priceElement);
-        var invoice_memoElement = $("#memo_text").val();console.log(invoice_memoElement);
+        var invoiceNameElement = $("#purpose_1").val();
+        var invoice_cDateElement = $("#cDate").val();
+        var invoice_eDateElement = $("#eDate").val();
+        var invoice_uNameElement = $("#uName").val();
+        var invoice_total_priceElement = parseInt($("#display_total_price").val().replaceAll(',', ''));
+        var invoice_memoElement = $("#memo_text").val();
 
         //upload invoice html
         var hostUrl = $("#hostUrl").val();
@@ -695,7 +773,7 @@ $(document).ready(function () {
     });
 
     //upload url
-    $(document).on('click', "#img_upload_img", function () {
+    $(document).on('click', "#new_item_blank", function () {
         var input = document.createElement('input');
         input.type = 'file';
         input.onchange = e => {
@@ -717,8 +795,9 @@ $(document).ready(function () {
                 processData: false,
                 success: function (data, status) {
                     const filePath = hostUrl + "/public/pdf_img/" + data;
-                    $("#img_upload_img").attr('src', filePath);
-                    $("#img_upload_url").val(data);
+                    $("#timg_"+current_img_index).attr('src', filePath);
+                    //$("#img_upload_url").val(data);
+                    $(".q-modal").css('display', 'none');
                 }
             }); // close ajax
         }
@@ -736,12 +815,22 @@ $(document).ready(function () {
         $('#' + currnent_img_id).attr('src', display_img_url);
         $(".q-modal").css("display", "none");
     });
+////////////////////////////////////////////////////////////
     $(document).on('click', '.img-upload-link-btn-1', function () {
+        var display_img_productID = $(this).parent().find('#item_productID').val();
         var display_img_url = $(this).parent().find('#img_upload_url_1').val();
-        var display_img_title = $(this).parent().find('.img-item-title').text();
-        var display_img_price = $(this).parent().find('.img-item-price').text().replace('円', '');
+        var display_img_title = $(this).parent().find('.img-item-productName').text();
+        var display_img_price = $(this).parent().find('#item_price').val();
         var currnent_img_id = 'timg_' + current_img_index;
+        $('#ID_'+current_img_index).val(display_img_productID);
         $('#' + currnent_img_id).attr('src', display_img_url);
+        //for options
+        // for(opt_i = 0; opt_i<varient_option_count; opt_i++){
+        //     $(this).parent().find('#item_productID').val();
+        // }
+        varient_array.forEach(varient_element=>{
+            $('#subt_'+varient_element+ '_' + current_img_index).text($(this).parent().find('#item_'+varient_element).val());
+        })
         $('#price_' + current_img_index).val(display_img_price); $('#price_' + current_img_index).change();
         $('#title_' + current_img_index).text(display_img_title);
         $(".q-modal").css("display", "none");
@@ -755,7 +844,7 @@ $(document).ready(function () {
     $(document).on('keyup', '#search_input', function () {
         var filter = $(this).val();
         $(".img-view-item").each(function () {
-            var title = $(this).find(".img-item-title").text();
+            var title = $(this).find(".img-item-productName").text();
             if (title.indexOf(filter) > -1) {
                 $(this).css('display', 'flex');
             }
@@ -845,10 +934,62 @@ $(document).ready(function () {
         $("#linkModal").css('display', 'none');
     });
 
-
-
+    $(document).on('click', '.image-show-small', function(){
+        var category_text = $(this).parent().find('[id^="varient_check_"]').attr('id').replaceAll(/varient_check_/g, '');
+        $(this).parent().find('[id^="varient_check_"]').prop('checked', !$(this).parent().find('[id^="varient_check_"]').prop('checked'));
+        if($(this).parent().find('[id^="varient_check_"]').prop('checked') == true){
+            $(this).css("background-image","url('../../public/img/image_on.png')");
+            $(".td-plus-" + category_text).each(function (){
+                $(this).css('display', 'table-cell');
+            });
+            $(".th-plus-" + category_text).each(function (){
+                $(this).css('display', 'table-cell');
+            });
+            count_option_checked++;
+        } 
+        else {
+            $(this).css("background-image","url('../../public/img/image_off.png')");
+            $(".td-plus-" + category_text).each(function (){
+                $(this).css('display', 'none');
+            });
+            $(".th-plus-" + category_text).each(function (){
+                $(this).css('display', 'none');
+            });
+            count_option_checked--;
+        }
+        render_page_change(page_direction, count_option_checked);
+    });
+    $(document).on('change','#style_resize', function(){
+        if($(this).val() == '0') page_direction = false;
+        else  page_direction = true;
+        //render_page_change(page_direction, count_option_checked);
+        render_direction_changed(page_direction);
+    });
     ///////////////////////////////////////////
 });
+
+function render_page_change(m_dir, m_ct){
+    $(".td-r1").attr('colspan', m_ct+2);
+    if(m_ct>3) m_dir = true;
+    else m_dir = false;
+    page_direction = m_dir;
+    render_direction_changed(page_direction);
+}
+function render_direction_changed(x_dir){
+    if(x_dir){
+        $('#page_style').text('@page { margin: 0; size: A4 landscape; }');
+        $(".form-body").css('width', '1400px');
+        $("#select_resize").val('15');
+        $("#select_resize").change();
+        $("#select_resize").val('8');
+        $("#select_resize").attr('disabled', true);
+    }
+    else{
+        $(".form-body").css('width', '1000px');
+        $('#page_style').text('@page { margin: 0; size: A4; }');
+        $("#select_resize").attr('disabled', false);
+    }
+}
 function change_toEdit(toEdit_url){
     if(inv_state=="edit") return;
     to_router=toEdit_url.substr(0, toEdit_url.length-1);
@@ -867,9 +1008,9 @@ function resize_main_title(_obj) {
 }
 
 function myFunction() {
-    document.getElementById("barient_resize").classList.toggle("show");
+    document.getElementById("varient_resize").classList.toggle("show");
 }
-  
+
   // Close the dropdown if the user clicks outside of it
 window.onclick = function(event) {
     if (!event.target.matches('.fix-dropbtn')) {
