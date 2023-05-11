@@ -137,11 +137,11 @@
                         </div>
                         <div class="fix-dropdown">
                             <button onclick="myFunction()" class="fix-dropbtn" style="background: url({{ asset('public/img/ic_select_arrow.png') }}) no-repeat center center;background-size: cover;">バリエーション</button>
-                            <div id="barient_resize" class="fix-dropdown-content">
+                            <div id="varient_resize" class="fix-dropdown-content">
                             @foreach($productOptions as $productOption)
                                 <div class="fix-dropdown-item">        
                                     <div>
-                                        <input type="checkbox" class="image-check-box-small" id="barient_{{array_search($productOption, $productOptions)}}" name="" value="" checked>
+                                        <input type="checkbox" class="image-check-box-small" id="varient_check_{{$productOption}}" name="" value="" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'checked' : '' }}>
                                         <label class="image-show-small" for="color_show">&nbsp;</label>    
                                     </div>
                                     <p>{{$productOption}}</p>
@@ -153,8 +153,8 @@
                         <div class="fix-opt">
                             <div style="position: relative;">
                                 <select class="opt-grad" id="style_resize" style="background: url({{ asset('public/img/ic_select_arrow.png') }}) no-repeat center center;background-size: cover;">
-                                    <option value="A4" selected>スタンダード</option>
-                                    <option value="A4 landscape">ワイド</option>
+                                    <option value="0" selected>スタンダード</option>
+                                    <option value="1">ワイド</option>
                                 </select>
                             </div>
                             <p>スタイル</p>
@@ -182,7 +182,7 @@
                     <div class="p2">
                         <img id="profile" alt="profile" src="{{  Auth::user()->profile_url }}" style="border-style:solid; border-width:1px; height:50px; width:50px" />
                     </div>
-                    <div class="t1">
+                    <div class="t1-col">
                         <input id="serial" class="input2 w200" value="請求書No,Q{{ Auth::user()->id + 1000 }}---------">
                         <input id="company" class="input2 w200" value="{{ Auth::user()->full_name }}">
                         <div id="invoice_num">{{ $invoice}}</div>
@@ -202,11 +202,11 @@
 
                 </div>
 
-                <div class="flex-between t1 pro40">
-                    <div class="flex-center p2 text-center w150">
+                <div class="profile-block t1 pro40">
+                    <div class="flex-center p2 text-center w150" style="width: 80px;">
                         <p>住所</p>
                     </div>
-                    <div class="flex p2">
+                    <div class="profile-sub-block flex p2">
                         <div>
                         <input id="zipCode" class="input2 w200" value="〒{{ Auth::user()->zip_code }}">
                         <input id="adress" class="input2 w200" value="{{ Auth::user()->address }}">
@@ -231,10 +231,13 @@
                 <table cellpadding="1" cellspacing="0" class="main-table">
                     <thead>
                         <tr>
+                            <th class="th-ID">ID</th>
                             <th class="th1">内容</th>
-                            <th class="th-color">カラー</th>
-                            <th class="th-size">サイズ</th>
-                            <th class="th-metiarial">コットン</th>
+                            @foreach($productOptions as $productOption)
+                                <th class="th-plus th-plus-{{$productOption}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>        
+                                    {{$productOption}}
+                                </th>
+                            @endforeach
                             <th class="th2">単価</th>
                             <th class="th3">数量</th>
                             <th class="th4">金額(円)</th>
@@ -245,8 +248,8 @@
                         <tr>
                             <?php $currentPrice=0; $i=0; ?>
                             <?php $totalPrice=0; $totalCount=1;?>
-                            <td class="td-a1"> &nbsp; 
-                                    <div class="td-a1-d1 tooltipimg">
+                            <td class="td-ID">
+                                <div class="td-a1-d1 tooltipimg">
                                         <img src="{{ asset('public/img/edit_query.png') }}" class="img1"/>
                                         <div class="tooltiptext">
                                             <div><img src="{{ asset('public/img/ic_add.png') }}" id="row_{{ $i }}" class="img2 tooltip-row"/></div><p>画像追加</p>
@@ -255,16 +258,27 @@
                                         </div>
                                         <img src="{{ asset('public/img/ic_modal_close.png') }}" id="tooltip_close_{{ $i }}" class="tooltip-close"/>
                                         <div class="tooltip-edit-div"><img src="{{ asset('public/img/edit_query_m.png') }}" id="tooltip_edit_{{ $i }}" class="tooltip-edit"/><p>編集</p></div>
-                                    </div>
+                                        <input class="td-ID-input" id="ID_{{ $i }}" value="Q0000">
+                                </div>
+                            </td>
+                            <td class="td-a1"> &nbsp; 
+                                    
                                     <div class="flex-center"><img alt="product" id="timg_{{ $i }}"
                                             src="" onerror="this.onerror=null; this.onload=null; if (!this.attributes.src.value) this.attributes.src.value='{{ asset("public/img/blank-plus.png") }}';"
                                             class="td-a1-d2-img" />
-                                    </div>
+                                    </div>             
                                     <textarea class="td-a1-input" id="title_{{ $i }}">タイトル</textarea>
                             </td>
-                            <td class="td-color"><textarea class="td-color-input" id="subt_color_{{ $i }}">カラー</textarea></td>
-                            <td class="td-size"><textarea class="td-size-input" id="subt_size_{{ $i }}">サイズ</textarea></td>
-                            <td class="td-metiarial"><textarea class="td-metiarial-input" id="subt_metiarial_{{ $i }}">コットン</textarea></td>                 
+
+                            @foreach($productOptions as $productOption)
+                                <td class="td-plus td-plus-{{$productOption}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>
+                                    <textarea class="td-subt-input td-input-{{$productOption}}" id="subt_{{$productOption}}_{{ $i }}"></textarea>
+                                </td>
+                            @endforeach
+
+
+
+
                             <td class="td-a2"><input class="td-a2-input" id="price_{{ $i }}" value="0"><span>円</span></td>
                             <td class="td-a3"><input class="td-a3-input"   id="quantity_{{ $i }}" value="1"></td>
                             <td class="td-a4"> <input class="td-a4-input"  id="current_price_{{ $i }}" value="0">円</td>
@@ -279,11 +293,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="td-r1">合計</td>
+                            <td class="td-r1" colspan="5">合計</td>
                             <td ></td>
                             <td class="td-r3"><input  class="td-r3-input" id="total_count" value="{{ $totalCount }}"> </td>
-                            <td class="td-r4" colspan="2"> <input  class="td-r4-input" id="total_price" value="{{ $totalPrice }}">円</td>
-                            <td class="td-r5" colspan="3"> 消費税(内税)<input  class="td-r5-input" id="reduce_price" value="0">円</td>
+                            <td class="td-r4"> <input  class="td-r4-input" id="total_price" value="{{ $totalPrice }}">円</td>
+                            <td class="td-r5"> 消費税(内税)<input  class="td-r5-input" id="reduce_price" value="0">円</td>
                         </tr>
                     </tbody>
                 </table>
@@ -306,6 +320,9 @@
                 </div>
             </div>
         </div>
+        <style id="page_style">
+            @page{size: A4; margin: 0;}
+        </style>
     </div>
 
         <div id="q_modal" class="q-modal">
@@ -346,6 +363,5 @@
 @section('js')
 <script>var paper_id=0; </script>
 <script src="{{asset('public/js/invoice.js')}}"></script>
-
 
 @endsection

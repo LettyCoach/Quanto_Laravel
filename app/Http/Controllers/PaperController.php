@@ -32,13 +32,13 @@ class PaperController extends Controller
 
 		$listDataTmp = array();
 		foreach($listModel as $i => $model) {
-
 			$listDataTmp[$i]['product'] = $model->name;
 			//add selections...
 			$listDataTmp[$i]['brand'] = $model->brandName;
 			$listDataTmp[$i]['file_url'] = $model->getImageUrlFirst();
 			$listDataTmp[$i]['value'] = $model->price;
 			$listDataTmp[$i]['options'] = $model->getOptions();
+			$listDataTmp[$i]['productID'] = $model->getProductID();
 		}
 		$answers[0]=$listDataTmp;
 
