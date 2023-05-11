@@ -1,0 +1,286 @@
+.main_pan {
+    padding: 0 12px 0 12px;
+}
+
+.main_title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.form_pan {
+    width: 100%;
+    background-color: white;
+    padding: 20px 20px;
+    /* border: 1px solid gray; */
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.form_pan h4 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #7d49ff;
+}
+
+.main_img {
+    cursor: pointer;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    border: 1px solid #d5d5d5;
+}
+
+
+.user_product_img_pan {
+    display: flex;
+    flex-wrap: wrap;
+
+}
+
+.user_product_img_pan div {
+    position: relative;
+    width: 94px;
+    height: 100px;
+}
+
+.user_product_img_pan .view_image,
+.add_image {
+    position: absolute;
+    width: 84px;
+    height: 84px;
+    margin: 0px 6px 10px 0px;
+    border: 1px solid #d5d5d5;
+    border-radius: 8px;
+    /* box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; */
+}
+
+.user_product_img_pan .delete_image {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: -10px;
+    right: 0px;
+    border: 1px solid #847fba;
+    border-radius: 15px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.f-dropdown {
+    --max-scroll: 3;
+    position: relative;
+    z-index: 10;
+}
+
+.f-dropdown select {
+    display: none;
+}
+
+.f-dropdown>span {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    color: #bbb;
+    border: 1px solid #ccc;
+    background: #fff;
+    transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.f-dropdown>span>span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-right: 12px;
+}
+
+.f-dropdown>span img {
+    width: 30px;
+    margin-right: 10px;
+}
+
+.f-dropdown>span:before,
+.f-dropdown>span:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 8px;
+    height: 2px;
+    border-radius: 1px;
+    top: 50%;
+    right: 12px;
+    background: #000;
+    transition: all 0.3s ease;
+}
+
+.f-dropdown>span:before {
+    margin-right: 4px;
+    transform: scale(0.96, 0.8) rotate(50deg);
+}
+
+.f-dropdown>span:after {
+    transform: scale(0.96, 0.8) rotate(-50deg);
+}
+
+.f-dropdown ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    max-height: calc(var(--max-scroll) * 46px);
+    top: 40px;
+    left: 0;
+    z-index: 1;
+    right: 0;
+    background: #FFF;
+    border: 1px solid #CCC;
+    border-radius: 6px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transform-origin: 0 0;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.3s cubic-bezier(0.4, 0.6, 0.5, 1.32);
+    transform: translate(0, 5px);
+}
+
+.f-dropdown ul li {
+    padding: 0;
+    margin: 0;
+}
+
+.f-dropdown ul li a {
+    cursor: pointer;
+    display: block;
+    padding: 8px 12px;
+    color: #000;
+    text-decoration: none;
+    outline: none;
+    position: relative;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+}
+
+.f-dropdown ul li a img {
+    width: 30px;
+    margin-right: 10px;
+}
+
+.f-dropdown ul li a:hover {
+    color: #5C6BC0;
+}
+
+.f-dropdown ul li.active a {
+    color: #FFF;
+    background: #303F9F;
+}
+
+.f-dropdown ul li.active a:before,
+.f-dropdown ul li.active a:after {
+    --scale: 0.6;
+    content: "";
+    display: block;
+    width: 10px;
+    height: 2px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    opacity: 0;
+    background: #FFF;
+    transition: all 0.2s ease;
+}
+
+.f-dropdown ul li.active a:before {
+    transform: rotate(45deg) scale(var(--scale));
+}
+
+.f-dropdown ul li.active a:after {
+    transform: rotate(-45deg) scale(var(--scale));
+}
+
+.f-dropdown ul li.active a:hover:before,
+.f-dropdown ul li.active a:hover:after {
+    --scale: 0.9;
+    opacity: 1;
+}
+
+.f-dropdown ul li:first-child a {
+    border-radius: 6px 6px 0 0;
+}
+
+.f-dropdown ul li:last-child a {
+    border-radius: 0 0 6px 6px;
+}
+
+.f-dropdown.disabled {
+    opacity: 0.7;
+}
+
+.f-dropdown.disabled>span {
+    cursor: not-allowed;
+}
+
+.f-dropdown.filled>span {
+    color: #000;
+}
+
+.f-dropdown.open {
+    z-index: 15;
+}
+
+.f-dropdown.open>span {
+    border-color: #AAA;
+}
+
+.f-dropdown.open>span:before,
+.f-dropdown.open>span:after {
+    background: #000;
+}
+
+.f-dropdown.open>span:before {
+    transform: scale(0.96, 0.8) rotate(-50deg);
+}
+
+.f-dropdown.open>span:after {
+    transform: scale(0.96, 0.8) rotate(50deg);
+}
+
+.f-dropdown.open ul {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0, 12px);
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s cubic-bezier(0.4, 0.6, 0.5, 1.32);
+}
+
+/* --------------------------- */
+.f-group {
+    max-width: 250px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.f-group select {
+    width: 100%;
+}
+
+.f-control {
+    font-size: 14px;
+    line-height: normal;
+    color: #000;
+    display: inline-block;
+    background-color: #ffffff;
+    border: #ccc 1px solid;
+    border-radius: 6px;
+    padding: 8px 12px;
+    outline: none;
+    max-width: 250px;
+}
+
+.add_product {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+}

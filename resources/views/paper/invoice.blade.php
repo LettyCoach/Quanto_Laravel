@@ -54,11 +54,11 @@
             </tbody>
         </table>
     </div>
-    
+
     <script>
         function deleteData(url) {
             if (window.confirm("本当に削除しますか？") == false) return;
-            location.href = url;         
+            location.href = url;
         }
     </script>
     <style>
@@ -71,7 +71,7 @@
             box-shadow: 5px 5px 10px grey;
             color: #6423fe;
             border-radius: 15px;
-        } 
+        }
         .table td {
             border: 0;
         }
@@ -86,7 +86,7 @@
     </style>
 <script>
     $(document).on('change', '#th_check', function(){
-        if($(this).prop('checked')==true){ 
+        if($(this).prop('checked')==true){
             $('[id^="td_check"]').each(function(){
                 $(this).prop('checked', 'true');
             });

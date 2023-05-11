@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\SaveItem;
 use App\Models\UserProductCategory;
 use App\Models\Product2Category;
 use App\Models\UserProduct;
@@ -33,8 +34,39 @@ class UserProductController extends Controller
         return view('admin/userProduct/index', ['models' => $models]);
     }
 
-    public function create()
-    {
+    public function show($id) {
+        $model = UserProduct::find($id);
+        $user_id = Auth::user()->id;
+        $user = $model->users()->find($user_id);
+        $rlt = [
+            'productID' => $model->getProductID(),
+            'main_img' => $model->getImageUrlFirstFullPath(true),
+            'name' => $model->name,
+            'price' => $model->price,
+            'detail' => $model->detail,
+            'brandName' => $model->brandName,
+            'sku' => $model->sku,
+            'tag' => $user != null ? true : false,
+            'options' => $model->getOptionsArray(),
+        ];
+        return json_encode($rlt);
+    }
+
+    public function setTag(Request $request) {
+        $product_id = $request->get('product_id');
+        $user_id = Auth::user()->id;
+        $flag = $request->get('flag');
+
+        SaveItem::where('product_id', $product_id)->where('user_id', $user_id)->delete();
+        if ($flag == 1) {
+            $model = new SaveItem();
+            $model->product_id = $product_id;
+            $model->user_id = $user_id;
+            $model->save();
+        }
+    }
+
+    public function create() {
         $model = new UserProduct();
         $model->options = json_encode([]);
         $model->flagPrice2 = "checked";
@@ -76,6 +108,7 @@ class UserProductController extends Controller
         $model->price = is_numeric($request->get('price')) ? $request->get('price') : 0;
         $model->price2 = is_numeric($request->get('price2')) ? $request->get('price') : 0;
         $model->flagPrice2 = $request->get('flagPrice2') ? "checked" : "";
+        $model->main_img_url = $request->get('main_img_url') ? $request->get('main_img_url') : "";
         $model->img_urls = $request->get('img_urls') ? $request->get('img_urls') : "_";
         $model->options = $request->get('options');
         $model->detail = $request->get('detail');
@@ -111,6 +144,14 @@ class UserProductController extends Controller
             $tModel->category_id = $category_id;
             $tModel->save();
         }
+    }
+
+    public function duplicate($id)
+    {
+        $model = UserProduct::find($id);
+        $model =$model->replicate();
+        $model->save();
+        return redirect()->route('admin.userProducts');
     }
 
     public function delete($id)

@@ -2,7 +2,7 @@
 @section('main-content')
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.8/tagify.css">
-<link href="{{ asset('public/css/userProduct.css') }}" rel="stylesheet">
+<link href="{{ asset('public/css/userProduct/edit.css') }}" rel="stylesheet">
 
 <div class="product_mana_pan">
     <h2 class="product_add_title">{{ $caption }}</h2>
@@ -14,14 +14,15 @@
                 <div class="row m-0">
                     <div class="form_pan">
                         <h4>画像</h4>
-                        <div class = "row m-0 flex flex-row">
+                        <div class = "row m-0 flex flex-row justify-content-center">
                             <div class="user_product_img_first">
-                                <img src = "{{url('public/img/img_03/grid_list.png')}}" alt = "img" class = "add_image">
+                                <img src = "{{ $model->getImageUrlFirstFullPath() }}" id="img_upload_img_main" alt = "img" >
+                                <input type="hidden" id = "main_img_url" name="main_img_url" value="{{ $model->main_img_url }}">
                             </div>
                             <div class = "user_product_img_pan">
                             @php
                                 $listImageURL = $model->getImageUrls();
-                                for ($i = 0; $i < 20; $i ++) {
+                                for ($i = 0; $i < 10; $i ++) {
                                     $style = "";
                                     $src = "";
                                     if ($i >= count($listImageURL)) $style = "display:none";
@@ -29,12 +30,12 @@
                             @endphp
                                     <div id = "userProductImage_div_{{$i}}" style = "{{$style}}">
                                         <img src = "{{$src}}" id="userProductImage_{{$i}}" alt = "img" class="view_image">
-                                        <img src = "{{url('public/img/ic_delete.png')}}" onclick="deleteImage({{$i}})" alt = "img" class = "delete_image">
+                                        <img src = "{{url('public/img/img_03/delete.png')}}" onclick="deleteImage({{$i}})" alt = "img" class = "delete_image">
                                     </div>
                             @php
                                 }
                             @endphp
-                                <div>werwe
+                                <div id="img_upload_img_div" style="display: none">
                                     <img src = "{{url('public/img/img_03/add_plus.png')}}" id="img_upload_img" alt = "img" class = "add_image">
                                 </div>
                                 <input type="hidden" name="img_urls" id="img_urls" value="{{$model->img_urls}}">
@@ -178,7 +179,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="modalAddQuestion" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document" style="">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 400px">
             <div class="modal-content" style="width:400px;;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">カテゴリー選択</h5>
@@ -225,10 +226,7 @@
 
     var options = [];
     var listCategoryId = [];
-
-
-
-
+    const fileLimit = 10;
 
     // formatText = () => {
     //     $('[class="input_material"]').each(function() {
@@ -264,6 +262,7 @@
 
         makeCategoryPan();
         makeOptionPan();
+        displayImageAdd();
 
     });
 
@@ -273,14 +272,10 @@
         $(this).css('width', ($(this).val().length + 1) * 2 + 'ch');
     })
 
-    $(document).on('click',"#img_upload_img", function(){
+    $(document).on('click', '#img_upload_img_main', function() {
         var input = document.createElement('input');
         input.type = 'file';
-        let id = getNesImageId();
-        if (id < 0) {
-            alert("画像を挿入できません。");
-            return;
-        }
+
         input.onchange = e => {
             var file = e.target.files[0];
             var formData = new FormData();
@@ -301,10 +296,58 @@
                 processData : false,
                 success : function (data, status) {
                     const filePathFull = hostUrl + '/' + filePath + data;
-                    $("#userProductImage_" + id).attr('src', filePathFull);
-                    $("#userProductImage_div_" + id).css('display', 'block');
-                    $("#userProductImage_delete_" + id).css('display', 'block');
-                    // $("#userProductImageId_" + id).val(data);
+                    $("#img_upload_img_main").attr('src', filePathFull);
+                    $("#main_img_url").val(data);
+                }
+            });
+        }
+        input.click();
+    })
+
+    $(document).on('click',"#img_upload_img", function(){
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.multiple="true";
+
+        let id = getNesImageId();
+        if (id < 0) {
+            alert("画像を挿入できません。");
+            return;
+        }
+        input.onchange = e => {
+
+            var formData = new FormData();
+            var filePath = "public/user_product/";
+            formData.append('filePath', filePath);
+            for (let i = 0; i < e.target.files.length; i ++) {
+                if (id + i >= fileLimit) break;
+                var file = e.target.files[i];
+                formData.append('file[]', file);
+            }
+
+            var hostUrl = "{{url('/')}}";
+            var postUrl = hostUrl + '/api/v1/client/uploadImgWithPathes';
+
+            $.ajax({
+                type: 'POST',
+                url: postUrl,
+                data: formData,
+                contentType : false,
+                enctype: 'multipart/form-data',
+                cache: false,
+                processData : false,
+                success : function (data, status) {
+                    let fileNames = JSON.parse(data);
+                    for (let i = 0; i < fileNames.length; i ++) {
+                        const fN = fileNames[i];
+                        const filePathFull = hostUrl + '/' + filePath + fN;
+                        $("#userProductImage_" + id).attr('src', filePathFull);
+                        $("#userProductImage_div_" + id).css('display', 'block');
+                        $("#userProductImage_delete_" + id).css('display', 'block');
+                        id ++;
+                    }
+
+                    displayImageAdd();
                 }
             });
         }
@@ -313,23 +356,38 @@
 
     getNesImageId = () => {
 
-        for (let i = 0; i < 20; i ++) {
+        for (let i = 0; i < fileLimit; i ++) {
             if ($('#userProductImage_div_' + i).css('display') == 'none') {
                 return i;
             }
         }
-
         return -1;
     }
 
+    displayImageAdd = () => {
+
+        const id = getNesImageId();
+        if (id == -1) {
+            $('#img_upload_img_div').css('display', 'none');
+        }
+        else {
+            $('#img_upload_img_div').css('display', 'block');
+        }
+    }
+
     deleteImage = (id) => {
-        for (let i = id; i < 19; i ++) {
+        for (let i = id; i < fileLimit - 1; i ++) {
             $('#userProductImage_div_' + i).css('display', $('#userProductImage_div_' + (i + 1) ).css('display'));
             $('#userProductImage_' + i).attr('src', $('#userProductImage_' + (i + 1) ).attr('src'));
 
             $('#userProductImage_div_' + (i + 1) ).css('display', 'none');
             $('#userProductImage_' + (i + 1) ).attr('src', "");
         }
+        if (id == fileLimit - 1) {
+            $('#userProductImage_div_' + id ).css('display', 'none');
+            $('#userProductImage_' + id ).attr('src', "");
+        }
+        displayImageAdd();
     }
 
     viewModal = () => {
@@ -511,7 +569,7 @@
 
 
         let rlt = "_"
-        for (let i = 0; i < 20; i ++) {
+        for (let i = 0; i < fileLimit; i ++) {
             if ($('#userProductImage_div_' + i).css('display') == 'none') break;
             let src = $('#userProductImage_' + i).attr('src');
             src = src.replaceAll('\\', '/')
