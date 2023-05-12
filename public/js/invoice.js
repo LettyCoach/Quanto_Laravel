@@ -105,6 +105,7 @@ resize_main_title($('[id^="purpose_"]'));
 
 function css_re() {
     var rows = parseInt($("#select_resize").val());
+    if(!page_direction) {rows = 15;}
     var img_height = Math.ceil(38 + (15 - rows) * (60 - 38) / (15 - 8)).toString() + "px";
     var td_height = Math.ceil(45 + (15 - rows) * (70 - 45) / (15 - 8)).toString() + "px";
     $("td").css('height', td_height);
@@ -358,6 +359,7 @@ function pdfRender(type, cId, tId, rows) {
     $('[id^="title_"]').each(function () {
         var txtrows = $(this).text().split("\n").length;
         var rows = parseInt($("#select_resize").val());
+        if(!page_direction) rows=15;
         var thisHeight = 40 + (15 - rows) * (65 - 40) / (15 - 8);
         var thisFont = 12 + (15 - rows) * (20 - 12) / (15 - 8);
         $(this).css('font-size', thisFont + "px");
@@ -365,6 +367,7 @@ function pdfRender(type, cId, tId, rows) {
     });
     $(".td-subt-input").each(function(){
         var rows = parseInt($("#select_resize").val());
+        if(!page_direction) rows=15;
         var thisHeight = 40 + (15 - rows) * (65 - 40) / (15 - 8);
         var thisFont = 12 + (15 - rows) * (20 - 12) / (15 - 8);
         $(this).css('font-size', thisFont + "px");
@@ -995,8 +998,8 @@ $(document).ready(function () {
         render_page_change(page_direction, count_option_checked);
     });
     $(document).on('change','#style_resize', function(){
-        if($(this).val() == '0') page_direction = false;
-        else  page_direction = true;
+        if($(this).val() == '0') page_direction = true;
+        else  page_direction = false;
         //render_page_change(page_direction, count_option_checked);
         render_direction_changed(page_direction);
     });
@@ -1005,13 +1008,13 @@ $(document).ready(function () {
 
 function render_page_change(m_dir, m_ct){
     $(".td-r1").attr('colspan', m_ct+2);
-    if(m_ct>3) m_dir = true;
-    else m_dir = false;
+    if(m_ct>3) m_dir = false;
+    else m_dir = true;
     page_direction = m_dir;
     render_direction_changed(page_direction);
 }
 function render_direction_changed(x_dir){
-    if(x_dir){
+    if(!x_dir){
         $('#page_style').text('@page { margin: 0; size: A4 landscape; }');
         $(".form-body").css('width', '1400px');
         $("#select_resize").val('15');
