@@ -403,10 +403,10 @@ th {
 
 .break {
     position: relative;
-    left: -150px;
-    width: 1200px;
+    
+    width: 100%;
     background: grey;
-    height: 50px;
+    height: 5px;
 }
 
 .top-bar {
@@ -1076,7 +1076,7 @@ textarea {
 }
 
 .page1 {
-    padding-top: 100px;
+    padding-top: 50px;
 }
 
 #search_input {
@@ -1241,4 +1241,7 @@ textarea:focus {
 .profile-block{
     display: flex;
     justify-content: flex-start;
+}
+hr{
+    margin: 1px;
 }
