@@ -327,6 +327,7 @@
 
         <div id="q_modal" class="q-modal">
             <div class="img-modal" id="img_modal" >
+                <img class="img-close-btn" src="{{asset('public/img/ic_modal_close.png')}}">
                 <div class="img-modal-main">
                     <div class="img-modal-title">
                         <div class="img-modal-title-text">画像を選択</div>

@@ -126,7 +126,7 @@ function uDiv() {
 
 var current_img_index = '';
 
-$(document).on('click', ".img-close-btn", function (ev) {
+$(document).on('click', ".img-close-btn", function (e) {
     $(".q-modal").css("display", "none");
 });
 //make table row
@@ -599,9 +599,9 @@ $(document).ready(function () {
         var totalAmount88s = 0;
         var tId = parseInt($("#rowCount").val());
         var rows = parseInt($("#select_resize").val());
-        $("[id^='reduce_plus_']").each(function () {
+        $("[id^='current_price_']").each(function () {
             var thisval = parseInt($(this).val().replaceAll(',', ''));
-            var pindex = $(this).attr('id').replaceAll(/reduce_plus_/g, '');
+            var pindex = $(this).attr('id').replaceAll(/current_price_/g, '');
             var pcat = $('#reduce_pro_' + pindex).prop('selectedIndex');
 
             if (pcat == 0) { totalAmount10 += thisval; totalAmount10s += Math.round(thisval * 0.1); }
@@ -609,7 +609,6 @@ $(document).ready(function () {
             else if (pcat == 2) { totalAmount8 += thisval; totalAmount8s += Math.round(thisval * 0.08); }
             else { totalAmount0 += thisval; }
             totalAmount += thisval;
-
         });
         $("#reduce_price").val(totalAmount);
         $("#totalAmount10").val(totalAmount10); updateTextView($("#totalAmount10"));
@@ -808,9 +807,38 @@ $(document).ready(function () {
                 processData: false,
                 success: function (data, status) {
                     const filePath = hostUrl + "/public/pdf_img/" + data;
-                    $("#timg_"+current_img_index).attr('src', filePath);
+                    //$("#timg_"+current_img_index).attr('src', filePath);
                     //$("#img_upload_url").val(data);
-                    $(".q-modal").css('display', 'none');
+                    //$(".q-modal").css('display', 'none');
+
+
+
+                    var itemHtml = '';
+                    var select_img_url = filePath;
+                    if (filePath == null) select_img_url = blankUrl;
+                    var item_productName = "商品名";
+                    var item_brandName = "ブランド";
+                    var item_productID = "Q000000";
+                    var item_price = 0;
+                    var item_like = "NOLIKE";
+                    if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
+                                 
+                    var item_sub = 0;
+                    itemHtml += '<div class="img-view-item"><div class="img-item-img">';
+                    itemHtml += '<input type="hidden" id="img_upload_url_1" value="' + select_img_url + '">';
+                    itemHtml += '<input type="hidden" id="item_productID" value="' + item_productID + '">';
+                    itemHtml += '<input type="hidden" id="item_price" value="' + item_price + '">';
+                    itemHtml += '<input type="hidden" id="item_like" value="' + item_like + '">';
+                    // for (const [kkkey, option] of Object.entries(answer.options)) {
+                    //     itemHtml += '<input type="hidden" id="item_'+ kkkey +'" value="' + option + '">';
+                    // }
+                    itemHtml += '<img alt="' + select_img_url + '" src="' + select_img_url + '" ></div>';
+                    itemHtml += '<div class="img-item-down"><div class="img-item-brandName">' + item_brandName + '</div><div class="img-item-productName">' + item_productName + '</div><input type="hidden" class="img-item-sub" value="' + item_sub + '"></div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 30px;"></div></div>';
+                                 
+                    $(".img-view-item").last().remove();
+                    //console.log($(".img-view-item").last());
+                    $("#img_view").append(itemHtml);
+                    $("#img_view").append(makeNew_item_view());
                 }
             }); // close ajax
         }
@@ -936,7 +964,11 @@ $(document).ready(function () {
         
     });
 
-
+    $(document).on('mouseenter', '.img-item-img', function (e) {
+        $(this).parent().find(".img-upload-link-btn-1").css("display", 'block');
+    }).on('mouseleave', '.img-view-item', function (e) {
+        $(this).parent().find(".img-upload-link-btn-1").css("display", 'none');
+    });
 
     ///////////////////////////////////////////////////
 
@@ -1015,17 +1047,22 @@ function render_page_change(m_dir, m_ct){
 }
 function render_direction_changed(x_dir){
     if(!x_dir){
+        let title_width = 200-(count_option_checked*30);
         $('#page_style').text('@page { margin: 0; size: A4 landscape; }');
         $(".form-body").css('width', '1400px');
         $("#select_resize").val('15');
         $("#select_resize").change();
         $("#select_resize").val('8');
         $("#select_resize").attr('disabled', true);
+        $(".td-a1-input").css("width",title_width);
+
     }
     else{
+        let title_width = 130-(count_option_checked*20);
         $(".form-body").css('width', '1000px');
         $('#page_style').text('@page { margin: 0; size: A4; }');
         $("#select_resize").attr('disabled', false);
+        $(".td-a1-input").css("width",title_width);
     }
 }
 function change_toEdit(toEdit_url){
@@ -1046,7 +1083,8 @@ function resize_main_title(_obj) {
 }
 
 function myFunction() {
-    document.getElementById("varient_resize").classList.toggle("show");
+    if($("#varient_resize").css('display')=='none') $("#varient_resize").css('display', "block");
+    else $("#varient_resize").css('display', "none");
 }
 
   // Close the dropdown if the user clicks outside of it

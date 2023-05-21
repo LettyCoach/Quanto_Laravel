@@ -4,10 +4,10 @@
 <script src="{{ asset('public/js/lib/jquery.min.js') }}"></script>
     <div style="display: flex; justify-content: space-between; padding-right: 100px;">
         <div class="img-modal-search-bar">
-            <input type="text" id="search_invoice" placeholder="取引先名.." style="width: 400px; padding-left: 20px;">
+            <input type="text" class="pl-5" id="search_invoice" placeholder="取引先名.." style="width: 400px; padding-left: 20px; background: url({{ asset('public/img/img_03/search_one.png')}}) left center no-repeat; ">
         </div>
         <div class="action-container">
-            <a class="btn btn-primary" href="{{ route('paper.invoice.new') }}">新規追加</a>
+            <a class="btn btn-primary" href="{{ route('paper.invoice.new') }}" style="background:#6423fe;">新規追加</a>
         </div>
     </div>
     <div class="mt-2">
@@ -21,7 +21,7 @@
                 <th>有効期限</th>
                 <th>ステイタス</th>
                 <th>取引状況</th>
-                <th>メモ</th>
+                <th style="width:300px;">メモ</th>
                 <th>&nbsp;</th>
             </tr>
             </thead>
@@ -43,7 +43,16 @@
                     <td class="text-center">{{ $paper->eDate }}</td>
                     <td class="text-center">{{ "ステイタス" }}</td>
                     <td class="text-center">{{ "取引状況" }}</td>
-                    <td class="" style="font-size: 10px;">{{ $paper->memo_text }}</td>
+                    
+                    <td class="memotd" style="font-size: 16px;display: flex;">
+                        <form action="{{ route('paper.invoice.memo_edit')}}" method="post" style="display: flex;">    
+                        <textarea  name="memoText" style="height: 50px;border:0; background: #e7ebfd; border-radius: 10px; overflow: hidden; line-height: 20px;">{{ $paper->memo_text }}</textarea>    
+                        <div name="memoEdit" class="memoEdit"><img src="{{asset('public/img/img_03/image_on (1).png')}}" style="height: 30px; visibility: visible;"></div>
+                        <input type="hidden" name="paperid" value="{{ $paper->id }}">
+                        @csrf 
+                        </form>  
+                    </td>
+
                     <td>
                         <a class="" href="{{ route('paper.invoice.edit',['id'=>$paper->id]) }}"><img src="{{asset('public/img/img_03/pen.png')}}" style="height: 30px; visibility: visible;"></a>
                         <a class="" href="{{ route('paper.invoice.duplicate',['id'=>$paper->id]) }}"><img src="{{asset('public/img/img_03/copy.png')}}" style="height: 30px; visibility: visible;"></a>
@@ -74,6 +83,9 @@
         }
         .table td {
             border: 0;
+        }
+        tr{
+            line-height: 50px;
         }
 
         tr:first-child th:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px;}
@@ -109,6 +121,33 @@
                 $(this).css('display', 'none');
             }
         });
+    });
+    $(document).on('click','.memoEdit', function(e){
+        e.preventDefault();
+        $(this).parent().submit();
+        
+        // ('<input type="submit" id="send_memo" style="display">');
+        // $("#send_memo").trigger( "click" );
+        // var ajaxUrl = "{{url('/').'/paper/invoice/memo_edit'}}";
+        // var ajaxText = $(this).parent().find("textarea").val();
+        // var ajaxId = $(this).parent().find("#paperid").val();
+        // var fd = new FormData();
+        // fd.append('memo_text', ajaxText);
+        // fd.append('paper_id', ajaxId);
+        // fd.append('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'))
+        // $.ajax({
+        //     type: 'POST',
+        //     url: ajaxUrl,
+        //     data: fd,
+        //     contentType: false,
+        //     enctype: 'multipart/form-data',
+        //     cache: false,
+        //     processData: false,
+        //     success: function (data, status) {
+        //         alert('ok');
+
+        //     }
+        // });
     });
 </script>
 @endsection

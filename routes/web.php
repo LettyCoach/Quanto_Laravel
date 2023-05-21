@@ -37,7 +37,7 @@ Route::post('/profile/purpose', [ProfileController::class, 'purpose']);
 Route::post('/profile/payment_method', [ProfileController::class, 'payment_method']);
 Route::post('/profile/member', [ProfileController::class, 'member']);
 
-Route::get('/admin', [SurveyController::class,'index'])->name('admin.surveys');
+//Route::get('/admin', [SurveyController::class,'index'])->name('admin.surveys');
 
 Route::get('/admin/users', [UserController::class,'index'])->name('admin.users');
 Route::get('/admin/user/edit/{id}', [UserController::class,'edit'])->name('admin.user.edit');
@@ -58,7 +58,7 @@ Route::post('admin/lp/upload', [LPController::class,'upload'])->name('admin.lp.u
 Route::post('admin/lp/content', [LPController::class,'content'])->name('admin.lp.content');
 Route::post('admin/lp/contentd', [LPController::class,'contentDelete'])->name('admin.lp.contentd');
 
-Route::get('/admin/surveys', [SurveyController::class,'index'])->name('admin.surveys');
+//Route::get('/admin/surveys', [SurveyController::class,'index'])->name('admin.surveys');
 Route::get('/admin/survey/add', [SurveyController::class,'add'])->name('admin.survey.add');
 Route::get('/admin/survey/delete/{id}', [SurveyController::class,'delete'])->name('admin.survey.delete');
 Route::post('/admin/survey/save', [SurveyController::class,'save'])->name('admin.survey.save');
@@ -106,6 +106,7 @@ Route::get('/paper/invoice/new', [PaperController::class, 'invoiceNew'])->name('
 Route::get('/paper/invoice/edit/{id}', [PaperController::class, 'invoiceEdit'])->name('paper.invoice.edit');
 Route::get('/paper/invoice/duplicate/{id}', [PaperController::class, 'duplicate_invoice'])->name('paper.invoice.duplicate');
 Route::get('/paper/invoice/delete/{id}', [PaperController::class, 'invoiceDelete'])->name('paper.invoice.delete');
+Route::post('/paper/invoice/memo_edit', [PaperController::class, 'invoiceMemoEdit'])->name('paper.invoice.memo_edit');
 
 
 

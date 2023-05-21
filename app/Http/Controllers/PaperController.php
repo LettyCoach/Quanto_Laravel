@@ -63,6 +63,7 @@ class PaperController extends Controller
         ]);
 	}
 
+
 	public function invoiceSave(Request $request){
 		$user_id=Auth::user()->id;
 		$subject=$request->invoiceName;
@@ -130,5 +131,13 @@ class PaperController extends Controller
 		$user=User::where('id',Auth::user()->id)->first();
 		$userName=$user->name;
 		return view('paper/invoice',['papers' => $papers, 'userName'=>$userName,]);
+	}
+
+	public function invoiceMemoEdit(Request $request){
+		$memo_text = ($request->memoText == null)? " " : $request->memoText;
+		Paper::where('id',$request->paperid)->update([
+				'memo_text'=>$memo_text,
+			]);
+		return redirect(route('paper.invoice'));
 	}
 }
