@@ -69,7 +69,7 @@
                 <div class="modal-body">
                     <div class="row m-0 px-2">
                         <div class="col-6 p-0 flex flex-column align-items-center">
-                            <img src="{{  url('public/img/img_03/delete.png') }}" alt="" class="main_img">
+                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" class="main_img">
                             <div class="img_pan">
                                 <div class="swiper mySwiper">
                                     <div class="swiper-wrapper" id = "slide_img_pan">
@@ -109,12 +109,12 @@
                             <div class="row m-0 mt-3" id="price">980デ</div>
                             <div class="row m-0 mt-3" >
                                 <div class="col-3 p-0 flex">
-                                    <div class="pr-2" style="font-size: 24px">-</div>
-                                    <input type="text" style="width : 32px">
-                                    <div class="pl-2" style="font-size: 24px">+</div>
+                                    <div class="pr-2 change-count" onclick="changeCount(-1)">-</div>
+                                    <input type="text" id = "count_product" value = "0">
+                                    <div class="pl-2 change-count" onclick="changeCount(1)">+</div>
                                 </div>
                                 <div class="col-3 p-0">
-                                    <input type="button" class="btn btn-primary" value="キャンセル">
+                                    <input type="button" class="btn btn-primary" value="カートに追加">
                                 </div>
                                 <div class="col-1 p-0">
                                     <img src="{{ url('public/img/img_03/tag_off.png') }}" alt="" class="tag" id="tag_1" onclick="setSave(1)" >
@@ -200,6 +200,17 @@
 
 
 
+        }
+
+        const changeCount = (val) => {
+            let rlt = $("#count_product").val();
+            rlt = parseInt(rlt);
+            if (typeof val != "number") {
+                rlt = 0;
+            }
+            rlt += val;
+            if (rlt < 0) rlt = 0;
+            $("#count_product").val(rlt);
         }
 
         function deleteData(url) {

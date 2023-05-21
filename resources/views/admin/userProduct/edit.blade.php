@@ -36,7 +36,7 @@
                                 }
                             @endphp
                                 <div id="img_upload_img_div" style="display: none">
-                                    <img src = "{{url('public/img/img_03/add_plus.png')}}" id="img_upload_img" alt = "img" class = "add_image">
+                                    <img src = "{{url('public/img/img_03/plus_img.png')}}" id="img_upload_img" alt = "img" class = "add_image">
                                 </div>
                                 <input type="hidden" name="img_urls" id="img_urls" value="{{$model->img_urls}}">
                             </div>
@@ -78,7 +78,7 @@
                         <div class="form_pan">
                             <div class="row m-0 justify-content-between">
                                 <h4 >金額</h4>
-                                <input type="checkbox" class="switch_1" name="flagPrice2" {{$model->flagPrice2}}>
+                                <input type="checkbox" class="switch_2" name="flagPrice2" {{$model->flagPrice2}}>
                             </div>
                             <div class="row m-0 mt-3">
                                 <div class="col-6 p-0 pr-2">
@@ -108,7 +108,7 @@
                                         <div class="option_description"><div></div></div>
                                     </div>
                                 </div>
-                                <img src = "{{url('public/img/img_03/add_plus.png')}}" id="img_add_option" alt = "img" class = "add_option">
+                                <img src = "{{url('public/img/img_03/plus_img.png')}}" id="img_add_option" alt = "img" class = "add_option">
                                 <input type="hidden" name="options" id="options" value="{{ $model->options }}">
                             </div>
                         </div>
@@ -151,7 +151,7 @@
                     </div>
                     <div class="row m-0 mt-3">
                         <h5 >在庫数の指定</h5>
-                        <input type="checkbox" class="switch_1" name="stockLimit" {{ $model->stockLimit }}>
+                        <input type="checkbox" class="switch_2" name="stockLimit" {{ $model->stockLimit }}>
                     </div>
                     <div class="row m-0 mt-3">
                         <h5 >在庫</h5>
@@ -162,11 +162,11 @@
                 <div class="form_pan mt-4">
                     <div class="row m-0 mt-3 justify-content-between">
                         <h5 >非表示にする</h5>
-                        <input type="checkbox" class="switch_1" name="isDisplay" {{$model->isDisplay}}>
+                        <input type="checkbox" class="switch_2" name="isDisplay" {{$model->isDisplay}}>
                     </div>
                     <div class="row m-0 mt-3 justify-content-center">
                         <input type="button" class="btn btn-outline-primary mr-3" value="キャンセル"  onclick="location.href='{{route('admin.userProducts')}}'">
-                        <input type="submit" class="btn btn-primary ml-3" value="保存" >
+                        <input type="submit" class="btn btn-primary ml-3" style="background-color:#6423FF" value="保存" >
                     </div>
                 </div>
             </div>

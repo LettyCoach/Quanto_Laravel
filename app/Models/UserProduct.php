@@ -152,7 +152,7 @@ class UserProduct extends Model
             if (count($options) == 0) continue;
             foreach($options as $option) {
                 $name = $option->name;
-                if (array_search($name, $rlt) != false) continue;
+                if (array_search($name, $rlt) !== false) continue;
                 array_push($rlt, $name);
             }
         }

@@ -25,12 +25,10 @@ class UserProductController extends Controller
         $models = null;
         $user_id = Auth::user()->id;
         if (Auth::user()->isAdmin()) {
-            $models = UserProduct::simplePaginate(15);
+            $models = UserProduct::orderby('id', 'desc')->simplePaginate(15);
         } else {
-            $models = UserProduct::where('user_id', $user_id)->simplePaginate(15);
+            $models = UserProduct::where('user_id', $user_id)->orderby('id', 'desc')->simplePaginate(15);
         }
-
-        // $models = UserProduct::where('user_id', '555555555')->simplePaginate(15);;
         return view('admin/userProduct/index', ['models' => $models]);
     }
 
