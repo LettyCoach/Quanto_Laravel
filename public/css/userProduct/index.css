@@ -96,6 +96,17 @@ tbody tr:first-child {
     color: black;
 }
 
+.change-count {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#count_product {
+    width: 32px;
+    text-align: center;
+}
+
 #productID,
 #name {
     font-size: 24px;
