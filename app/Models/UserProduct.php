@@ -71,7 +71,10 @@ class UserProduct extends Model
 
     public function getImageUrlFirst($flag = false)
     {
-        $url = $this->main_img_url;
+        $rlt = $this->getImageUrls();
+        $url = "";
+        if (count($rlt) > 0) $url = $rlt[0];
+        
         if ($url == "" || !File::exists($this->imgPath . $url)) {
             if ($flag == false)
                 return $this->addImgURL;

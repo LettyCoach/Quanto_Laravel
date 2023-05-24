@@ -22,38 +22,59 @@
     color: #7d49ff;
 }
 
-.user_product_img_first img {
-    cursor: pointer;
+.user_product_img_pan {
+
+    width: 780px;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto;
+    gap: 10px;
+}
+
+.user_product_img_first {
+    position: relative;
     width: 240px;
     height: 240px;
+    grid-area: 1 / 1 / 3 / 3;
+}
+
+.user_product_img_first img {
+    position: absolute;
+    cursor: pointer;
+    width: 240;
+    height: 232px;
     border-radius: 8px;
     border: 1px solid #d5d5d5;
 }
 
-.user_product_img_pan {
-    display: flex;
-    flex-wrap: wrap;
-    width: 610px;
+.user_product_img_first .delete_image {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: -10px;
+    right: -10px;
+    border: 1px solid #847fba;
+    border-radius: 15px;
+    background-color: white;
+    cursor: pointer;
 }
 
-.user_product_img_pan div {
+.sub_image_pan {
     position: relative;
-    width: 122px;
-    height: 129px;
+    width: 111px;
+    height: 111px;
 }
 
-.user_product_img_pan .view_image,
+.sub_image_pan .view_image,
 .add_image {
     position: absolute;
     width: 111px;
     height: 111px;
-    margin: 0px 0px 18px 11px;
     border: 1px solid #d5d5d5;
     border-radius: 8px;
     /* box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; */
 }
 
-.user_product_img_pan .delete_image {
+.sub_image_pan .delete_image {
     position: absolute;
     width: 30px;
     height: 30px;

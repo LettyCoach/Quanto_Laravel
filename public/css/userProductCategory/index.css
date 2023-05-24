@@ -1,6 +1,18 @@
-a{
+a {
     text-decoration: none;
 }
+
+#search_category {
+    width: 400px; 
+    padding: 8px 40px 8px 10px;
+    background: url('../../img/img_03/search_right.png') right center no-repeat;
+    border: 0;
+    border-radius: 4px;
+    margin: 8px;
+    
+    box-shadow: 5px 5px 10px grey;
+}
+
 table {
     /* border-collapse: separate; */
     border-spacing: 0;

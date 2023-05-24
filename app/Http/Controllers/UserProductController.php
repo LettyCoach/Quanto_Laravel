@@ -32,7 +32,8 @@ class UserProductController extends Controller
         return view('admin/userProduct/index', ['models' => $models]);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $model = UserProduct::find($id);
         $user_id = Auth::user()->id;
         $user = $model->users()->find($user_id);
@@ -51,7 +52,8 @@ class UserProductController extends Controller
         return json_encode($rlt);
     }
 
-    public function setTag(Request $request) {
+    public function setTag(Request $request)
+    {
         $product_id = $request->get('product_id');
         $user_id = Auth::user()->id;
         $flag = $request->get('flag');
@@ -65,7 +67,8 @@ class UserProductController extends Controller
         }
     }
 
-    public function create() {
+    public function create()
+    {
         $model = new UserProduct();
         $model->options = json_encode([]);
         $model->flagPrice2 = "checked";
@@ -123,9 +126,11 @@ class UserProductController extends Controller
         $category_ids = $request->get('category_ids');
         $this->addCatetories($model->id, $category_ids);
 
-        return redirect()->route('admin.userProduct.edit', [
-            'id' => $model->id,
-        ]);
+        return redirect()->route('admin.userProducts');
+
+        // return redirect()->route('admin.userProduct.edit', [
+        //     'id' => $model->id,
+        // ]);
     }
 
     public function addCatetories($product_id, $category_ids)
@@ -148,7 +153,7 @@ class UserProductController extends Controller
     public function duplicate($id)
     {
         $model = UserProduct::find($id);
-        $model =$model->replicate();
+        $model = $model->replicate();
         $model->save();
         return redirect()->route('admin.userProducts');
     }
