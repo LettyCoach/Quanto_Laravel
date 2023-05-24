@@ -12,7 +12,7 @@ class UserProductCategory extends Model
 {
     use HasFactory;
 
-    private $addImgURL = "public/img/img_03/add_plus.png";
+    private $addImgURL = "public/img/img_03/plus_img.png";
     private $blankImgURL = "public/img/blank-plus.png";
     private $imgPath = "public/user_product_category/";
 

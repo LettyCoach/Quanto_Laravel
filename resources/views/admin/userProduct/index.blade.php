@@ -69,28 +69,9 @@
                 <div class="modal-body">
                     <div class="row m-0 px-2">
                         <div class="col-6 p-0 flex flex-column align-items-center">
-                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" class="main_img">
-                            <div class="img_pan">
-                                <div class="swiper mySwiper">
-                                    <div class="swiper-wrapper" id = "slide_img_pan">
-                                        <div class="swiper-slide">
-                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                        </div>
-                                        <div class="swiper-slide">
-                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
-                                        </div>
+                            <div class="img_pan_main">
+                                <div class="swiper mySwiper" id="mySwiper_main">
+                                    <div class="swiper-wrapper" id = "slide_img_pan_main">
                                         <div class="swiper-slide">
                                             <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
                                         </div>
@@ -101,6 +82,24 @@
                                     <div class="swiper-button-next"></div>
                                     <div class="swiper-button-prev"></div>
                                 </div>
+                            </div>
+                            <div class="img_pan">
+                                <div class="swiper mySwiper" id="mySwiper">
+                                    <div class="swiper-wrapper" id = "slide_img_pan">
+                                        <div class="swiper-slide">
+                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                        </div>
+                                        <div class="swiper-slide">
+                                            <img src="{{ url('public/img/img_03/delete.png') }}" alt="" >
+                                        </div>
+                                    </div>
+                                    <div class="swiper-button-next"></div>
+                                    <div class="swiper-button-prev"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="m-4 flex justify-content-end" style="width : 400px" >
+                                <a href="javascript:viewImageList()" class="font-weight-bold">もっと見る</a>
                             </div>
                         </div>
                         <div class="col-6 p-0 pr-4" id="info_pan">
@@ -138,11 +137,59 @@
                                     <div class="col-9 p-0">デザイ-1</div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="modalImageViewList" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 900px; min-width: 900px">
+            <div class="modal-content" style="width:900px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">商品画像</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#modalAddQuestion').modal('toggle')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class = "user_product_img_pan">
+                        <div class="user_product_img_first" id = "userProductImage_div_0">
+                            <img src = "{{ $model->getImageUrlFirstFullPath() }}" id="userProductImage_0" alt = "img" onclick="viewImage(this.src)">
+                        </div>
+                    @php
+                        for ($i = 1; $i < 18; $i ++) {
+                            $style = "display:none";
+                            $src = "";
+                    @endphp
+                            <div id = "userProductImage_div_{{$i}}" class="sub_image_pan" style = "{{$style}}">
+                                <img src = "{{$src}}" id="userProductImage_{{$i}}" alt = "img" class="view_image" onclick="viewImage(this.src)">
+                            </div>
+                    @php
+                        }
+                    @endphp
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Modal -->
+    <div class="modal fade" id="modalImageView" tabindex="-1" role="dialog" aria-hidden="true" >
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 640px; min-width: 640px">
+            <div class="modal-content" style="width:640px;">
+                <div class="modal-body">
+                    <img src="" alt="" class="img_view" id="img_view">
+
                 </div>
             </div>
         </div>
@@ -156,11 +203,18 @@
             $.get(`/admin/userProduct/show/${id}`, function(data) {
                 const obj = JSON.parse(data);
                 $('#productID').html(obj.productID);
-                $('.main_img').attr('src', obj.main_img);
+                // $('.main_img').attr('src', obj.main_img);
                 let rlt = "";
+                for (let i = 0; i < 18; i ++) {
+                    $("#userProductImage_div_" + i).css('display', 'block');
+                }
+
                 obj.img_urls.forEach((e, i) => {
                     rlt += `<div class="swiper-slide"><img src="${e}" alt="" ></div>`;
+                    $("#userProductImage_" + i).attr('src', e);
+                    $("#userProductImage_div_" + i).css('display', 'block');
                 })
+                $('#slide_img_pan_main').html(rlt);
                 $('#slide_img_pan').html(rlt);
 
                 $('#name').html(obj.name);
@@ -186,6 +240,16 @@
 
         }
 
+        const viewImageList = () => {
+            
+            $('#modalImageViewList').modal('toggle');
+        }
+
+        const viewImage = (src) => {
+            $("#img_view").attr("src", src);
+            $('#modalImageView').modal('toggle');
+        }
+
         setSave = (flag) => {
             $.get(`/admin/userProduct/setTag`, {'product_id': product_id, 'flag': flag}, function(data) {
                 if (flag === 1) {
@@ -197,9 +261,6 @@
                     $("#tag_2").css('display', 'none');
                 }
             });
-
-
-
         }
 
         const changeCount = (val) => {
@@ -220,7 +281,18 @@
 
         }
 
-        var swiper = new Swiper(".mySwiper", {
+        var swiper = new Swiper("#mySwiper_main", {
+            slidesPerView: 1,
+            loop: true,
+            spaceBetween: 30,
+            freeMode: true,
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+        
+        var swiper = new Swiper("#mySwiper", {
             slidesPerView: 4,
             loop: true,
             spaceBetween: 30,

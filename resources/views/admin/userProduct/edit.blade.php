@@ -15,27 +15,28 @@
                     <div class="form_pan">
                         <h4>画像</h4>
                         <div class = "row m-0 flex flex-row justify-content-center">
-                            <div class="user_product_img_first">
-                                <img src = "{{ $model->getImageUrlFirstFullPath() }}" id="img_upload_img_main" alt = "img" >
-                                <input type="hidden" id = "main_img_url" name="main_img_url" value="{{ $model->main_img_url }}">
-                            </div>
                             <div class = "user_product_img_pan">
+                                <div class="user_product_img_first" id = "userProductImage_div_0">
+                                    <img src = "{{ $model->getImageUrlFirstFullPath() }}" id="userProductImage_0" alt = "img" >
+                                    <input type="hidden" id = "main_img_url" name="main_img_url" value="{{ $model->main_img_url }}">
+                                    <img src = "{{url('public/img/img_03/delete.png')}}" onclick="deleteImage(0)" alt = "img" class = "delete_image">
+                                </div>
                             @php
                                 $listImageURL = $model->getImageUrls();
-                                for ($i = 0; $i < 10; $i ++) {
+                                for ($i = 1; $i < 18; $i ++) {
                                     $style = "";
                                     $src = "";
                                     if ($i >= count($listImageURL)) $style = "display:none";
                                     else $src = url('public/user_product/' . $listImageURL[$i]);
                             @endphp
-                                    <div id = "userProductImage_div_{{$i}}" style = "{{$style}}">
+                                    <div id = "userProductImage_div_{{$i}}" class="sub_image_pan" style = "{{$style}}">
                                         <img src = "{{$src}}" id="userProductImage_{{$i}}" alt = "img" class="view_image">
                                         <img src = "{{url('public/img/img_03/delete.png')}}" onclick="deleteImage({{$i}})" alt = "img" class = "delete_image">
                                     </div>
                             @php
                                 }
                             @endphp
-                                <div id="img_upload_img_div" style="display: none">
+                                <div id="img_upload_img_div" class="sub_image_pan" style="display: none">
                                     <img src = "{{url('public/img/img_03/plus_img.png')}}" id="img_upload_img" alt = "img" class = "add_image">
                                 </div>
                                 <input type="hidden" name="img_urls" id="img_urls" value="{{$model->img_urls}}">
@@ -226,7 +227,7 @@
 
     var options = [];
     var listCategoryId = [];
-    const fileLimit = 10;
+    const fileLimit = 18;
 
     // formatText = () => {
     //     $('[class="input_material"]').each(function() {

@@ -27,6 +27,14 @@
                 </div>
                 <div class="row m-0 px-4 mt-4" >
                     <div class="col-3 p-0" >
+                        <label class="col-form-label mr-1">サブカテゴリ名</label>
+                    </div>
+                    <div class="col-9 p-0">
+                        <input type = "text" class = "form-control" name = "sub_name" value="{{$model->sub_name}}" required>
+                    </div>
+                </div>
+                <div class="row m-0 px-4 mt-4" >
+                    <div class="col-3 p-0" >
                         <label class="col-form-label mr-1">商品一覧</label>
                     </div>
                     <div class="col-9 p-0">
@@ -43,12 +51,12 @@
 
                     </div>
                     <div class="col-2 p-0 flex justify-content-center align-items-baseline">
-                        <img src = "{{url('public/img/img_03/add_plus.png')}}" id="img_add_product" alt = "img" class = "add_product" onclick="addProduct()">
+                        <img src = "{{url('public/img/img_03/plus_img.png')}}" id="img_add_product" alt = "img" class = "add_product" onclick="addProduct()">
                     </div>
                 </div>
                 <div class="row m-0 px-4 mt-5 justify-content-center" >
                     <input type="button" class="btn btn-outline-primary mr-3" value="キャンセル"  onclick="location.href='{{route('admin.userProductCategories')}}'">
-                    <input type="submit" class="btn btn-primary ml-3" value="保存" >
+                    <input type="submit" class="btn btn-primary ml-3" value="保存" style="background-color: #6423FF">
                 </div>
 
                 <input type = "hidden" name = "id" value = "{{$model->id}}"/>

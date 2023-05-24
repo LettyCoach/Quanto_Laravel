@@ -5,6 +5,7 @@
     <div>
         <div class="action-container">
             <a class="btn btn-primary" href="{{ route('admin.userProductCategory.create') }}">新規作成</a>
+            <input type="text" id="search_category" placeholder="カテゴリー" value="{{ $category }}" onchange="viewList(this.value)">
         </div>
     </div>
     <div class="mt-2 overflow-auto">
@@ -61,6 +62,13 @@
     </div>
 
     <script>
+
+        document.getElementById("search_category").select();
+
+        const viewList = (value) => {
+            location.href=`/admin/userProductCategories?category=${value}`;
+        }
+
         function deleteData(url) {
 
             if (window.confirm("本当に削除しますか？") == false) return;

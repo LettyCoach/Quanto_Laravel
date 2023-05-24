@@ -20,15 +20,17 @@ class UserProductCategoryController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $category = $request->get("category") ? $request->get("category") : "";
 
         $listModel = null;
         // if (Auth::user()->isAdmin()) {
-        $listModel = UserProductCategory::simplePaginate(10);
+        $listModel = UserProductCategory::where("name", "like", '%' . $category . '%')->orderby('id', 'desc')->simplePaginate(10);
         // }
         return view('admin/userProductCategory/index', [
-            'listModel' => $listModel
+            'listModel' => $listModel,
+            'category' => $category
         ]);
     }
 
@@ -60,13 +62,14 @@ class UserProductCategoryController extends Controller
 
         $model->main_img_url = $request->get('main_img_url') ? $request->get('main_img_url') : "";
         $model->name = $request->get('name');
+        $model->sub_name = $request->get('sub_name');
         $model->other = "";
         $model->save();
 
         Product2Category::where('category_id', $model->id)->delete();
 
         $productes = json_decode($request->get('productes'));
-        foreach($productes as $product) {
+        foreach ($productes as $product) {
             $tModel = new Product2Category();
             $tModel->product_id = $product->id;
             $tModel->category_id = $model->id;
@@ -81,7 +84,7 @@ class UserProductCategoryController extends Controller
     public function duplicate($id)
     {
         $model = UserProductCategory::find($id);
-        $model =$model->replicate();
+        $model = $model->replicate();
         $model->save();
         return redirect()->route('admin.userProductCategories');
     }
