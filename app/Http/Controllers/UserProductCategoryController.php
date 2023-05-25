@@ -80,6 +80,25 @@ class UserProductCategoryController extends Controller
             'id' => $model->id,
         ]);
     }
+    
+
+    public function add(Request $request)
+    {
+        $model = new UserProductCategory();
+        
+        $model->main_img_url = "";
+        $model->name = $request->get('name');
+        $model->sub_name = "";
+        $model->other = "";
+        $model->save();
+
+
+        return response()->json([
+            'state' => 'SUCCESS',
+            'id' => $model->id,
+            'name' => $model->name
+        ]);
+    }
 
     public function duplicate($id)
     {

@@ -85,6 +85,7 @@ Route::get('/admin/userProductCategories', [UserProductCategoryController::class
 Route::get('/admin/userProductCategory/create', [UserProductCategoryController::class, 'create'])->name('admin.userProductCategory.create');
 Route::get('/admin/userProductCategory/edit/{id}', [UserProductCategoryController::class, 'edit'])->name('admin.userProductCategory.edit');
 Route::post('/admin/userProductCategory/save', [UserProductCategoryController::class, 'save'])->name('admin.userProductCategory.save');
+Route::get('/admin/userProductCategory/add', [UserProductCategoryController::class, 'add'])->name('admin.userProductCategory.add');
 Route::get('/admin/userProductCategory/duplicate/{id}', [UserProductCategoryController::class, 'duplicate'])->name('admin.userProductCategory.duplicate');
 Route::get('/admin/userProductCategory/delete/{id}', [UserProductCategoryController::class, 'delete'])->name('admin.userProductCategory.delete');
 
