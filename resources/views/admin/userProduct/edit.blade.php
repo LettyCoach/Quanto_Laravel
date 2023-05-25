@@ -180,7 +180,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="modalAddQuestion" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 400px">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 400px; width: 400px">
             <div class="modal-content" style="width:400px;;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">カテゴリー選択</h5>
@@ -191,7 +191,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <div>
-                            <input type="checkbox" id = "categoryCheckAll" class="switch_2">
+                            <input type="checkbox" id = "categoryCheckAll" class="switch_3">
                             <label class="col-form-label"  id = "categoryLabelAll">All Categories</label>
                         </div>
                     </div>
@@ -199,7 +199,7 @@
                         <div class="category_pan">
                             @foreach($listCategory as $item)
                             <div>
-                                <input type="checkbox" id = "categoryCheck_{{$item->id}}" class="switch_2">
+                                <input type="checkbox" id = "categoryCheck_{{$item->id}}" class="switch_3">
                                 <label class="col-form-label"  id = "categoryLabel_{{$item->id}}">{{$item->name}}</label>
                             </div>
                             @endforeach
@@ -209,6 +209,36 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  onclick="$('#modalAddQuestion').modal('toggle')">閉じる</button>
                     <button type="button" class="btn btn-primary" id="btnSaveCategory">OK</button>
+                    <button type="button" class="btn btn-primary" id="btnViewAddCategory">カテゴリー追加</button>
+                </div>
+                <input type="hidden" id="container-id">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="modalAddCategory" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 280px; width: 280px; min-hegith: 100px; height: 200px">
+            <div class="modal-content" style="width:400px; min-height: 200px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">カテゴリー追加</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#modalAddCategory').modal('toggle')">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="row m-0 p-0" >
+                            <label class="col-form-label">カテゴリ名</label>
+                        </div>
+                        <div class="row m-0 p-0">
+                            <input type = "text" class = "form-control p-3" name = "name" id="category_name" value="" required style="width: 100%; font-size: 18px;">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"  onclick="$('#modalAddCategory').modal('toggle')">閉じる</button>
+                    <button type="button" class="btn btn-primary" id="btnAddCategory">OK</button>
                 </div>
                 <input type="hidden" id="container-id">
             </div>
@@ -564,6 +594,39 @@
         if ($('#modalAddQuestion').modal) {
             $('#modalAddQuestion').modal('toggle');
         }
+    })
+    
+
+    $(document).on('click', '#btnAddCategory', function() {
+        
+        const name = $('#category_name').val();
+        $.get("/admin/userProductCategory/add", {"name" : name}, function(data) {
+            
+            if (data.state === "SUCCESS") {
+
+                let str = "";
+                str += "<div>";
+                str += `<input type="checkbox" id = "categoryCheck_${data.id}" class="switch_3">`;
+                str += `<label class="col-form-label"  id = "categoryLabel_${data.id}">${data.name}</label>`;
+                str += "</div>"
+
+                console.log(str);
+
+                $('.category_pan').append(str);
+                listCategoryId.push(data.id);
+
+                if ($('#modalAddCategory').modal) {
+                  $('#modalAddCategory').modal('toggle');
+                }
+                
+            }
+        })
+    })
+
+
+
+    $(document).on('click', '#btnViewAddCategory', function() {
+        $('#modalAddCategory').modal('toggle');
     })
 
     checkData = () => {

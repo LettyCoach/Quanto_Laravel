@@ -153,7 +153,7 @@
             <div class="modal-content" style="width:900px;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">商品画像</h5>
-                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#modalAddQuestion').modal('toggle')">
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#modalImageViewList').modal('toggle')">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -206,7 +206,8 @@
                 // $('.main_img').attr('src', obj.main_img);
                 let rlt = "";
                 for (let i = 0; i < 18; i ++) {
-                    $("#userProductImage_div_" + i).css('display', 'block');
+                    $("#userProductImage_div_" + i).css('display', 'none');
+                    $("#userProductImage_" + i).attr('src', "");
                 }
 
                 obj.img_urls.forEach((e, i) => {
