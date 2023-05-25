@@ -50,6 +50,7 @@ for (const [key, value] of Object.entries(dis_data)) {
         var item_productName = answer.product;
         var item_brandName = answer.brand;
         var item_productID = answer.productID;
+        var item_id = answer.id;
         var item_price = answer.value;
         var item_like = answer.productLike;
         if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
@@ -60,6 +61,7 @@ for (const [key, value] of Object.entries(dis_data)) {
         iHtml += '<input type="hidden" id="item_productID" value="' + item_productID + '">';
         iHtml += '<input type="hidden" id="item_price" value="' + item_price + '">';
         iHtml += '<input type="hidden" id="item_like" value="' + item_like + '">';
+        iHtml += '<input type="hidden" id="item_id" value="' + item_id + '">';
         for (const [kkkey, option] of Object.entries(answer.options)) {
             iHtml += '<input type="hidden" id="item_'+ kkkey +'" value="' + option + '">';
         }
@@ -141,10 +143,11 @@ function make_tr(i, k, cId) {
     var current_price = $('#current_price_' + (i - k)).val();
     var current_reduce = $('#reduce_plus_' + (i - k)).val();
     var reduce_pro_option = $('#reduce_pro_' + (i - k)).val();
+    var productNum = $('#productNum_' + (i - k)).val();
     var selk = ($('#reduce_pro_' + (i - k)).prop('selectedIndex') != null) ? $('#reduce_pro_' + (i - k)).prop('selectedIndex') : 0;
     if (k < 0) { }
     else if (cId < 0) { }
-    else { if (i == cId + 1) {product_tr_ID='Q0000'; imgUrl = blankUrl; title = "タイトル"; price = 0; quantity = 1; current_price = 0; current_reduce = 0; } }
+    else { if (i == cId + 1) {product_tr_ID='Q0000'; imgUrl = blankUrl; title = "タイトル"; price = 0; quantity = 1; current_price = 0; current_reduce = 0; productNum = -1;} }
     //making html
     rHtml += '<tr>';
     rHtml += '<td class="td-ID">';
@@ -154,7 +157,7 @@ function make_tr(i, k, cId) {
     rHtml += '<div><img src="' + addUrl + '" class="img2 tooltip-row" id="row_' + i + '"/></div><p>画像追加</p><div><img src="' + linkUrl + '" id="link_' + i + '" class="img2 tooltip-link"/></div><p>URLリンク</p><div><img src="' + delUrl + '" id="del_' + i + '" class="img2 tooltip-del"/></div></div>';
     rHtml += '<div class="tooltip-edit-div"><img src="'+t_editUrl+'" id="tooltip_edit_'+i+'" class="tooltip-edit"/><p>編集</p></div>';
     rHtml += '<img src="'+t_closeUrl+'" id="tooltip_close_'+i+'" class="tooltip-close"/>';
-    rHtml += '<input class="td-ID-input" id="ID_'+ i +'" value="'+ product_tr_ID +'"></div>';
+    rHtml += '<input class="td-ID-input" id="ID_'+ i +'" value="'+ product_tr_ID +'"><input type="hidden" id="productNum_'+ i +'" value="'+ productNum +'"></div>';
     rHtml += '</td>';
 
 
@@ -385,7 +388,7 @@ function pdfRender(type, cId, tId, rows) {
         var category_text = $(this).parent().find('[id^="varient_check_"]').attr('id').replaceAll(/varient_check_/g, '');
         //$(this).parent().find('[id^="varient_check_"]').prop('checked', !$(this).parent().find('[id^="varient_check_"]').prop('checked'));
         if($(this).parent().find('[id^="varient_check_"]').prop('checked') == true){
-            $(this).css("background-image","url('../../public/img/image_on.png')");
+            //$(this).css("background-image","url('../../public/img/image_on.png')");
             $(".td-plus-" + category_text).each(function (){
                 $(this).css('display', 'table-cell');
             });
@@ -394,7 +397,7 @@ function pdfRender(type, cId, tId, rows) {
             });
         } 
         else {
-            $(this).css("background-image","url('../../public/img/image_off.png')");
+            //$(this).css("background-image","url('../../public/img/image_off.png')");
             $(".td-plus-" + category_text).each(function (){
                 $(this).css('display', 'none');
             });
@@ -589,7 +592,7 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////
     //捕獲　reduce 
     $(document).on('change', '[id^="reduce_plus_"]', function () {
-        var totalAmount = 0;
+        var totalAmounts = 0;
         var totalAmount10 = 0;
         var totalAmount8 = 0;
         var totalAmount88 = 0;
@@ -604,13 +607,13 @@ $(document).ready(function () {
             var pindex = $(this).attr('id').replaceAll(/current_price_/g, '');
             var pcat = $('#reduce_pro_' + pindex).prop('selectedIndex');
 
-            if (pcat == 0) { totalAmount10 += thisval; totalAmount10s += Math.round(thisval * 0.1); }
-            else if (pcat == 1) { totalAmount88 += thisval; totalAmount88s += Math.round(thisval * 0.08); }
-            else if (pcat == 2) { totalAmount8 += thisval; totalAmount8s += Math.round(thisval * 0.08); }
-            else { totalAmount0 += thisval; }
-            totalAmount += thisval;
+            if (pcat == 0) { totalAmount10 += thisval; totalAmount10s += Math.round(thisval * 0.1); totalAmounts += totalAmount10s;}
+            else if (pcat == 1) { totalAmount88 += thisval; totalAmount88s += Math.round(thisval * 0.08); totalAmounts += totalAmount88s;}
+            else if (pcat == 2) { totalAmount8 += thisval; totalAmount8s += Math.round(thisval * 0.08); totalAmounts += totalAmount8s;}
+            else { totalAmount0 += 0;}
+            
         });
-        $("#reduce_price").val(totalAmount);
+        $("#reduce_price").val(totalAmounts);
         $("#totalAmount10").val(totalAmount10); updateTextView($("#totalAmount10"));
         $("#totalAmount10s").val(totalAmount10s); updateTextView($("#totalAmount10s"));
         $("#totalAmount88").val(totalAmount88); updateTextView($("#totalAmount88"));
@@ -821,6 +824,7 @@ $(document).ready(function () {
                     var item_productID = "Q000000";
                     var item_price = 0;
                     var item_like = "NOLIKE";
+                    var item_id = -1;
                     if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
                                  
                     var item_sub = 0;
@@ -829,6 +833,7 @@ $(document).ready(function () {
                     itemHtml += '<input type="hidden" id="item_productID" value="' + item_productID + '">';
                     itemHtml += '<input type="hidden" id="item_price" value="' + item_price + '">';
                     itemHtml += '<input type="hidden" id="item_like" value="' + item_like + '">';
+                    itemHtml += '<input type="hidden" id="item_id" value="' + item_id + '">';
                     // for (const [kkkey, option] of Object.entries(answer.options)) {
                     //     itemHtml += '<input type="hidden" id="item_'+ kkkey +'" value="' + option + '">';
                     // }
@@ -836,7 +841,7 @@ $(document).ready(function () {
                     itemHtml += '<div class="img-item-down"><div class="img-item-brandName">' + item_brandName + '</div><div class="img-item-productName">' + item_productName + '</div><input type="hidden" class="img-item-sub" value="' + item_sub + '"></div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 30px;"></div></div>';
                                  
                     $(".img-view-item").last().remove();
-                    //console.log($(".img-view-item").last());
+
                     $("#img_view").append(itemHtml);
                     $("#img_view").append(makeNew_item_view());
                 }
@@ -863,6 +868,7 @@ $(document).ready(function () {
         var display_img_title = $(this).parent().find('.img-item-productName').text();
         var display_img_price = $(this).parent().find('#item_price').val();
         var currnent_img_id = 'timg_' + current_img_index;
+        var productNum = $(this).parent().find('#item_id').val();
         $('#ID_'+current_img_index).val(display_img_productID);
         $('#' + currnent_img_id).attr('src', display_img_url);
         //for options
@@ -874,6 +880,7 @@ $(document).ready(function () {
         })
         $('#price_' + current_img_index).val(display_img_price); $('#price_' + current_img_index).change();
         $('#title_' + current_img_index).text(display_img_title);
+        $('#productNum_' + current_img_index).val(productNum);
         $(".q-modal").css("display", "none");
     });
     $('[id*="price"]').each(function () {
@@ -998,17 +1005,27 @@ $(document).ready(function () {
         $("#saveModal").css('display', 'none');
     });
     $(document).on('click','[id^="link_"]', function(){
+        current_img_index = $(this).attr('id').replaceAll(/link_/g, '');
+        var hostUrl = $("#hostUrl").val();
+        var product_id = $(this).parent().parent().parent().find('[id^="productNum_"]').val();
+        var linput_url = hostUrl + "/admin/userProduct/edit/" + product_id;
+        if(product_id < 0) linput_url = "https://";
+        $("#linput_link").val(linput_url);
         $("#linkModal").css('display', 'block');
+        $("#linput_link")
+        //var product_id = $(this).parent().parent().parent();
+        viewData(product_id);
     });
-    $(document).on('click', '#link_close', function(){
+    $(document).on('click', '#bt_link_close', function(){
         $("#linkModal").css('display', 'none');
+        $("#modalAddQuestion").css('display', 'none');
     });
 
     $(document).on('click', '.image-show-small', function(){
         var category_text = $(this).parent().find('[id^="varient_check_"]').attr('id').replaceAll(/varient_check_/g, '');
         $(this).parent().find('[id^="varient_check_"]').prop('checked', !$(this).parent().find('[id^="varient_check_"]').prop('checked'));
         if($(this).parent().find('[id^="varient_check_"]').prop('checked') == true){
-            $(this).css("background-image","url('../../public/img/image_on.png')");
+            //$(this).css("background-image","url('../../public/img/image_on.png')");
             $(".td-plus-" + category_text).each(function (){
                 $(this).css('display', 'table-cell');
             });
@@ -1018,7 +1035,7 @@ $(document).ready(function () {
             count_option_checked++;
         } 
         else {
-            $(this).css("background-image","url('../../public/img/image_off.png')");
+            //$(this).css("background-image","url('../../public/img/image_off.png')");
             $(".td-plus-" + category_text).each(function (){
                 $(this).css('display', 'none');
             });
@@ -1047,7 +1064,7 @@ function render_page_change(m_dir, m_ct){
 }
 function render_direction_changed(x_dir){
     if(!x_dir){
-        let title_width = 200-(count_option_checked*30);
+        let title_width = 300-(count_option_checked*30);
         $('#page_style').text('@page { margin: 0; size: A4 landscape; }');
         $(".form-body").css('width', '1400px');
         $("#select_resize").val('15');

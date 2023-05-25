@@ -27,9 +27,25 @@ class PaperController extends Controller
 		$answers=[];
         $listModel = null;
         $user_id = Auth::user()->id;
-        $listModel = UserProduct::all();
+        $listModel = null;
+		$models = null;
+        if (Auth::user()->isAdmin()) {
+            $listModel = UserProduct::orderby('id', 'desc')->get();
+        } else {
+            $listModel = UserProduct::where('user_id', $user_id)->orderby('id', 'desc')->get();
+        }
+
+
+
 		$user_model = User::find(Auth::user()->id);
 		$user_like_products = $user_model->productes;
+
+		$models = null;
+        if (Auth::user()->isAdmin()) {
+            $models = UserProduct::orderby('id', 'desc')->simplePaginate(15);
+        } else {
+            $models = UserProduct::where('user_id', $user_id)->orderby('id', 'desc')->simplePaginate(15);
+        }
 
 		$listDataTmp = array();
 		foreach($listModel as $i => $model) {
@@ -38,6 +54,7 @@ class PaperController extends Controller
 			$listDataTmp[$i]['brand'] = $model->brandName;
 			$listDataTmp[$i]['file_url'] = $model->getImageUrlFirstFullPath(true);
 			$listDataTmp[$i]['value'] = $model->price;
+			$listDataTmp[$i]['id'] = $model->id;
 			$listDataTmp[$i]['options'] = $model->getOptions();
 			$listDataTmp[$i]['productID'] = $model->getProductID();
 			$tp_collection = $user_like_products->find($model->id);
@@ -60,6 +77,7 @@ class PaperController extends Controller
 			'eDate'=>$expire,
 			'answers'=>$answers,
 			'productOptions' => $productOptions,
+			'models' => $models,
         ]);
 	}
 
