@@ -156,9 +156,12 @@ tbody tr:first-child {
     text-align: center;
 }
 
-#productID,
+#productID {
+    font-size: 14px;
+    font-weight: bold;
+}
 #name {
-    font-size: 24px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -173,24 +176,24 @@ tbody tr:first-child {
 }
 
 #product_detail {
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
     border-bottom: 1px solid black;
 }
 
 #detail {
-    font-size: 22px;
+    font-size: 16px;
     /* font-weight: bold; */
 }
 
 #product_info {
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
     border-bottom: 1px solid black;
 }
 
 .info {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     border-bottom: 1px solid #d5d5d5;
 }
@@ -200,4 +203,8 @@ tbody tr:first-child {
 .swiper-button-prev:after,
 .swiper-rtl .swiper-button-next:after {
     font-size: 30px !important;
+}
+
+#modalImageViewList > .madal-content {
+    border : 0 !important;
 }

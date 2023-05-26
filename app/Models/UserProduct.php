@@ -37,16 +37,6 @@ class UserProduct extends Model
         return $this->belongsToMany(User::class, 'save_items', 'product_id', 'user_id');
     }
 
-    // public function userProductColor()
-    // {
-    //     return $this->belongsTo(UserProductColor::class, 'color_id');
-    // }
-
-    // public function userProductSize()
-    // {
-    //     return $this->belongsTo(UserProductSize::class, 'size_id');
-    // }
-
     public function getProductID() {
         return sprintf("Q%05d%03d", $this->user_id, $this->id);
     }
@@ -60,49 +50,96 @@ class UserProduct extends Model
         return $name;
     }
 
-    public function getImageUrls()
-    {
+    public function getFullPath($url, $flag) {
 
-        $rlt = explode("_", $this->img_urls);
-        array_shift($rlt);
-        array_pop($rlt);
-        return $rlt;
-    }
-
-    public function getImageUrlFirst($flag = false)
-    {
-        $rlt = $this->getImageUrls();
-        $url = "";
-        if (count($rlt) > 0) $url = $rlt[0];
-        
         if ($url == "" || !File::exists($this->imgPath . $url)) {
-            if ($flag == false)
+            if ($flag == "add")
                 return $this->addImgURL;
-            else {
+            else if($flag == "blank") {
                 return $this->blankImgURL;
             }
         }
-
         return $this->imgPath . $url;
     }
 
-    public function getImageUrlsFullPath()
+    public function getImageUrls()
     {
-        $rlt = $this->getImageUrls();
-        foreach ($rlt as $i => $item) {
-            if ($item == "" || !File::exists($this->imgPath . $item)) {
-                $rlt[$i] = url($this->blankImgURL);
+        $rlt = [];
+        if (strlen($this->img_urls) > 0) {
+            $rlt = json_decode($this->img_urls, true);
+        }
+
+        $limit = 10;
+        $cnt = count($rlt);
+
+        if($cnt < $limit) {
+            for ($i = 0; $i < $limit - $cnt; $i ++){
+                array_push($rlt, [
+                    'name' => '',
+                    'url' => '',
+                    'state' => 'blank'
+                ]);
+            }
+        }
+
+        $limit = 18;
+        $cnt = count($rlt);
+        for ($i = $cnt; $i < $limit; $i ++){
+            array_push($rlt, [
+                'name' => '',
+                'url' => '',
+                'state' => 'none'
+            ]);
+        }
+
+
+        foreach($rlt as $i => $e) {
+            
+            // if($e['state'] == '') continue;
+
+            if ($i == 0) {
+                $rlt[$i]['url'] = $this->getFullPath($e['name'], "add");
             }
             else {
-                $rlt[$i] = url($this->imgPath . $item);
+                $rlt[$i]['url'] = $this->getFullPath($e['name'], "blank");
             }
-
         }
+
         return $rlt;
     }
 
-    public function getImageUrlFirstFullPath($flag = false)
+    public function getImageUrlsFullPath() {
+
+        $rlt = $this->getImageUrls();
+        foreach($rlt as $i => $e) {
+
+            if ($i == 0) {
+                $rlt[$i]['url'] = url($this->getFullPath($e['name'], "add"));
+            }
+            else {
+                $rlt[$i]['url'] = url($this->getFullPath($e['name'], "blank"));
+            }
+        }
+
+        return $rlt;
+    }
+
+    public function getImageUrls_JSON() {
+        $rlt = $this->getImageUrls();
+        return json_encode($rlt);
+    }
+
+    public function getImageUrlFirst($flag = 'add')
     {
+        $rlt = $this->getImageUrls();
+        
+        return $this->getFullPath($rlt[0]['name'], $flag);
+    }
+
+    public function getImageUrlFirstFullPath($flag = 'add')
+    {
+        $rlt = $this->getImageUrls();
+        
         return url($this->getImageUrlFirst($flag));
     }
 
@@ -136,8 +173,11 @@ class UserProduct extends Model
         $options = $this->getOptions();
         $rlt = "";
         $i = 0;
-        foreach($options as $option) {
+        foreach($options as $name => $option) {
             if ($i > 0) $rlt .= "<br>";
+            if ($name != 'カラー' && $name != 'サイズ' && $name != '素材') {
+                $rlt .= "<b>$name</b><br>";
+            }
             $rlt .= $option;
             $i ++;
         }
@@ -180,7 +220,14 @@ class UserProduct extends Model
             $rlt[$name] = $dscString;
         }
 
-        return $rlt;
+        $names = $this->getAllOptionNames();
+        $tmp = [];
+        foreach($names as $i => $name) {
+            if (isset($rlt[$name]) == false) continue;
+            $tmp[$name] = $rlt[$name];
+        }
+
+        return $tmp;
     }
 
     public function getOptionsArray() {

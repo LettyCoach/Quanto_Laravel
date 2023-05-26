@@ -31,7 +31,7 @@
                 <tr>
                     <td>{{ $model->getProductID() }}</td>
                     <td>
-                        <img src="{{url($model->getImageUrlFirst(true))}}" class="product_first_img" onclick="viewData({{ $model->id }})"/>
+                        <img src="{{$model->getImageUrlFirstFullPath('blank')}}" class="product_first_img" onclick="viewData({{ $model->id }})"/>
                     </td>
                     <td>{{ $model->brandName }}</td>
                     <td>{{ $model->name }}</td>
@@ -58,8 +58,8 @@
 
     <!-- Modal -->
     <div class="modal fade" id="modalAddQuestion" tabindex="-1" role="dialog" aria-hidden="true" >
-        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 1200px">
-            <div class="modal-content" style="width:1200px;">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 1400px">
+            <div class="modal-content" style="width:1400px; min-height : calc(100vh - 80px)">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">商品情報</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#modalAddQuestion').modal('toggle')">
@@ -148,9 +148,9 @@
 
     
     <!-- Modal -->
-    <div class="modal fade" id="modalImageViewList" tabindex="-1" role="dialog" aria-hidden="true" >
-        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 900px; min-width: 900px">
-            <div class="modal-content" style="width:900px;">
+    <div class="modal fade" id="modalImageViewList" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 900px; min-width: 900px;">
+            <div class="modal-content" style="width:900px; min-height: 360px; background-color: #f1f2ff; border : 0; box-shadow: 5px 5px 10px grey;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">商品画像</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#modalImageViewList').modal('toggle')">
@@ -176,8 +176,6 @@
                     </div>
 
                 </div>
-                <div class="modal-footer">
-                </div>
             </div>
         </div>
     </div>
@@ -202,6 +200,7 @@
             product_id = id;
             $.get(`/admin/userProduct/show/${id}`, function(data) {
                 const obj = JSON.parse(data);
+                console.log(obj);
                 $('#productID').html(obj.productID);
                 // $('.main_img').attr('src', obj.main_img);
                 let rlt = "";
@@ -211,8 +210,12 @@
                 }
 
                 obj.img_urls.forEach((e, i) => {
-                    rlt += `<div class="swiper-slide"><img src="${e}" alt="" ></div>`;
-                    $("#userProductImage_" + i).attr('src', e);
+                    if (e.state !== '') {
+                        $("#userProductImage_div_" + i).css('display', 'none');
+                        return;
+                    }
+                    rlt += `<div class="swiper-slide"><img src="${e.url}" alt="" ></div>`;
+                    $("#userProductImage_" + i).attr('src', e.url);
                     $("#userProductImage_div_" + i).css('display', 'block');
                 })
                 $('#slide_img_pan_main').html(rlt);

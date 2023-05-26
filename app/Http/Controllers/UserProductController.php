@@ -39,7 +39,7 @@ class UserProductController extends Controller
         $user = $model->users()->find($user_id);
         $rlt = [
             'productID' => $model->getProductID(),
-            'main_img' => $model->getImageUrlFirstFullPath(true),
+            'main_img' => '',
             'img_urls' => $model->getImageUrlsFullPath(),
             'name' => $model->name,
             'price' => $model->price,
@@ -87,6 +87,7 @@ class UserProductController extends Controller
     public function edit($id)
     {
         $model = UserProduct::find($id);
+        $model->getImageUrls();
         $listCategory = UserProductCategory::all();
         $productID = $model->getProductID();
         return view('admin/userProduct/edit', [
@@ -107,7 +108,9 @@ class UserProductController extends Controller
         $model->brandName = $request->get('brandName');
         $model->name = $request->get('name');
         $model->sku = $request->get('sku');
+        $model->price_txt = $request->get('price_txt');
         $model->price = is_numeric($request->get('price')) ? $request->get('price') : 0;
+        $model->price2_txt = $request->get('price2_txt');
         $model->price2 = is_numeric($request->get('price2')) ? $request->get('price') : 0;
         $model->flagPrice2 = $request->get('flagPrice2') ? "checked" : "";
         $model->main_img_url = $request->get('main_img_url') ? $request->get('main_img_url') : "";

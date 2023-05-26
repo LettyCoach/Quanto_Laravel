@@ -17,9 +17,8 @@
                         <div class = "row m-0 flex flex-row justify-content-center">
                             <div class = "user_product_img_pan">
                                 <div class="user_product_img_first" id = "userProductImage_div_0">
-                                    <img src = "{{ $model->getImageUrlFirstFullPath() }}" id="userProductImage_0" alt = "img" >
-                                    <input type="hidden" id = "main_img_url" name="main_img_url" value="{{ $model->main_img_url }}">
-                                    <img src = "{{url('public/img/img_03/delete.png')}}" onclick="deleteImage(0)" alt = "img" class = "delete_image">
+                                    <img src = "{{ url($model->getImageUrlFirst('add')) }}" id="userProductImage_0" alt = "img" >
+                                    <img src = "{{url('public/img/img_03/delete.png')}}" id="delete_image_0" onclick="deleteImage(0)" alt = "img" class = "delete_image">
                                 </div>
                             @php
                                 $listImageURL = $model->getImageUrls();
@@ -27,11 +26,11 @@
                                     $style = "";
                                     $src = "";
                                     if ($i >= count($listImageURL)) $style = "display:none";
-                                    else $src = url('public/user_product/' . $listImageURL[$i]);
+                                    else $src = $listImageURL[$i]['url'];
                             @endphp
                                     <div id = "userProductImage_div_{{$i}}" class="sub_image_pan" style = "{{$style}}">
-                                        <img src = "{{$src}}" id="userProductImage_{{$i}}" alt = "img" class="view_image">
-                                        <img src = "{{url('public/img/img_03/delete.png')}}" onclick="deleteImage({{$i}})" alt = "img" class = "delete_image">
+                                        <img src = "{{url($src)}}" id="userProductImage_{{$i}}" alt = "img" class="view_image">
+                                        <img src = "{{url('public/img/img_03/delete.png')}}" id="delete_image_{{$i}}" onclick="deleteImage({{$i}})" alt = "img" class = "delete_image">
                                     </div>
                             @php
                                 }
@@ -39,7 +38,7 @@
                                 <div id="img_upload_img_div" class="sub_image_pan" style="display: none">
                                     <img src = "{{url('public/img/img_03/plus_img.png')}}" id="img_upload_img" alt = "img" class = "add_image">
                                 </div>
-                                <input type="hidden" name="img_urls" id="img_urls" value="{{$model->img_urls}}">
+                                <input type="hidden" name="img_urls" id="img_urls" value="{{$model->getImageUrls_JSON()}}">
                             </div>
                         </div>
                     </div>
@@ -83,12 +82,12 @@
                             </div>
                             <div class="row m-0 mt-3">
                                 <div class="col-6 p-0 pr-2">
-                                    <h6 class="text-center">例;希望小売価格</h6>
-                                    <input type = "text" class = "form-control text-right" name = "price" value="{{$model->price}}" required>
+                                    <input type = "text" class = "form-control text-center" placeholder="例;希望小売価格" name = "price_txt" value="{{$model->price_txt}}" required>
+                                    <input type = "text" class = "form-control text-right mt-2" name = "price" value="{{$model->price}}" required>
                                 </div>
                                 <div class="col-6 p-0 pl-2">
-                                    <h6 class="text-center">例;セール価格</h6>
-                                    <input type = "text" class = "form-control text-right" name = "price2" value="{{$model->price2}}" disable>
+                                    <input type = "text" class = "form-control text-center" placeholder="例;セール価格" name = "price2_txt" value="{{$model->price2_txt}}" disable>
+                                    <input type = "text" class = "form-control text-right mt-2" name = "price2" value="{{$model->price2}}" disable>
                                 </div>
                             </div>
                         </div>
@@ -255,16 +254,12 @@
 
 <script>
 
+    const hostUrl = "{{url('/')}}";
+    const blankUrl = "{{$model->getFullPath("", "blank")}}"
     var options = [];
     var listCategoryId = [];
     const fileLimit = 18;
-
-    // formatText = () => {
-    //     $('[class="input_material"]').each(function() {
-    //         $(this).css('width', ($(this).val().length + 1) * 2 + 'ch');
-    //     })
-    // }
-
+    var listImageURL = [];
 
     $(document).ready(function() {
 
@@ -274,15 +269,17 @@
                 e.preventDefault();
             }
         });
-        // formatText();
+
+        
+        listImageURL = JSON.parse($('#img_urls').val());
+        console.log(listImageURL);
+        displayImageList();
 
         var tmp = $('#listCategoryId').val().split('_');
 
         for (let i = 1; i < tmp.length - 1; i ++) {
             listCategoryId.push(tmp[i]);
         }
-
-        console.log($('#options').val());
 
 
         options = JSON.parse($('#options').val());
@@ -293,9 +290,31 @@
 
         makeCategoryPan();
         makeOptionPan();
-        displayImageAdd();
+        displayAddImage();
 
     });
+
+    const displayImageList = () => {
+        listImageURL.forEach((e, i) => {
+            const id_div = `userProductImage_div_${i}`;
+            const id_img = `userProductImage_${i}`;
+            const id_del = `delete_image_${i}`;
+            const url = `${hostUrl}/${e.url}`;
+            $(`#${id_img}`).attr("src", url);
+
+            let style_div = "block";
+            let style_del = "block";
+            if (e.state === "none") {
+                style_div = "none";
+            }
+            if (e.state === "blank") {
+                style_del = "none";
+            }
+
+            $(`#${id_div}`).css("display", style_div);
+            $(`#${id_del}`).css("display", style_del);
+        })
+    }
 
 
 
@@ -303,7 +322,7 @@
         $(this).css('width', ($(this).val().length + 1) * 2 + 'ch');
     })
 
-    $(document).on('click', '#img_upload_img_main', function() {
+    $(document).on('click', '#userProductImage_div_0', function() {
         var input = document.createElement('input');
         input.type = 'file';
 
@@ -314,7 +333,6 @@
             formData.append('file', file);
             formData.append('filePath', filePath);
 
-            var hostUrl = "{{url('/')}}";
             var postUrl = hostUrl + '/api/v1/client/uploadImgWithPath';
 
             $.ajax({
@@ -326,9 +344,13 @@
                 cache: false,
                 processData : false,
                 success : function (data, status) {
-                    const filePathFull = hostUrl + '/' + filePath + data;
-                    $("#img_upload_img_main").attr('src', filePathFull);
-                    $("#main_img_url").val(data);
+                    const img_url = `${filePath}${data}`;
+                    listImageURL[0] = {
+                        name: data,
+                        url: img_url,
+                        state: ''
+                    }
+                    displayImageList();
                 }
             });
         }
@@ -340,7 +362,7 @@
         input.type = 'file';
         input.multiple="true";
 
-        let id = getNesImageId();
+        let id = getNextImageId();
         if (id < 0) {
             alert("画像を挿入できません。");
             return;
@@ -356,7 +378,6 @@
                 formData.append('file[]', file);
             }
 
-            var hostUrl = "{{url('/')}}";
             var postUrl = hostUrl + '/api/v1/client/uploadImgWithPathes';
 
             $.ajax({
@@ -370,35 +391,50 @@
                 success : function (data, status) {
                     let fileNames = JSON.parse(data);
                     for (let i = 0; i < fileNames.length; i ++) {
-                        const fN = fileNames[i];
-                        const filePathFull = hostUrl + '/' + filePath + fN;
-                        $("#userProductImage_" + id).attr('src', filePathFull);
-                        $("#userProductImage_div_" + id).css('display', 'block');
-                        $("#userProductImage_delete_" + id).css('display', 'block');
+
+                        const fileName = fileNames[i];
+                        const img_url = `${filePath}${fileName}`;
+                        listImageURL[id] = {
+                            name: fileName,
+                            url: img_url,
+                            state: ''
+                        }
                         id ++;
                     }
-
-                    displayImageAdd();
+                    displayImageList();
+                    displayAddImage();
                 }
             });
         }
         input.click();
     });
 
-    getNesImageId = () => {
+    getNextImageId = () => {
 
-        for (let i = 0; i < fileLimit; i ++) {
-            if ($('#userProductImage_div_' + i).css('display') == 'none') {
+        for (let i = 0; i < listImageURL.length; i ++) {
+            const state = listImageURL[i].state;
+            if (state !== '') {
                 return i;
             }
         }
         return -1;
     }
 
-    displayImageAdd = () => {
+    isDisplayAddImag = () => {
+        
+        for (let i = 0; i < listImageURL.length; i ++) {
+            const state = listImageURL[i].state;
+            if (state === 'none') {
+                return true;
+            }
+        }
+        return false;
+    }
 
-        const id = getNesImageId();
-        if (id == -1) {
+    displayAddImage = () => {
+
+        const flag = isDisplayAddImag();
+        if (flag === false) {
             $('#img_upload_img_div').css('display', 'none');
         }
         else {
@@ -407,18 +443,23 @@
     }
 
     deleteImage = (id) => {
-        for (let i = id; i < fileLimit - 1; i ++) {
-            $('#userProductImage_div_' + i).css('display', $('#userProductImage_div_' + (i + 1) ).css('display'));
-            $('#userProductImage_' + i).attr('src', $('#userProductImage_' + (i + 1) ).attr('src'));
 
-            $('#userProductImage_div_' + (i + 1) ).css('display', 'none');
-            $('#userProductImage_' + (i + 1) ).attr('src', "");
+        const obj = listImageURL[id];
+        const length = listImageURL.length;
+        for (i = id + 1; i < length; i++) {
+            listImageURL[i - 1] = listImageURL[i];
+            if (i - 1 < 10 && listImageURL[i - 1].state !== '') {
+                listImageURL[i - 1].state = "blank";
+            }
         }
-        if (id == fileLimit - 1) {
-            $('#userProductImage_div_' + id ).css('display', 'none');
-            $('#userProductImage_' + id ).attr('src', "");
-        }
-        displayImageAdd();
+        listImageURL[length - 1] = {
+            name: "",
+            url: blankUrl,
+            state: 'none'
+        };
+       
+        displayImageList();
+        displayAddImage();
     }
 
     viewModal = () => {
@@ -631,17 +672,7 @@
 
     checkData = () => {
 
-
-        let rlt = "_"
-        for (let i = 0; i < fileLimit; i ++) {
-            if ($('#userProductImage_div_' + i).css('display') == 'none') break;
-            let src = $('#userProductImage_' + i).attr('src');
-            src = src.replaceAll('\\', '/')
-            let listTmp = src.split("/");
-            rlt += listTmp[listTmp.length - 1] + '_';
-        }
-
-        $("#img_urls").val(rlt);
+        $("#img_urls").val(JSON.stringify(listImageURL));
 
         rlt = '_';
         for (let i = 0; i < listCategoryId.length; i ++) {
