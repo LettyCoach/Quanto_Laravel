@@ -282,6 +282,7 @@ function formularSetting() {
     `);
     var title = document.getElementsByName('title');
     if (title[0].value !== ''){
+        $("#survey").attr('target', "_self");
         $("#survey").submit();
     }else {
         alert('フォームを入力してください');

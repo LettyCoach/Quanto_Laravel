@@ -475,7 +475,7 @@
                     <div class="modal-body">
                         <div class = "user_product_img_pan">
                             <div class="user_product_img_first" id = "userProductImage_div_0">
-                                <img src = "{{ $model->getImageUrlFirstFullPath() }}" id="userProductImage_0" alt = "img" onclick="viewImage(this.src);alert(this.src);">
+                                <img src = "{{ $model->getImageUrlFirstFullPath() }}" id="userProductImage_0" alt = "img" onclick="viewImage(this.src);">
                             </div>
                         @php
                             for ($ii = 1; $ii < 18; $ii ++) {
@@ -483,7 +483,7 @@
                                 $src = "";
                         @endphp
                                 <div id = "userProductImage_div_{{$ii}}" class="sub_image_pan" style = "{{$style}}">
-                                    <img src = "{{$src}}" id="userProductImage_{{$ii}}" alt = "img" class="view_image" onclick="viewImage(this.src);alert(this.src);">
+                                    <img src = "{{$src}}" id="userProductImage_{{$ii}}" alt = "img" class="view_image" onclick="viewImage(this.src);">
                                 </div>
                         @php
                             }
@@ -514,7 +514,7 @@
         <script>
             var product_id = 0;
             function viewData(id) {
-                alert();
+                
                 product_id = id;
                 $.get(`/admin/userProduct/show/${id}`, function(data) {
                     const obj = JSON.parse(data);
@@ -563,7 +563,7 @@
             }
     
             const viewImage = (src) => {
-                alert(src)
+                
                 $("#img_view1").attr("src", src);
                 $('#modalImageView').modal('toggle');
             }
