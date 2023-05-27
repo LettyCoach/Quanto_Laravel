@@ -52,7 +52,7 @@ class PaperController extends Controller
 			$listDataTmp[$i]['product'] = $model->name;
 			//add selections...
 			$listDataTmp[$i]['brand'] = $model->brandName;
-			$listDataTmp[$i]['file_url'] = $model->getImageUrlFirstFullPath(true);
+			$listDataTmp[$i]['file_url'] = $model->getImageUrlFirstFullPath('blank');
 			$listDataTmp[$i]['value'] = $model->price;
 			$listDataTmp[$i]['id'] = $model->id;
 			$listDataTmp[$i]['options'] = $model->getOptions();

@@ -592,7 +592,7 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////
     //捕獲　reduce 
     $(document).on('change', '[id^="reduce_plus_"]', function () {
-        var totalAmounts = 0;
+        var totalAmount_sub = 0;
         var totalAmount10 = 0;
         var totalAmount8 = 0;
         var totalAmount88 = 0;
@@ -607,13 +607,14 @@ $(document).ready(function () {
             var pindex = $(this).attr('id').replaceAll(/current_price_/g, '');
             var pcat = $('#reduce_pro_' + pindex).prop('selectedIndex');
 
-            if (pcat == 0) { totalAmount10 += thisval; totalAmount10s += Math.round(thisval * 0.1); totalAmounts += totalAmount10s;}
-            else if (pcat == 1) { totalAmount88 += thisval; totalAmount88s += Math.round(thisval * 0.08); totalAmounts += totalAmount88s;}
-            else if (pcat == 2) { totalAmount8 += thisval; totalAmount8s += Math.round(thisval * 0.08); totalAmounts += totalAmount8s;}
+            if (pcat == 0) { totalAmount10 += thisval; totalAmount10s += Math.round(thisval * 0.1); totalAmount_sub += Math.round(thisval * 0.1);}
+            else if (pcat == 1) { totalAmount88 += thisval; totalAmount88s += Math.round(thisval * 0.08); totalAmount_sub += Math.round(thisval * 0.08);}
+            else if (pcat == 2) { totalAmount8 += thisval; totalAmount8s += Math.round(thisval * 0.08); totalAmount_sub += Math.round(thisval * 0.08);}
             else { totalAmount0 += 0;}
-            
+   
         });
-        $("#reduce_price").val(totalAmounts);
+
+        $("#reduce_price").val(totalAmount_sub);
         $("#totalAmount10").val(totalAmount10); updateTextView($("#totalAmount10"));
         $("#totalAmount10s").val(totalAmount10s); updateTextView($("#totalAmount10s"));
         $("#totalAmount88").val(totalAmount88); updateTextView($("#totalAmount88"));

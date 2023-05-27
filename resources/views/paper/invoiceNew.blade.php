@@ -373,8 +373,8 @@
         @endforeach
         <!-- Modal -->
         <div class="modal fade" id="modalAddQuestion" tabindex="-1" role="dialog" aria-hidden="true" >
-            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 1200px">
-                <div class="modal-content" style="width:1200px;">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 1400px">
+                <div class="modal-content" style="width:1400px; min-height : calc(100vh - 80px)">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">商品情報</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#modalAddQuestion').modal('toggle')">
@@ -464,8 +464,8 @@
         
         <!-- Modal -->
         <div class="modal fade" id="modalImageViewList" tabindex="-1" role="dialog" aria-hidden="true" >
-            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 900px; min-width: 900px">
-                <div class="modal-content" style="width:900px;">
+            <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 900px; min-width: 900px;">
+                <div class="modal-content" style="width:900px; min-height: 360px; background-color: #f1f2ff; border : 0; box-shadow: 5px 5px 10px grey;">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLongTitle">商品画像</h5>
                         <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#modalImageViewList').modal('toggle')">
@@ -491,11 +491,11 @@
                         </div>
     
                     </div>
-                    <div class="modal-footer">
+                    
                     </div>
                 </div>
             </div>
-        </div>
+        
     
         
         <!-- Modal -->
@@ -526,11 +526,16 @@
                         $("#userProductImage_" + ii).attr('src', "");
                     }
     
-                    obj.img_urls.forEach((e, ii) => {
-                        rlt += `<div class="swiper-slide"><img src="${e}" alt="" ></div>`;
-                        $("#userProductImage_" + ii).attr('src', e);
-                        $("#userProductImage_div_" + ii).css('display', 'block');
-                    })
+    			obj.img_urls.forEach((e, ii) => {
+                    if (e.state !== '') {
+                        $("#userProductImage_div_" + ii).css('display', 'none');
+                        return;
+                    }
+                    rlt += `<div class="swiper-slide"><img src="${e.url}" alt="" ></div>`;
+                    $("#userProductImage_" + ii).attr('src', e.url);
+                    $("#userProductImage_div_" + ii).css('display', 'block');
+		
+		})
                     $('#slide_img_pan_main').html(rlt);
                     $('#slide_img_pan').html(rlt);
     
