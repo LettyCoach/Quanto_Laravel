@@ -55,6 +55,7 @@ class UserProductController extends Controller
     public function showNew($id)
     {
         $models = null;
+        $user_id = Auth::user()->id;
         if (Auth::user()->isAdmin()) {
             $models = UserProduct::orderby('id', 'desc')->simplePaginate(15);
         } else {
@@ -66,7 +67,7 @@ class UserProductController extends Controller
     public function setTag(Request $request)
     {
         $product_id = $request->get('product_id');
-        $user_id = Auth::user()->id;
+        $user_id = Auth::user()->id;     
         $flag = $request->get('flag');
 
         SaveItem::where('product_id', $product_id)->where('user_id', $user_id)->delete();
