@@ -98,6 +98,7 @@ Route::get('/admin/userProduct/edit/{id}', [UserProductController::class, 'edit'
 Route::post('/admin/userProduct/save', [UserProductController::class, 'save'])->name('admin.userProduct.save');
 Route::get('/admin/userProduct/duplicate/{id}', [UserProductController::class, 'duplicate'])->name('admin.userProduct.duplicate');
 Route::get('/admin/userProduct/delete/{id}', [UserProductController::class, 'delete'])->name('admin.userProduct.delete');
+Route::get('/admin/userProduct/showNew/{id}', [UserProductController::class, 'showNew'])->name('admin.userProduct.showNew');
 
 //Invoice
 Route::get('/paper', [PaperController::class, 'index'])->name('paper');

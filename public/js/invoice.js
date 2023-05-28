@@ -1009,7 +1009,7 @@ $(document).ready(function () {
         current_img_index = $(this).attr('id').replaceAll(/link_/g, '');
         var hostUrl = $("#hostUrl").val();
         var product_id = $(this).parent().parent().parent().find('[id^="productNum_"]').val();
-        var linput_url = hostUrl + "/admin/userProduct/edit/" + product_id;
+        var linput_url = hostUrl + "/admin/userProduct/showNew/" + product_id;
         if(product_id < 0) linput_url = "https://";
         $("#linput_link").val(linput_url);
         $("#linkModal").css('display', 'block');

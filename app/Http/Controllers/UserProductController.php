@@ -52,6 +52,17 @@ class UserProductController extends Controller
         return json_encode($rlt);
     }
 
+    public function showNew($id)
+    {
+        $models = null;
+        if (Auth::user()->isAdmin()) {
+            $models = UserProduct::orderby('id', 'desc')->simplePaginate(15);
+        } else {
+            $models = UserProduct::where('user_id', $user_id)->orderby('id', 'desc')->simplePaginate(15);
+        }
+        return view('admin/userProduct/showNew', ['models' => $models, 'id'=>$id]);
+    }
+
     public function setTag(Request $request)
     {
         $product_id = $request->get('product_id');
