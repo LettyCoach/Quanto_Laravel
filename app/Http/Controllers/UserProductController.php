@@ -122,7 +122,7 @@ class UserProductController extends Controller
         $model->sku = $request->get('sku');
         $model->price_txt = $request->get('price_txt');
         $model->price = is_numeric($request->get('price')) ? $request->get('price') : 0;
-        $model->price2_txt = $request->get('price2_txt');
+        $model->price2_txt = $request->get('price2_txt') ? $request->get('price2_txt') : "";
         $model->price2 = is_numeric($request->get('price2')) ? $request->get('price') : 0;
         $model->flagPrice2 = $request->get('flagPrice2') ? "checked" : "";
         $model->main_img_url = $request->get('main_img_url') ? $request->get('main_img_url') : "";
