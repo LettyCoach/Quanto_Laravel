@@ -55,6 +55,7 @@ class UserProductController extends Controller
     public function showNew($id)
     {
         $models = null;
+        $user_id = Auth::user()->id;
         if (Auth::user()->isAdmin()) {
             $models = UserProduct::orderby('id', 'desc')->simplePaginate(15);
         } else {
