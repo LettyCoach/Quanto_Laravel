@@ -64,11 +64,12 @@ class SurveyController extends Controller
 	public function index(Request $request)
 	{
 		if(Auth::user()->isAdmin()) {
-			$surveys = Survey::simplePaginate(20);
+			$surveys = Survey::orderby('id', 'desc')->simplePaginate(20);
 		} else {
 			$surveys = Survey::join('users', 'surveys.user_id', 'users.id')
 				->where('users.id',Auth::user()->id)
 				->select('surveys.*')
+				->orderby('id', 'desc')
 				->simplePaginate(20);
 		}
 		return view('admin/survey/index',['surveys' => $surveys]);
