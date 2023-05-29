@@ -15,7 +15,8 @@ class ReferralInfoController extends Controller
     }
 
     public function index(Request $request){
-
+        
+        $referralInfo = ReferralInfo::where('id', 0)->simplePaginate(20);;
         if(Auth::user()->isAdmin()) {
             $referralInfo = ReferralInfo::simplePaginate(20);
         }
@@ -23,6 +24,7 @@ class ReferralInfoController extends Controller
     }
 
     public function save(Request $request) {
+        $referralInfoList = ReferralInfo::where('id', 0)->simplePaginate(20);;
         if(Auth::user()->isAdmin()) {
             if($request->post('id') != null) {
                 $referralInfo = ReferralInfo::find($request->post('id'));
