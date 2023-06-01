@@ -23,11 +23,14 @@ class UserProductCategoryController extends Controller
     public function index(Request $request)
     {
         $category = $request->get("category") ? $request->get("category") : "";
-
-        $listModel = null;
-        // if (Auth::user()->isAdmin()) {
-        $listModel = UserProductCategory::where("name", "like", '%' . $category . '%')->orderby('id', 'desc')->simplePaginate(10);
-        // }
+        $user_id = Auth::user()->id;
+        
+        $listModel = UserProductCategory::where("name", "like", '%' . $category . '%')->orderby('updated_at', 'desc');
+        if (!Auth::user()->isAdmin()) {
+            $listModel = $listModel->where('user_id', $user_id);
+        }
+        $listModel = $listModel->simplePaginate(10);
+        
         return view('admin/userProductCategory/index', [
             'listModel' => $listModel,
             'category' => $category
@@ -62,8 +65,9 @@ class UserProductCategoryController extends Controller
 
         $model->main_img_url = $request->get('main_img_url') ? $request->get('main_img_url') : "";
         $model->name = $request->get('name');
-        $model->sub_name = $request->get('sub_name');
+        $model->sub_name = $request->get('sub_name') ? $request->get('sub_name') : "";
         $model->other = "";
+        $model->user_id = Auth::user()->id;
         $model->save();
 
         Product2Category::where('category_id', $model->id)->delete();
@@ -76,15 +80,22 @@ class UserProductCategoryController extends Controller
             $tModel->save();
         }
 
-        return redirect()->route('admin.userProductCategory.edit', [
-            'id' => $model->id,
-        ]);
+        return redirect()->route('admin.userProductCategories');
+
+        // return redirect()->route('admin.userProductCategory.index', [
+        //     'id' => $model->id,
+        // ]);
     }
     
 
     public function add(Request $request)
     {
-        $model = new UserProductCategory();
+        $id = $request->get('id');
+        $model = UserProductCategory::find($id);
+        
+        if ($model == null) {
+            $model = new UserProductCategory();
+        }
         
         $model->main_img_url = "";
         $model->name = $request->get('name');
@@ -92,11 +103,11 @@ class UserProductCategoryController extends Controller
         $model->other = "";
         $model->save();
 
+        $categories = UserProductCategory::orderBy('name', 'asc')->get();
 
         return response()->json([
             'state' => 'SUCCESS',
-            'id' => $model->id,
-            'name' => $model->name
+            'categories' => json_encode($categories),
         ]);
     }
 

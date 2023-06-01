@@ -167,6 +167,12 @@
     word-wrap: break-word;
 }
 
+.option_row img{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
 .add_option {
     cursor: pointer;
     width: 40px;

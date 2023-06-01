@@ -63,7 +63,7 @@
                             </div>
                             <div class="row m-0 mt-3">
                                 <h5 class="font-weight-bold">SKU</h5>
-                                <input type = "text" class = "form-control" name = "sku" value="{{$model->sku}}" required>
+                                <input type = "text" class = "form-control" name = "sku" value="{{$model->sku}}" >
                             </div>
                         </div>
 
@@ -135,7 +135,7 @@
                     <h4 >バーコード</h4>
                     <div class="row m-0 mt-3  justify-content-between align-items-center">
                         <img src = "{{url('public/img/img_03/barcode.png')}}" alt = "barcode" class="barcode_img">
-                        <input type = "text" class = "form-control" name = "barcode" value="{{$model->barcode}}" required style="width : calc(100% - 60px)">
+                        <input type = "text" class = "form-control" name = "barcode" value="{{$model->barcode}}"  style="width : calc(100% - 60px)">
                     </div>
                 </div>
                 <div class="form_pan mt-4">
@@ -179,29 +179,24 @@
 
     <!-- Modal -->
     <div class="modal fade" id="modalAddQuestion" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 400px; width: 400px">
-            <div class="modal-content" style="width:400px;;">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 600px; width: 600px">
+            <div class="modal-content" style="width:600px;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">カテゴリー選択</h5>
                     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="$('#modalAddQuestion').modal('toggle')">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group">
+                <div class="modal-body" style=" display: flex; flex-direction: column; justify-content: center; ">
+                    <div class="form-group" style="width: 480px; margin: 0 auto">
                         <div>
                             <input type="checkbox" id = "categoryCheckAll" class="switch_3">
                             <label class="col-form-label"  id = "categoryLabelAll">All Categories</label>
                         </div>
                     </div>
-                    <div class="dropQuestion">
+                    <div class="dropQuestion" style="width: 480px; margin: 0 auto">
                         <div class="category_pan">
-                            @foreach($listCategory as $item)
-                            <div>
-                                <input type="checkbox" id = "categoryCheck_{{$item->id}}" class="switch_3">
-                                <label class="col-form-label"  id = "categoryLabel_{{$item->id}}">{{$item->name}}</label>
-                            </div>
-                            @endforeach
+                            
                         </div>
                     </div>
                 </div>
@@ -210,6 +205,7 @@
                     <button type="button" class="btn btn-primary" id="btnSaveCategory">OK</button>
                     <button type="button" class="btn btn-primary" id="btnViewAddCategory">カテゴリー追加</button>
                 </div>
+                <input type="hidden" id="categories" value="{{$categories}}">
                 <input type="hidden" id="container-id">
             </div>
         </div>
@@ -256,6 +252,8 @@
 
     const hostUrl = "{{url('/')}}";
     const blankUrl = "{{$model->getFullPath("", "blank")}}"
+    const editUrl = "{{url('public/img/img_03/pen.png')}}"
+    const delUrl = "{{url('public/img/img_03/delete.png')}}"
     var options = [];
     var listCategoryId = [];
     const fileLimit = 18;
@@ -272,7 +270,6 @@
 
         
         listImageURL = JSON.parse($('#img_urls').val());
-        console.log(listImageURL);
         displayImageList();
 
         var tmp = $('#listCategoryId').val().split('_');
@@ -288,6 +285,7 @@
         elementDisable('#form_add_option', 0.5, true);
 
 
+        createCategoryPan();
         makeCategoryPan();
         makeOptionPan();
         displayAddImage();
@@ -462,7 +460,26 @@
         displayAddImage();
     }
 
-    viewModal = () => {
+    createCategoryPan = () => {
+
+        const categories = JSON.parse($('#categories').val());
+        
+        $('.category_pan').html("");
+        categories.forEach(e => {
+            let str = "";
+            str += "<div style='width:90%; display:flex; justify-content:space-between;'>";
+            str += "<div>";
+            str += `<input type="checkbox" id = "categoryCheck_${e.id}" class="switch_3">`;
+            str += `<label class="col-form-label"  id = "categoryLabel_${e.id}">${e.name}</label>`;
+            str += "</div>"
+            str += `<div style="width:20px; height:20px"><img src = "${editUrl}" style="width:20px; height:20px" onclick="editCategory(${e.id})" alt = "img" ></div>`;
+            str += "</div>"
+            $('.category_pan').append(str);
+        })
+    }
+
+
+    checkCategories = () => {
 
         let cnt = 0;
         $('[id^="categoryCheck_"]').each(function() {
@@ -477,14 +494,23 @@
         if (cnt == listCategoryId.length) {
             $('#categoryCheckAll').prop('checked', true);
         }
+    }
+
+    viewModal = () => {
+
+        checkCategories();
 
         if ($('#modalAddQuestion').modal) {
             $('#modalAddQuestion').modal('toggle');
         }
     }
 
+    var option_id = 0;
 
     $(document).on('click',"#img_add_option", function(){
+        option_id = -1;
+        $('#option_name').val('');
+        $('#option_description_tag').val('');
         elementDisable('[class^="form_pan"]', 0.5, true);
         elementDisable('#form_add_option', 1, false);
 
@@ -508,6 +534,8 @@
             return;
         }
 
+
+
         const values = JSON.parse(description);
 
         const rlt = [];
@@ -515,10 +543,19 @@
             rlt.push(e.value);
         });
 
-        options.push({
-            name:name,
-            description:rlt
-        })
+        if (option_id === -1) {
+            options.push({
+                name:name,
+                description:rlt
+            })
+        }
+        else {
+            options[option_id] = {
+                name:name,
+                description:rlt
+            }
+        }
+        
 
         makeOptionPan();
         elementDisable('[class^="form_pan"]', 1, false);
@@ -588,14 +625,40 @@
         return rlt;
     }
 
+    editOption = (id) => {
+        option_id = id;
+        const option = options[id];
+        $('#option_name').val(option.name);
+        const rlt = [];
+        option.description.forEach(e => {
+            rlt.push({value : e});
+        });
+        $('#option_description_tag').val(JSON.stringify(rlt));
+        elementDisable('[class^="form_pan"]', 0.5, true);
+        elementDisable('#form_add_option', 1, false);
+
+        new Tagify(document.getElementById('option_description_tag'));
+
+    }
+
+    deleteOption = (id) => {
+        if (window.confirm("本当に削除しますか？") === false) {
+            return;
+        }
+        options.splice(id, 1);
+        makeOptionPan();
+    }
+
     makeOptionPan = () => {
 
         let rlt = "";
-        options.forEach( e => {
+        options.forEach( (e, i) => {
             let tmp = "";
             tmp += "<div class='option_row'>";
             tmp += `<div class="option_name">${e.name}</div>`;
             tmp += `<div class="option_description">${array2string(e.description)}</div>`;
+            tmp += `<div class="option_edit"><img src = "${editUrl}" onclick="editOption(${i})" alt = "img" ></div>`;
+            tmp += `<div class="option_delete"><img src = "${delUrl}" onclick="deleteOption(${i})" alt = "img" ></div>`;
             tmp += "</div>";
             rlt += tmp;
         })
@@ -605,7 +668,6 @@
     $(document).on('click', '#categoryCheckAll', function() {
 
         const state = $('#categoryCheckAll').prop('checked');
-        console.log(state);
         $('[id^="categoryCheck_"]').each(function() {
             $(this).prop('checked', state);
         });
@@ -637,24 +699,20 @@
         }
     })
     
+    var category_id = 0;
 
     $(document).on('click', '#btnAddCategory', function() {
         
+        const id = category_id;
         const name = $('#category_name').val();
-        $.get("/admin/userProductCategory/add", {"name" : name}, function(data) {
+        $.get("/admin/userProductCategory/add", {"id" : id, "name" : name}, function(data) {
             
             if (data.state === "SUCCESS") {
 
-                let str = "";
-                str += "<div>";
-                str += `<input type="checkbox" id = "categoryCheck_${data.id}" class="switch_3">`;
-                str += `<label class="col-form-label"  id = "categoryLabel_${data.id}">${data.name}</label>`;
-                str += "</div>"
-
-                console.log(str);
-
-                $('.category_pan').append(str);
-                listCategoryId.push(data.id);
+                console.log(data.categories);
+                $("#categories").val(data.categories);
+                createCategoryPan();
+                checkCategories();
 
                 if ($('#modalAddCategory').modal) {
                   $('#modalAddCategory').modal('toggle');
@@ -664,9 +722,16 @@
         })
     })
 
-
+    editCategory = (id) => {
+        category_id = id;
+        const txt = $('#categoryLabel_' + id).text();
+        $('#category_name').val(txt);
+        $('#modalAddCategory').modal('toggle');
+    }
 
     $(document).on('click', '#btnViewAddCategory', function() {
+        category_id = 0;
+        $('#category_name').val('');
         $('#modalAddCategory').modal('toggle');
     })
 
