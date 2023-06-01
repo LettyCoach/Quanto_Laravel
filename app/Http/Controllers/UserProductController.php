@@ -100,13 +100,19 @@ class UserProductController extends Controller
     {
         $model = UserProduct::find($id);
         $model->getImageUrls();
-        $listCategory = UserProductCategory::all();
+        
+        $categories = UserProductCategory::orderBy('name', 'asc');
+        if (!Auth::user()->isAdmin()) {
+            $categories = $categories->where('user_id', Auth::user()->id);
+        }
+        $categories = $categories->get();
+        
         $productID = $model->getProductID();
         return view('admin/userProduct/edit', [
             'caption' => "商品情報編集",
             'model' => $model,
             'productID' => $productID,
-            'listCategory' => $listCategory,
+            'categories' => json_encode($categories),
         ]);
     }
 
@@ -119,7 +125,7 @@ class UserProductController extends Controller
 
         $model->brandName = $request->get('brandName');
         $model->name = $request->get('name');
-        $model->sku = $request->get('sku');
+        $model->sku = $request->get('sku') ? $request->get('sku') : "";
         $model->price_txt = $request->get('price_txt');
         $model->price = is_numeric($request->get('price')) ? $request->get('price') : 0;
         $model->price2_txt = $request->get('price2_txt') ? $request->get('price2_txt') : "";

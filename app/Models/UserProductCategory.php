@@ -52,7 +52,7 @@ class UserProductCategory extends Model
         foreach($productes as $product) {
             array_push($rlt, [
                 "id" => $product->id,
-                "img_url" => $product->getImageUrlFirstFullPath(true)
+                "img_url" => $product->getImageUrlFirstFullPath('blank')
             ]);
         }
 
@@ -73,7 +73,7 @@ class UserProductCategory extends Model
             array_push($rlt, [
                 "id" => $product->id,
                 "name" => $product->name,
-                "img_url" => $product->getImageUrlFirstFullPath(true)
+                "img_url" => $product->getImageUrlFirstFullPath('blank')
             ]);
         }
 

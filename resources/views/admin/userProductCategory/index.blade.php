@@ -34,7 +34,7 @@
                                     if ($i > 9) break;
                             @endphp
                             <div>
-                            <img src = "{{ $product->getImageUrlFirstFullPath(true) }}">
+                            <img src = "{{ $product->getImageUrlFirstFullPath('blank') }}">
                             <p>{{ $product->getShortName() }}</p>
                             </div>
                             @php

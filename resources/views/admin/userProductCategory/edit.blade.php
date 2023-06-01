@@ -30,7 +30,7 @@
                         <label class="col-form-label mr-1">サブカテゴリ名</label>
                     </div>
                     <div class="col-9 p-0">
-                        <input type = "text" class = "form-control" name = "sub_name" value="{{$model->sub_name}}" required>
+                        <input type = "text" class = "form-control" name = "sub_name" value="{{$model->sub_name}}">
                     </div>
                 </div>
                 <div class="row m-0 px-4 mt-4" >
@@ -89,7 +89,7 @@
         displayProductImages();
         initSelectProduct();
     });
-    {{-- <option value="2" data-image="{{ url('public/img/img_03/barcode.png') }}">List entry #1.2 </option><option value="3" data-image="{{ url('public/img/img_03/barcode.png') }}">List entry #1.3</option><option value="4" data-image="{{ url('public/img/img_03/barcode.png') }}">List entry #1.4</option><option value="5" data-image="{{ url('public/img/img_03/barcode.png') }}">List entry #1.5</option> --}}
+    
     makeSelectProduct = () => {
         let rlt = "";
         rlt += `<select class="f-control f-dropdown" id = "selectProduct" placeholder="商品選択">`;
@@ -240,6 +240,26 @@
         input.click();
     })
 
+    
+    $(document).on('mouseenter', '.userProductItem', function() {
+        const imgId = $(this).attr('id') + "_del";
+        $(`#${imgId}`).css('display', 'block');
+    })
+    
+    $(document).on('mouseleave', '.userProductItem', function() {
+        const imgId = $(this).attr('id') + "_del";
+        $(`#${imgId}`).css('display', 'none');
+    })
+
+    $(document).on('mouseenter', '.delete_image', function() {
+        const imgId = $(this).attr('id') + "_del";
+        $(`#${imgId}`).css('display', 'block');
+    })
+    
+    $(document).on('mouseleave', '.delete_image', function() {
+        const imgId = $(this).attr('id') + "_del";
+        $(`#${imgId}`).css('display', 'none');
+    })
 
     readProductes = () => {
 
@@ -252,9 +272,9 @@
 
         productes.forEach((e, i) => {
             if (i >= 10) return;
-            rlt += `<div id = "userProductImage_div_${i}">`;
+            rlt += `<div id = "userProductImage_div_${i}" class="userProductItem">`;
             rlt += `<img src = "${e.img_url}" id="userProductImage_${i}" alt = "img" class="view_image">`;
-            rlt += `<img src = "{{url('public/img/img_03/delete.png')}}" onclick="deleteImage(${i})" alt = "img" class = "delete_image">`;
+            rlt += `<img src = "{{url('public/img/img_03/delete.png')}}"  id="userProductImage_div_${i}_del" onclick="deleteImage(${i})" alt = "img" class = "delete_image" style="display:none">`;
             rlt += `</div>`
         })
 
