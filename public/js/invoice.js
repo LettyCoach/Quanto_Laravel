@@ -16,6 +16,7 @@ var varient_array = [];
 $('.fix-dropdown-item').each(function(){
     varient_array.push($(this).find('p').text());
 });
+var selected_item_id = 0;
 
 
 
@@ -786,6 +787,10 @@ $(document).ready(function () {
     $(document).on('click', "[id^='timg_']", function () {
         $(".q-modal").css("display", "block");
         current_img_index = $(this).attr('id').replaceAll(/timg_/g, '');
+        $(".img-upload-link-btn-1").each(function (){
+            if($(this).parent().find("#item_id").val() == selected_item_id) return;
+            $(this).css("display", "none");
+        })
     });
 
     //upload url
@@ -883,6 +888,7 @@ $(document).ready(function () {
         $('#title_' + current_img_index).text(display_img_title);
         $('#productNum_' + current_img_index).val(productNum);
         $(".q-modal").css("display", "none");
+        selected_item_id = productNum;
     });
     $('[id*="price"]').each(function () {
         updateTextView($(this));
@@ -972,10 +978,12 @@ $(document).ready(function () {
         
     });
 
-    $(document).on('mouseenter', '.img-item-img', function (e) {
-        $(this).parent().find(".img-upload-link-btn-1").css("display", 'block');
+    $(document).on('mouseenter', '.img-view-item', function (e) {
+        $(this).find(".img-upload-link-btn-1").css("display", 'block');
+
     }).on('mouseleave', '.img-view-item', function (e) {
-        $(this).parent().find(".img-upload-link-btn-1").css("display", 'none');
+        if($(this).find("#item_id").val() == selected_item_id) return;
+        $(this).find(".img-upload-link-btn-1").css("display", 'none');
     });
 
     ///////////////////////////////////////////////////
