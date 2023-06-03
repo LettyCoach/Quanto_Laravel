@@ -54,7 +54,8 @@ for (const [key, value] of Object.entries(dis_data)) {
         var item_id = answer.id;
         var item_price = answer.value;
         var item_like = answer.productLike;
-        if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
+        var out_product_name = item_productName
+        // if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
 
         var item_sub = answer.value;
         iHtml += '<div class="img-view-item"><div class="img-item-img">';
@@ -65,9 +66,12 @@ for (const [key, value] of Object.entries(dis_data)) {
         iHtml += '<input type="hidden" id="item_id" value="' + item_id + '">';
         for (const [kkkey, option] of Object.entries(answer.options)) {
             iHtml += '<input type="hidden" id="item_'+ kkkey +'" value="' + option + '">';
+            out_product_name += option;
         }
+        // if (out_product_name.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
+
         iHtml += '<img alt="' + select_img_url + '" src="' + select_img_url + '" ></div>';
-        iHtml += '<div class="img-item-down"><div class="img-item-brandName">' + item_brandName + '</div><div class="img-item-productName">' + item_productName + '</div><input type="hidden" class="img-item-sub" value="' + item_sub + '"></div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 30px;"></div></div>';
+        iHtml += '<div class="img-item-down"><div class="img-item-brandName">' + item_brandName + '</div><div class="img-item-productName">' + out_product_name + '</div><div class="img-item-price-sub">'+ item_price +'円</div><input type="hidden" class="img-item-sub" value="' + item_sub + '"></div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 30px;"></div></div>';
     }
 }
 $("#img_view").html('');
@@ -801,7 +805,7 @@ $(document).ready(function () {
             var file = e.target.files[0];
             var fd = new FormData();
             fd.append('file', file);
-
+            fd.append('user_id', $("#user_id").val());
             //upload img & url
             var hostUrl = $("#hostUrl").val();
             var postUrl = hostUrl + '/api/v1/client/uploadImg';
@@ -815,13 +819,7 @@ $(document).ready(function () {
                 cache: false,
                 processData: false,
                 success: function (data, status) {
-                    const filePath = hostUrl + "/public/pdf_img/" + data;
-                    //$("#timg_"+current_img_index).attr('src', filePath);
-                    //$("#img_upload_url").val(data);
-                    //$(".q-modal").css('display', 'none');
-
-
-
+                    const filePath = hostUrl + "/public/user_product/" + data.filename;
                     var itemHtml = '';
                     var select_img_url = filePath;
                     if (filePath == null) select_img_url = blankUrl;
@@ -830,7 +828,7 @@ $(document).ready(function () {
                     var item_productID = "Q000000";
                     var item_price = 0;
                     var item_like = "NOLIKE";
-                    var item_id = -1;
+                    var item_id = data.new_product_id;
                     if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
                                  
                     var item_sub = 0;
@@ -844,17 +842,57 @@ $(document).ready(function () {
                     //     itemHtml += '<input type="hidden" id="item_'+ kkkey +'" value="' + option + '">';
                     // }
                     itemHtml += '<img alt="' + select_img_url + '" src="' + select_img_url + '" ></div>';
-                    itemHtml += '<div class="img-item-down"><div class="img-item-brandName">' + item_brandName + '</div><div class="img-item-productName">' + item_productName + '</div><input type="hidden" class="img-item-sub" value="' + item_sub + '"></div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 30px;"></div></div>';
+                    itemHtml += '<div class="img-item-down"><div class="img-item-brandName">' + item_brandName + '</div><div class="img-item-productName">' + item_productName + '</div><div class="img-item-price-sub">'+ item_price +'円</div><input type="hidden" class="img-item-sub" value="' + item_sub + '"></div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 30px;"></div></div>';
                                  
                     $(".img-view-item").last().remove();
 
                     $("#img_view").append(itemHtml);
                     $("#img_view").append(makeNew_item_view());
+                    if($(".img-view-item").css('flex-direction') == "row"){
+                        $("#img_modal_xbtn").click();
+                    }
                 }
             }); // close ajax
         }
         input.click();
     });
+
+    $(document).on('click', "#profile", function () {
+        var input = document.createElement('input');
+        input.type = 'file';
+        var profile_path = $(this).attr('src');
+        var p_filename = profile_path.split('/').pop();
+        const questionMarkIndex = p_filename.indexOf("?");
+        const new_String = questionMarkIndex !== -1 ? p_filename.substring(0, questionMarkIndex) : p_filename;
+        input.onchange = e => {
+            var file = e.target.files[0];
+            var fd = new FormData();
+            fd.append('file', file);
+            fd.append('user_id', $("#user_id").val());
+            fd.append('p_filename', new_String);
+            //upload img & url
+            var hostUrl = $("#hostUrl").val();
+            var postUrl = hostUrl + '/api/v1/client/uploadProfile';
+
+            $.ajax({
+                type: 'POST',
+                url: postUrl,
+                data: fd,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                cache: false,
+                processData: false,
+                success: function (data, status) {
+                    var profileUrl = hostUrl + '/uploads/users/';
+                    const randomNumber = Math.random();
+                    const imageUrlWithCacheBuster = profileUrl + data+`?cache=${randomNumber}`;
+                    $("#profile").attr("src", imageUrlWithCacheBuster);
+                }
+            }); // close ajax
+        }
+        input.click();
+    });
+
     function update_total_price() {
         updateTextView($("#total_price_sub"));
         updateTextView($("#total_price"));

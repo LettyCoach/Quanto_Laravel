@@ -31,6 +31,7 @@ Route::post('v1/client/pdf', [ApiController::class, 'pdf']);
 Route::post('v1/client/uploadImg', [ApiController::class, 'uploadImg']);
 Route::post('v1/client/uploadImgWithPath', [ApiController::class, 'uploadImgWithPath']);
 Route::post('v1/client/uploadImgWithPathes', [ApiController::class, 'uploadImgWithPathes']);
+Route::post('v1/client/uploadProfile', [ApiController::class, 'uploadProfile']);
 
 
 //Auth
