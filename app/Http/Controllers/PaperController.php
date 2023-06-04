@@ -145,7 +145,7 @@ class PaperController extends Controller
 	}
 
 	public function invoice(Request $request){
-		$papers = Paper::where('user_id',Auth::user()->id)->get();
+		$papers = Paper::where('user_id',Auth::user()->id)->orderby('id', 'desc')->get();
 		$user=User::where('id',Auth::user()->id)->first();
 		$userName=$user->name;
 		return view('paper/invoice',['papers' => $papers, 'userName'=>$userName,]);

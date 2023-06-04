@@ -2,7 +2,11 @@
 
 @section('main-content')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-
+<style>
+    .container-fluid{
+        padding-left: 10rem!important;
+    }
+</style>
     <!-- Page Heading -->
     <div class="" 
     style="background-color: rgb(105, 55, 255);line-height: 30px; border-radius: 15px; width: 120px; height: 30px; text-align:center; color: white;font-size: 14px; position:fixed; left: 250px;top: 80px;">{{ __('請求書作成') }}</div>

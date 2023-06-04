@@ -429,7 +429,7 @@ $(document).ready(function () {
         var cId = parseInt($(this).attr('id').replaceAll(/del_/g, ''));
         var tId = parseInt($("#rowCount").val());
         var rows = parseInt($("#select_resize").val());
-        if(tId<2) return;
+        if(tId<1) return;
         //re-render pdf
         pdfRender('del', cId, tId, rows);
     });
@@ -1050,6 +1050,8 @@ $(document).ready(function () {
     });
     $(document).on('click', '#save_close', function(){
         $("#saveModal").css('display', 'none');
+        hostUrl = $("#hostUrl").val();
+        location.href = hostUrl + "/paper/invoice";
     });
     $(document).on('click','[id^="link_"]', function(){
         current_img_index = $(this).attr('id').replaceAll(/link_/g, '');
