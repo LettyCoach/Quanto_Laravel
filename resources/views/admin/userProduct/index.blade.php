@@ -68,7 +68,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row m-0 px-2">
-                        <div class="col-6 p-0 flex flex-column align-items-center">
+                        <div class="col-6 p-0 d-flex flex-column align-items-center">
                             <div class="img_pan_main">
                                 <div class="swiper mySwiper" id="mySwiper_main">
                                     <div class="swiper-wrapper" id = "slide_img_pan_main">
@@ -98,7 +98,7 @@
                                 </div>
                             </div>
                             
-                            <div class="m-4 flex justify-content-end" style="width : 400px" >
+                            <div class="m-4 d-flex justify-content-end" style="width : 400px" >
                                 <a href="javascript:viewImageList()" class="font-weight-bold">もっと見る</a>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                             <div class="row m-0 mt-3" id="name">デザインTシャツブラック</div>
                             <div class="row m-0 mt-3" id="price">980デ</div>
                             <div class="row m-0 mt-3" >
-                                <div class="col-3 p-0 flex">
+                                <div class="col-3 p-0 d-flex">
                                     <div class="pr-2 change-count" onclick="changeCount(-1)">-</div>
                                     <input type="text" id = "count_product" value = "0">
                                     <div class="pl-2 change-count" onclick="changeCount(1)">+</div>
