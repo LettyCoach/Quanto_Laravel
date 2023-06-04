@@ -100,6 +100,7 @@ class UserProductCategoryController extends Controller
         $model->main_img_url = "";
         $model->name = $request->get('name');
         $model->sub_name = "";
+        $model->user_id = Auth::user()->id;
         $model->other = "";
         $model->save();
 
@@ -124,4 +125,17 @@ class UserProductCategoryController extends Controller
         UserProductCategory::find($id)->delete();
         return redirect()->route('admin.userProductCategories');
     }
+    public function remove(Request $request)
+    {
+        $id = $request->get('id');
+        UserProductCategory::find($id)->delete();
+
+        $categories = UserProductCategory::orderBy('name', 'asc')->get();
+
+        return response()->json([
+            'state' => 'SUCCESS',
+            'categories' => json_encode($categories),
+        ]);
+    }
+
 }
