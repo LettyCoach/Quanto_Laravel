@@ -253,6 +253,10 @@ class UserProduct extends Model
         return $rlt;
     }
 
+    public function txtPrice() {
+        
+    }
+
     // public function getMaterials()
     // {
     //     $rlt = explode("_m_", $this->materials);

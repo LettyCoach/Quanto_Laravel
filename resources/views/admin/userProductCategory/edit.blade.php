@@ -54,6 +54,33 @@
                         <img src = "{{url('public/img/img_03/plus_img.png')}}" id="img_add_product" alt = "img" class = "add_product" onclick="addProduct()">
                     </div>
                 </div>
+                <div>
+                    
+                    {{-- <div class="col-7 p-0 " id = "select_pan">
+                        <select name="" id="" onfocus='this.size=10;' onblur='this.size=1;' onchange='this.size=1; this.blur();' style="width: 200px">
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                            <option value="1">sdf</option>
+                        </select>
+                    </div> --}}
+                </div>
                 <div class="row m-0 px-4 mt-5 justify-content-center" >
                     <input type="button" class="btn btn-outline-primary mr-3" value="キャンセル"  onclick="location.href='{{route('admin.userProductCategories')}}'">
                     <input type="submit" class="btn btn-primary ml-3" value="保存" style="background-color: #6423FF">
@@ -92,7 +119,7 @@
     
     makeSelectProduct = () => {
         let rlt = "";
-        rlt += `<select class="f-control f-dropdown" id = "selectProduct" placeholder="商品選択">`;
+        rlt += `<select class="f-control f-dropdown" id = "selectProduct" placeholder="商品選択" size=10`;
         rlt += `<option value=""> </option>`;
         productes_all.forEach((e, i) => {
             if (productes.filter(p => p.id === e.id).length > 0) return;
@@ -106,9 +133,13 @@
 
     addProduct = () => {
         const id = $('#selectProduct').val();
+        if (id == '') {
+            alert("商品を選択してください。");
+            return;
+        }
 
         const product = productes_all.find(e => e.id == id);
-        console.log(id, product);
+        
         productes.push(product);
         $('#select_pan *').remove();
         displayProductImages();
@@ -124,11 +155,15 @@
 
                 $this.each(function () {
                     var dropdown = $("<div />").addClass("f-dropdown selectDropdown");
+                    dropdown.css('--max-scroll', 8);
 
                     if ($(this).is(':disabled'))
                         dropdown.addClass('disabled');
 
+
                     $(this).wrap(dropdown);
+                    
+                    console.log(dropdown)
 
                     var label = $("<span />").append($("<span />")
                         .text($(this).attr("placeholder"))).insertAfter($(this));
@@ -191,6 +226,7 @@
 
                     $this.parent().on("click", "> span", function (e) {
                         var self = $(this).parent();
+                        // self.css('height', '500px')
                         self.toggleClass("open");
                     });
 
