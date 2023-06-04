@@ -19,7 +19,7 @@
                     <th style="width: 20%">商品名</th>
                     <th style="width: 12%">カテゴリー</th>
                     <th style="width: 24%">オプション<br>（カラー/サイズ/素材）</th>
-                    <th style="width: 10%">単価</th>
+                    <th style="width: 10%">単価(円)</th>
                     <th style="width: 16%; min-width: 120px"></th>
                 </tr>
             </thead>
@@ -37,7 +37,7 @@
                     <td>{{ $model->name }}</td>
                     <td>{{ $model->getCategoryText() }}</td>
                     <td><?php echo $model->getOptionsText(); ?></td>
-                    <td>{{ $model->price }}</td>
+                    <td>{{ number_format($model->price) }}円</td>
                     <td>
                         <a href="{{ route('admin.userProduct.edit',['id'=>$model->id]) }}">
                             <img src="{{  url('public/img/img_03/pen.png') }}" alt='edit' style="width:28px"/>
