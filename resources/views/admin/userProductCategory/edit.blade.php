@@ -54,33 +54,6 @@
                         <img src = "{{url('public/img/img_03/plus_img.png')}}" id="img_add_product" alt = "img" class = "add_product" onclick="addProduct()">
                     </div>
                 </div>
-                <div>
-                    
-                    {{-- <div class="col-7 p-0 " id = "select_pan">
-                        <select name="" id="" onfocus='this.size=10;' onblur='this.size=1;' onchange='this.size=1; this.blur();' style="width: 200px">
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                            <option value="1">sdf</option>
-                        </select>
-                    </div> --}}
-                </div>
                 <div class="row m-0 px-4 mt-5 justify-content-center" >
                     <input type="button" class="btn btn-outline-primary mr-3" value="キャンセル"  onclick="location.href='{{route('admin.userProductCategories')}}'">
                     <input type="submit" class="btn btn-primary ml-3" value="保存" style="background-color: #6423FF">
