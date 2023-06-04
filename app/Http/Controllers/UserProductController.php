@@ -87,12 +87,18 @@ class UserProductController extends Controller
         $model->isDisplay = "checked";
         $max_id = DB::table('user_products')->max('id');
         $productID = sprintf("Q%05d%03d", Auth::user()->id, $max_id + 1);
-        $listCategory = UserProductCategory::all();
+
+        $categories = UserProductCategory::orderBy('name', 'asc');
+        if (!Auth::user()->isAdmin()) {
+            $categories = $categories->where('user_id', Auth::user()->id);
+        }
+        $categories = $categories->get();
+        
         return view('admin/userProduct/edit', [
             'caption' => "新規登録",
             'model' => $model,
             'productID' => $productID,
-            'listCategory' => $listCategory,
+            'categories' => $categories,
         ]);
     }
 
