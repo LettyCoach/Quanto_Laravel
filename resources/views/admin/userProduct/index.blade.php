@@ -160,7 +160,7 @@
                 <div class="modal-body">
                     <div class = "user_product_img_pan">
                         <div class="user_product_img_first" id = "userProductImage_div_0">
-                            <img src = "{{ $model->getImageUrlFirstFullPath() }}" id="userProductImage_0" alt = "img" onclick="viewImage(this.src)">
+                            <img src = "" id="userProductImage_0" alt = "img" onclick="viewImage(this.src)">
                         </div>
                     @php
                         for ($i = 1; $i < 18; $i ++) {
