@@ -3,7 +3,7 @@
 
 <link href="{{ asset('public/css/userProduct/index.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-    <script src="{{ asset('public/js/lib/jquery.min.js') }}"></script>
+<script src="{{ asset('public/js/lib/jquery.min.js') }}"></script>
     <div>
         <div class="action-container">
             <a class="btn btn-primary" href="{{ route('admin.userProduct.create') }}">新規追加</a>
@@ -19,7 +19,7 @@
                     <th style="width: 20%">商品名</th>
                     <th style="width: 12%">カテゴリー</th>
                     <th style="width: 24%">オプション<br>（カラー/サイズ/素材）</th>
-                    <th style="width: 10%">単価</th>
+                    <th style="width: 10%">単価(円)</th>
                     <th style="width: 16%; min-width: 120px"></th>
                 </tr>
             </thead>
@@ -37,7 +37,7 @@
                     <td>{{ $model->name }}</td>
                     <td>{{ $model->getCategoryText() }}</td>
                     <td><?php echo $model->getOptionsText(); ?></td>
-                    <td>{{ $model->price }}</td>
+                    <td>{{ number_format($model->price) }}円</td>
                     <td>
                         <a href="{{ route('admin.userProduct.edit',['id'=>$model->id]) }}">
                             <img src="{{  url('public/img/img_03/pen.png') }}" alt='edit' style="width:28px"/>
@@ -68,7 +68,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row m-0 px-2">
-                        <div class="col-6 p-0 flex flex-column align-items-center">
+                        <div class="col-6 p-0 d-flex flex-column align-items-center">
                             <div class="img_pan_main">
                                 <div class="swiper mySwiper" id="mySwiper_main">
                                     <div class="swiper-wrapper" id = "slide_img_pan_main">
@@ -98,7 +98,7 @@
                                 </div>
                             </div>
                             
-                            <div class="m-4 flex justify-content-end" style="width : 400px" >
+                            <div class="m-4 d-flex justify-content-end" style="width : 400px" >
                                 <a href="javascript:viewImageList()" class="font-weight-bold">もっと見る</a>
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                             <div class="row m-0 mt-3" id="name">デザインTシャツブラック</div>
                             <div class="row m-0 mt-3" id="price">980デ</div>
                             <div class="row m-0 mt-3" >
-                                <div class="col-3 p-0 flex">
+                                <div class="col-3 p-0 d-flex">
                                     <div class="pr-2 change-count" onclick="changeCount(-1)">-</div>
                                     <input type="text" id = "count_product" value = "0">
                                     <div class="pl-2 change-count" onclick="changeCount(1)">+</div>
@@ -160,7 +160,7 @@
                 <div class="modal-body">
                     <div class = "user_product_img_pan">
                         <div class="user_product_img_first" id = "userProductImage_div_0">
-                            <img src = "{{ $model->getImageUrlFirstFullPath() }}" id="userProductImage_0" alt = "img" onclick="viewImage(this.src)">
+                            <img src = "" id="userProductImage_0" alt = "img" onclick="viewImage(this.src)">
                         </div>
                     @php
                         for ($i = 1; $i < 18; $i ++) {
@@ -198,7 +198,7 @@
         var product_id = 0;
         function viewData(id) {
             product_id = id;
-            $.get('/admin/userProduct/show/'+id, function(data) {
+            $.get(`/admin/userProduct/show/${id}`, function(data) {
                 const obj = JSON.parse(data);
                 console.log(obj);
                 $('#productID').html(obj.productID);
