@@ -29,7 +29,7 @@
     $dis_data=json_encode($answers);
 
 ?>    <script>var dis_data='{!! $dis_data !!}';</script>
-
+<input type="hidden" id="user_id" value="{{Auth::user()->id}}">
     <div class="modal fade show" id="previewModal" style="display: block;">
         <div class="modal-dialog">
             <div class="modal-content" 

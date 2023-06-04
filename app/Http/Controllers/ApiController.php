@@ -10,6 +10,7 @@ use App\Models\ClientOption;
 use App\Models\Question;
 use App\Models\ReferralInfo;
 use App\Models\Survey;
+use App\Models\UserProduct;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -343,7 +344,37 @@ class ApiController extends Controller
     {
         $filename = date('ymdhis') . '.png';
         $file = $request->file;
-        $file->move('public/pdf_img', $filename);
+        $file->move('public/user_product', $filename);
+        //dd($filename);
+        $model = new UserProduct();
+        $model->brandName = "ブランド";
+        $model->name = "商品名";
+        $model->sku = "";
+        $model->price_txt = '';
+        $model->price = 0;
+        $model->price2_txt = "";
+        $model->price2 = 0;
+        $model->flagPrice2 = "";
+        $model->main_img_url =  $filename;
+        $model->img_urls = '[{"name":"'. $filename. '","url":"public/user_product/'. $filename .'","state":""}]';
+        $model->options = '[]';
+        $model->detail = '[]';
+        $model->memo = "";
+        $model->stock = 0;
+        $model->stockLimit = "";
+        $model->barcode = "";
+        $model->isDisplay = "";
+        $model->user_id = $request->user_id;
+        $model->other = "";
+        $model->save();
+        return ['filename' => $filename, 'new_product_id'=>$model->id];
+    }
+    public function uploadProfile(Request $request)
+    {
+        $filename = $request->p_filename;
+        $file = $request->file;
+        $file->move('uploads/users', $filename);
+
         return $filename;
     }
 
