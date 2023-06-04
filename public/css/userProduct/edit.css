@@ -160,11 +160,24 @@
     width: 70%;
     height: 100%;
     font-size: 16px;
-    padding: 4px;
     margin-left: 8px;
-    background-color: #f2f1ff;
     border-radius: 4px;
     word-wrap: break-word;
+    display: flex;
+    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
+    gap: 4px;
+}
+
+.option_description div {
+    background-color: #f2f1ff;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.option_edit, .option_delete {   
+    display: flex;
+    align-items: center;
 }
 
 .option_row img{

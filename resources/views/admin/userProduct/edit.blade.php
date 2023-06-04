@@ -70,7 +70,7 @@
                         <div class="form_pan mt-4">
                             <h4 >商品説明</h4>
                             <div class="row m-0 mt-3">
-                                <textarea class = "form-control" name = "detail" style = "height : 84px" required>{{$model->detail}}</textarea>
+                                <textarea class = "form-control" name = "detail" id="detail" style = "height : 84px; max-height: 200px" required>{{$model->detail}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -247,6 +247,7 @@
 
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.8/tagify.min.js"></script>
+<script src="https://rawgit.com/jackmoore/autosize/master/dist/autosize.min.js"></script>
 
 <script>
 
@@ -263,7 +264,7 @@
 
 
         $('#userProduct' ).bind( 'keypress keydown keyup', function(e) {
-            if (e.keyCode == 13) {
+            if (e.keyCode == 13 && e.target.tagName !== "TEXTAREA") {
                 e.preventDefault();
             }
         });
@@ -278,8 +279,21 @@
             listCategoryId.push(tmp[i]);
         }
 
-
+        [{"name":"Size","description":["size-1","size-2"]},{"name":"Color","description":["color-1","color-2","color-2"]},{"name":"Mat","description":["mat1"]},{"name":"other","description":["other1","other"]},{"name":"サイズ","description":["サイズ","wer"]}]
         options = JSON.parse($('#options').val());
+        if (options.length === 0) {
+            options = [{
+                    name: "カラー",
+                    description: []
+                },{
+                    name: "サイズ",
+                    description: []
+                },{
+                    name: "素材",
+                    description: []
+                }
+            ]
+        }
 
         elementDisable('[class^="form_pan"]', 1, false);
         elementDisable('#form_add_option', 0.5, true);
@@ -289,6 +303,8 @@
         makeCategoryPan();
         makeOptionPan();
         displayAddImage();
+
+        autosize(document.getElementById("detail"));
 
     });
 
@@ -472,7 +488,10 @@
             str += `<input type="checkbox" id = "categoryCheck_${e.id}" class="switch_3">`;
             str += `<label class="col-form-label"  id = "categoryLabel_${e.id}">${e.name}</label>`;
             str += "</div>"
-            str += `<div style="width:20px; height:20px"><img src = "${editUrl}" style="width:20px; height:20px" onclick="editCategory(${e.id})" alt = "img" ></div>`;
+            str += `<div style="width:20px; height:20px">`;
+            str += `<img src = "${editUrl}" style="width:20px; height:20px; cursor:pointer" onclick="editCategory(${e.id})" alt = "img" >`;
+            str += `<img src = "${delUrl}" style="width:20px; height:20px; cursor:pointer" onclick="deleteCategory(${e.id})" alt = "img" >`;
+            str += "</div>"
             str += "</div>"
             $('.category_pan').append(str);
         })
@@ -656,7 +675,13 @@
             let tmp = "";
             tmp += "<div class='option_row'>";
             tmp += `<div class="option_name">${e.name}</div>`;
-            tmp += `<div class="option_description">${array2string(e.description)}</div>`;
+            tmp += `<div class="option_description">`;
+
+            e.description.forEach(v => {
+                tmp += `<div>${v}</div>`;
+            })
+
+            tmp += `</div>`;
             tmp += `<div class="option_edit"><img src = "${editUrl}" onclick="editOption(${i})" alt = "img" ></div>`;
             tmp += `<div class="option_delete"><img src = "${delUrl}" onclick="deleteOption(${i})" alt = "img" ></div>`;
             tmp += "</div>";
@@ -727,6 +752,22 @@
         const txt = $('#categoryLabel_' + id).text();
         $('#category_name').val(txt);
         $('#modalAddCategory').modal('toggle');
+    }
+    
+    deleteCategory = (id) => {
+        if (window.confirm("本当に削除しますか？") === false) {
+            return;
+        }
+        
+        $.get("/admin/userProductCategory/remove", {"id" : id,}, function(data) {
+            
+            if (data.state === "SUCCESS") {
+
+                $("#categories").val(data.categories);
+                createCategoryPan();
+                checkCategories();
+            }
+        })
     }
 
     $(document).on('click', '#btnViewAddCategory', function() {
