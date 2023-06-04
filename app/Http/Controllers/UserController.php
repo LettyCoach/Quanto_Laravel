@@ -18,6 +18,9 @@ class UserController extends Controller
         if(Auth::user()->isAdmin()) {
             $users = User::simplePaginate(20);
         }
+        else {
+            $users = User::where('id', Auth::user()->id)->simplePaginate(20);
+        }
         return view('admin/users/index', ['users' => $users]);
     }
 
