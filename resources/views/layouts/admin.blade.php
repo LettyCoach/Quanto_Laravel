@@ -19,7 +19,6 @@
     <!-- Styles -->
     <link href="{{ asset('public/css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('public/css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/css/make_form.css') }}" rel="stylesheet">
     <script src="{{asset('public/js/easy-number-separator.js')}}"></script>
 
 
