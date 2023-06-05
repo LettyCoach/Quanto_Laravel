@@ -371,11 +371,56 @@ class ApiController extends Controller
     }
     public function uploadProfile(Request $request)
     {
-        $filename = $request->p_filename;
-        $file = $request->file;
-        $file->move('uploads/users', $filename);
+        $profile_file = $request->file;
+        $profile_url = '';
+        $user_id = $request->user_id;
+        if ($profile_file != null) {
+            if (strtolower($profile_file->getClientOriginalExtension()) == 'png'
+                || strtolower($profile_file->getClientOriginalExtension()) == 'jpg'
+                || strtolower($profile_file->getClientOriginalExtension()) == 'jpeg'
+                || strtolower($profile_file->getClientOriginalExtension()) == 'gif'
+                || strtolower($profile_file->getClientOriginalExtension()) == 'bmp'
+            ) {
+                $profile_file->move('uploads/users', str_replace(' ','_', $profile_file->getClientOriginalName()));
+                $profile_url = '/uploads/users/' . str_replace(' ','_', $profile_file->getClientOriginalName());
+                User::where('id', $user_id)->update([
+                    'profile_url'=>$profile_url,
+                ]);
+            }
+            else {
+                return "image_error";
+            }
+        }
+        return $profile_url;
+    }
 
-        return $filename;
+    public function uploadStamp(Request $request)
+    {
+        $stamp_file = $request->file;
+        $stamp_url = '';
+        $user_id = $request->user_id;
+        if ($stamp_file != null) {
+            if (strtolower($stamp_file->getClientOriginalExtension()) == 'png'
+                || strtolower($stamp_file->getClientOriginalExtension()) == 'jpg'
+                || strtolower($stamp_file->getClientOriginalExtension()) == 'jpeg'
+                || strtolower($stamp_file->getClientOriginalExtension()) == 'gif'
+                || strtolower($stamp_file->getClientOriginalExtension()) == 'bmp'
+            ) {
+                $stamp_file->move('uploads/users', str_replace(' ','_', $stamp_file->getClientOriginalName()));
+                $stamp_url = '/uploads/users/' . str_replace(' ','_', $stamp_file->getClientOriginalName());          
+                $user_setting_tp = User::find($user_id)->settings;             
+                $user_setting = json_decode($user_setting_tp, true);
+                $user_setting['stamp_url'] = $stamp_url;
+                $user_setting_tp = json_encode($user_setting);
+                User::where('id', $user_id)->update([
+                    'settings'=>$user_setting_tp,
+                ]);
+            }
+            else {
+                return "image_error";
+            }
+        }
+        return $stamp_url;
     }
 
     public function uploadImgWithPath(Request $request)
