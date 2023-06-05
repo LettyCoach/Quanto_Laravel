@@ -883,10 +883,46 @@ $(document).ready(function () {
                 cache: false,
                 processData: false,
                 success: function (data, status) {
-                    var profileUrl = hostUrl + '/uploads/users/';
+                    var profileUrl = hostUrl;
                     const randomNumber = Math.random();
                     const imageUrlWithCacheBuster = profileUrl + data+`?cache=${randomNumber}`;
                     $("#profile").attr("src", imageUrlWithCacheBuster);
+                }
+            }); // close ajax
+        }
+        input.click();
+    });
+
+    $(document).on('click', "#stamp", function () {
+        var input = document.createElement('input');
+        input.type = 'file';
+        var stamp_path = $(this).attr('src');
+        var s_filename = stamp_path.split('/').pop();
+        const questionMarkIndex = s_filename.indexOf("?");
+        const new_String = questionMarkIndex !== -1 ? s_filename.substring(0, questionMarkIndex) : s_filename;
+        input.onchange = e => {
+            var file = e.target.files[0];
+            var fd = new FormData();
+            fd.append('file', file);
+            fd.append('user_id', $("#user_id").val());
+            fd.append('s_filename', new_String);
+            //upload img & url
+            var hostUrl = $("#hostUrl").val();
+            var postUrl = hostUrl + '/api/v1/client/uploadStamp';
+
+            $.ajax({
+                type: 'POST',
+                url: postUrl,
+                data: fd,
+                contentType: false,
+                enctype: 'multipart/form-data',
+                cache: false,
+                processData: false,
+                success: function (data, status) {
+                    var stampUrl = hostUrl;
+                    const randomNumber = Math.random();
+                    const imageUrlWithCacheBuster = stampUrl + data+`?cache=${randomNumber}`;
+                    $("#stamp").attr("src", imageUrlWithCacheBuster);
                 }
             }); // close ajax
         }
