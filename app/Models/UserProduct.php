@@ -202,6 +202,16 @@ class UserProduct extends Model
             }
         }
 
+        $rlts = [];
+        foreach($rlt as $e) {
+            $key = base64_encode($e);
+            $key = str_replace('=', '_', $key);
+            $key = str_replace('+', '_', $key);
+            $key = str_replace('/', '_', $key);
+            $key = "_" . $key;
+            $rlts[$key] = $e;
+        }
+
         return $rlt;
     }
 
