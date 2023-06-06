@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use File;
+use Auth;
 
 class UserProduct extends Model
 {
@@ -186,7 +187,8 @@ class UserProduct extends Model
     }
 
     public function getAllOptionNames() {
-        $models = self::get();
+        $user_id = Auth::user()->id;
+        $models = self::where('id', $user_id)->get();
         $rlt = ['カラー', 'サイズ', '素材'];
 
         foreach($models as $model) {
