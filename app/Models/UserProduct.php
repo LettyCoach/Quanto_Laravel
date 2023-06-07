@@ -169,6 +169,16 @@ class UserProduct extends Model
         return $rlt;
     }
 
+    static public function convert2encode($str) {
+        $str = base64_encode($str);
+        $str = str_replace('=', '_', $str);
+        $str = str_replace('+', '_', $str);
+        $str = str_replace('/', '_', $str);
+        $str = "_" . $str;
+
+        return $str;
+    }
+
     public function getOptionsText() {
 
         $options = $this->getOptions();
@@ -188,7 +198,7 @@ class UserProduct extends Model
 
     public function getAllOptionNames() {
         $user_id = Auth::user()->id;
-        $models = self::where('id', $user_id)->get();
+        $models = self::where('user_id', $user_id)->get();
         $rlt = ['カラー', 'サイズ', '素材'];
 
         foreach($models as $model) {
@@ -204,15 +214,11 @@ class UserProduct extends Model
 
         $rlts = [];
         foreach($rlt as $e) {
-            $key = base64_encode($e);
-            $key = str_replace('=', '_', $key);
-            $key = str_replace('+', '_', $key);
-            $key = str_replace('/', '_', $key);
-            $key = "_" . $key;
+            $key = self::convert2encode($e);
             $rlts[$key] = $e;
         }
 
-        return $rlt;
+        return $rlts;
     }
 
     public function getOptions() {
@@ -240,6 +246,17 @@ class UserProduct extends Model
         }
 
         return $tmp;
+    }
+
+    public function getOptions2() {
+        $tmp = $this->getOptions();
+        $rlt = [];
+        foreach ($tmp as $k => $e) {
+            $key = self::convert2encode($k);
+            $rlt[$key] = $e;
+        }
+
+        return $rlt;
     }
 
     public function getOptionsArray() {

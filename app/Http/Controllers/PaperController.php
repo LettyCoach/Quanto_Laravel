@@ -12,6 +12,9 @@ use App\Models\FollowClient;
 use App\Models\Answer;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserProduct;
+use App\Models\Member;
+use App\Models\PaymentMethod;
+use App\Models\Purpose;
 
 class PaperController extends Controller
 {
@@ -55,7 +58,7 @@ class PaperController extends Controller
 			$listDataTmp[$i]['file_url'] = $model->getImageUrlFirstFullPath('blank');
 			$listDataTmp[$i]['value'] = $model->price;
 			$listDataTmp[$i]['id'] = $model->id;
-			$listDataTmp[$i]['options'] = $model->getOptions();
+			$listDataTmp[$i]['options'] = $model->getOptions2();
 			$listDataTmp[$i]['productID'] = $model->getProductID();
 			$tp_collection = $user_like_products->find($model->id);
 			if($tp_collection != null) $listDataTmp[$i]['productLike'] = 'LIKE';
@@ -69,8 +72,15 @@ class PaperController extends Controller
 
 		$productFormat = new UserProduct;
 		$productOptions = $productFormat->getAllOptionNames();
+        $purposes = Purpose::where('user_id', Auth::user()->id)->get();
+        $members = Member::where('user_id', Auth::user()->id)->get();
+        $payment_methods = PaymentMethod::where('user_id', Auth::user()->id)->get();
 
-
+        // return view('profile', [
+        //     'purposes' => $purposes,
+        //     'members' => $members,
+        //     'payment_methods' => $payment_methods,
+        // ]);
         return view('paper/invoiceNew', [
 			'edit_id'=>0,
 			'cDate'=>$date,
@@ -78,6 +88,9 @@ class PaperController extends Controller
 			'answers'=>$answers,
 			'productOptions' => $productOptions,
 			'models' => $models,
+			'purposes' => $purposes,
+            'members' => $members,
+            'payment_methods' => $payment_methods,
         ]);
 	}
 
