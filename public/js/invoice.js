@@ -13,8 +13,8 @@ var like_flag = false;
 var count_option_checked = 3;
 var page_direction = true;
 var varient_array = [];
-$('.fix-dropdown-item').each(function(){
-    varient_array.push($(this).find('p').text());
+$('[id^="varient_check_"]').each(function(){
+    varient_array.push($(this).attr('id').replaceAll(/varient_check_/g, ''));
 });
 var selected_item_id = 0;
 
@@ -152,7 +152,10 @@ function make_tr(i, k, cId) {
     var selk = ($('#reduce_pro_' + (i - k)).prop('selectedIndex') != null) ? $('#reduce_pro_' + (i - k)).prop('selectedIndex') : 0;
     if (k < 0) { }
     else if (cId < 0) { }
-    else { if (i == cId + 1) {product_tr_ID='Q0000'; imgUrl = blankUrl; title = "タイトル"; price = 0; quantity = 1; current_price = 0; current_reduce = 0; productNum = -1;} }
+    else { 
+        if (i == cId + 1) {product_tr_ID='Q0000'; imgUrl = blankUrl; title = "タイトル"; price = 0; quantity = 1; current_price = 0; current_reduce = 0; productNum = -1;} 
+        if (cId == 0) {product_tr_ID='Q0000'; imgUrl = blankUrl; title = "タイトル"; price = 0; quantity = 1; current_price = 0; current_reduce = 0; productNum = -1;} 
+    }
     //making html
     rHtml += '<tr>';
     rHtml += '<td class="td-ID">';
@@ -277,7 +280,8 @@ function pdfRender(type, cId, tId, rows) {
     if (tId + k <= rows) {
         pdfHtml += make_before(' ');
         //make table HTML
-        var rHtml = '<table cellpadding="1" cellspacing="0" class="main-table"><thead>';
+        //        var rHtml = '<table cellpadding="1" cellspacing="0" class="main-table"><thead>';
+        var rHtml = '<div class ="blank_new_row"><img src="'+ $(".blank_new_row_img").attr('src') +'" class="blank_new_row_img" alt=""></div><table cellpadding="1" cellspacing="0" class="main-table"><thead>';
         rHtml+= $(".main-table").find("thead").html();//  '<tr><th class="th1">内容</div></th><th class="th2">単価</div></th><th class="th3">数量</th><th class="th4">金額(円)</th><th class="th5">消費税</th></tr>';
         rHtml+='</thead><tbody>';
         //make main rows
@@ -303,7 +307,7 @@ function pdfRender(type, cId, tId, rows) {
         //make table HTML
         var rHtml1 = '';
         var rHtml2 = '';
-        var rHtml = '<table cellpadding="1" cellspacing="0" class="main-table"><thead>';
+        var rHtml = '<div class = "blank_new_row"><img src="'+ $(".blank_new_row_img").attr('src') +'" class="blank_new_row_img" alt=""></div><table cellpadding="1" cellspacing="0" class="main-table"><thead>';
         rHtml+= $(".main-table").find("thead").html();
         
         //'<tr><th class="th1">内容</div></th><th class="th2">単価</div></th><th class="th3">数量</th><th class="th4">金額(円)</th><th class="th5">消費税</th></tr>
@@ -411,6 +415,12 @@ function pdfRender(type, cId, tId, rows) {
             });
         }
     });
+    if(parseInt($("#rowCount").val()) < 1){
+        $(".blank_new_row").css("display", 'block');
+    }
+    else{
+        $(".blank_new_row").css("display", 'none');
+    }
 }
 $(document).ready(function () {
     $(document).on('keyup', '[id^="title_"]', function () {
@@ -956,7 +966,12 @@ $(document).ready(function () {
         //     $(this).parent().find('#item_productID').val();
         // }
         varient_array.forEach(varient_element=>{
-            $('#subt_'+varient_element+ '_' + current_img_index).text($(this).parent().find('#item_'+varient_element).val());
+            //var option_code = $(this).parent().find('#item_'+varient_element).val();
+            var xxxt = $(this).parent().find('[id*="'+ varient_element +'"]').val();
+            var xxxob = $('#subt_'+varient_element+'_'+current_img_index);
+            var xxxob_id = xxxob.attr('id');
+            //$('#subt_'+varient_element+'_'+current_img_index).val($(this).parent().find('[id~="'+ varient_element +'"]').val());
+            xxxob.val(xxxt);
         })
         $('#price_' + current_img_index).val(display_img_price); $('#price_' + current_img_index).change();
         $('#title_' + current_img_index).text(display_img_title);
@@ -1136,6 +1151,14 @@ $(document).ready(function () {
         else  page_direction = false;
         //render_page_change(page_direction, count_option_checked);
         render_direction_changed(page_direction);
+    });
+
+    $(document).on('click', '.blank_new_row_img', function(){
+        var cId = 0;
+        var tId = 0;
+        var rows = parseInt($("#select_resize").val());
+        //re-render pdf
+        pdfRender('add', cId, tId, rows);
     });
     ///////////////////////////////////////////
 });

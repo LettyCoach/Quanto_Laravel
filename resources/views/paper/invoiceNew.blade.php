@@ -57,11 +57,9 @@
                         <div class="first-label">請求先の設定</div>
                         <div class="first-content">
                             <select class="first-select" id="first_select">
-                                <option value="株式会社ニコニコ亭">株式会社ニコニコ亭</option>
-                                <option value="株式会社カゴロモフーズ">株式会社カゴロモフーズ</option>
-                                <option value="バンザイ株式会社">バンザイ株式会社</option>
-                                <option value="日本フード株式会社">日本フード株式会社</option>
-                                <option value="株式会社デリーアンドコー">株式会社デリーアンドコー</option>
+                                @foreach($members as $member)
+                                <option value="{{$member->name}}">{{$member->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -151,10 +149,10 @@
                         <div class="fix-dropdown">
                             <button onclick="myFunction()" class="fix-dropbtn" style="background: url({{ asset('public/img/ic_select_arrow.png') }}) no-repeat center center;background-size: cover;">バリエーション</button>
                             <div id="varient_resize" class="fix-dropdown-content">
-                            @foreach($productOptions as $productOption)
+                            @foreach($productOptions as $key=>$productOption)
                                 <div class="fix-dropdown-item">        
                                     <div>
-                                        <input type="checkbox" class="image-check-box-small" id="varient_check_{{$productOption}}" name="" value="" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'checked' : '' }}>
+                                        <input type="checkbox" class="image-check-box-small" id="varient_check_{{$key}}" name="" value="" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'checked' : '' }}>
                                         <label class="image-show-small" for="color_show">&nbsp;</label>    
                                     </div>
                                     <p>{{$productOption}}</p>
@@ -241,13 +239,16 @@
             </div>
 
             <div  id="main_table">
+                <div class = "blank_new_row">
+                    <img src="{{ asset('public/img/ic_add.png') }}" class="blank_new_row_img" alt="">
+                </div>
                 <table cellpadding="1" cellspacing="0" class="main-table">
                     <thead>
                         <tr>
                             <th class="th-ID">ID</th>
                             <th class="th1">内容</th>
-                            @foreach($productOptions as $productOption)
-                                <th class="th-plus th-plus-{{$productOption}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>        
+                            @foreach($productOptions as $key=>$productOption)
+                                <th class="th-plus th-plus-{{$key}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>        
                                     {{$productOption}}
                                 </th>
                             @endforeach
@@ -284,9 +285,9 @@
                                     <textarea class="td-a1-input" id="title_{{ $i }}">タイトル</textarea>
                             </td>
 
-                            @foreach($productOptions as $productOption)
-                                <td class="td-plus td-plus-{{$productOption}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>
-                                    <textarea class="td-subt-input td-input-{{$productOption}}" id="subt_{{$productOption}}_{{ $i }}"></textarea>
+                            @foreach($productOptions as $key=>$productOption)
+                                <td class="td-plus td-plus-{{$key}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>
+                                    <textarea class="td-subt-input td-input-{{$key}}" id="subt_{{$key}}_{{ $i }}"></textarea>
                                 </td>
                             @endforeach
 
