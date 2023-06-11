@@ -182,7 +182,7 @@ function make_tr(i, k, cId) {
         let ik = i-k;
         let varient_element_value = $("#subt_"+ varient_element.value + '_' + ik).text();
         if (typeof(varient_element_value) == "undefined") varient_element_value = '';
-        rHtml += '<td class="td-plus td-plus-'+ varient_element.value +'">';
+        rHtml += '<td class="td-plus td-plus-'+ varient_element.value +' open-modal">';
         rHtml += '<div class="td-subt-input td-input-'+ varient_element.value +' open-modal" id="subt_'+ varient_element.value +'_'+ i +'">'+ varient_element_value +'</div></td>';
         $('#subt_'+varient_element.value+ '_' + current_img_index).text($(this).parent().find('#item_'+varient_element).val());
     });
@@ -372,23 +372,6 @@ function pdfRender(type, cId, tId, rows) {
     $('[id^="reduce_plus_"]').each(function () {
         updateTextView($(this));
     });
-    $('[id^="title_"]').each(function () {
-        var txtrows = $(this).text().split("\n").length;
-        var rows = parseInt($("#select_resize").val());
-        if(!page_direction) rows=15;
-        var thisHeight = 40 + (15 - rows) * (65 - 40) / (15 - 8);
-        var thisFont = 12 + (15 - rows) * (20 - 12) / (15 - 8);
-        $(this).css('font-size', thisFont + "px");
-        $(this).css('height', thisHeight + "px");
-    });
-    $(".td-subt-input").each(function(){
-        var rows = parseInt($("#select_resize").val());
-        if(!page_direction) rows=15;
-        var thisHeight = 40 + (15 - rows) * (65 - 40) / (15 - 8);
-        var thisFont = 12 + (15 - rows) * (20 - 12) / (15 - 8);
-        $(this).css('font-size', thisFont + "px");
-        $(this).css('height', thisHeight + "px");
-    });
     updateTextView($('#reduce_price'));
     updateTextView($('#display_reduce'));
     $("#uName").keyup();
@@ -488,9 +471,27 @@ $(document).ready(function () {
         $("#uNameDiv").css('width', uNameDivCss);
     });
     $(document).on('keyup', '#uName', function () {
+        var str_uName = $(this).val();
+        var hasFullWidth = 0;
+        var hasHalfWidth = 0;
+
+        for (var i = 0; i < str_uName.length; i++) {
+            var charCode = str_uName.charCodeAt(i);
+            if (
+              (charCode >= 0x0020 && charCode <= 0x007E) || // Half-width characters
+              (charCode >= 0xFF61 && charCode <= 0xFF9F) || // Half-width Katakana
+              (charCode >= 0xFFA0 && charCode <= 0xFFDC) || // Full-width Roman characters and half-width voiced sound marks
+              (charCode >= 0xFFE8 && charCode <= 0xFFEE)    // Half-width punctuation marks and symbols
+            ) {
+              hasHalfWidth++;
+            } else {
+              hasFullWidth++;
+            }
+        }
         var set_font_size = parseInt($(this).css('font-size').replace("px", ''));
         var ct_num = $(this).val().length;
-        dis_width = ct_num * set_font_size + 10;
+        
+        dis_width = hasFullWidth * set_font_size + hasHalfWidth * set_font_size /2 + 10;
         uNameCss = dis_width;
         uNameDivCss = dis_width + 50;
         $("#uName").css('width', uNameCss);
@@ -517,7 +518,7 @@ $(document).ready(function () {
         $("#purpose_2").css('width', uTitleCss);
     });
     ///////////////////////////////////////////////////////////////////
-    $(document).on('keyup', '#uMethod', function () {
+    $(document).on('keyup', '#uMethod', function () {   
         var dis_width = $(this).val().length * 20 + 20;
         uMethodCss = dis_width;
         uMethodDivCss = dis_width + 120
@@ -1172,7 +1173,7 @@ $(document).ready(function () {
         save_inrow_data(id_tpnum, cur_row_num);
     });
     $(document).on('DOMSubtreeModified', '[id^="title_"]', function(){
-        var cur_row_num = parseInt($(this).attr('id').split("_").pop());
+        var cur_row_num = parseInt($(this).find($('[id^="subt_"]')).attr('id').split("_").pop());
         var id_tpnum = $("#productNum_"+cur_row_num).val();
         save_inrow_data(id_tpnum, cur_row_num);
     });
