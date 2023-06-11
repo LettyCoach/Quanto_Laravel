@@ -72,15 +72,19 @@ class PaperController extends Controller
 
 		$productFormat = new UserProduct;
 		$productOptions = $productFormat->getAllOptionNames();
-        $purposes = Purpose::where('user_id', Auth::user()->id)->get();
-        $members = Member::where('user_id', Auth::user()->id)->get();
-        $payment_methods = PaymentMethod::where('user_id', Auth::user()->id)->get();
 
-        // return view('profile', [
-        //     'purposes' => $purposes,
-        //     'members' => $members,
-        //     'payment_methods' => $payment_methods,
-        // ]);
+		$contacts = [];
+		$contacts[0] = " "; 
+		$t_contacts = [];
+		$papers = Paper::where('user_id', Auth::user()->id)->get();
+		if(count($papers) > 0){
+			foreach($papers as $paper){
+				if ($paper->send_name == '') continue;
+				if (array_search($paper->send_name, $contacts) !== false) continue;
+				array_push($contacts, $paper->send_name);		
+			}
+		}
+
         return view('paper/invoiceNew', [
 			'edit_id'=>0,
 			'cDate'=>$date,
@@ -88,9 +92,7 @@ class PaperController extends Controller
 			'answers'=>$answers,
 			'productOptions' => $productOptions,
 			'models' => $models,
-			'purposes' => $purposes,
-            'members' => $members,
-            'payment_methods' => $payment_methods,
+			'contacts' => $contacts,
         ]);
 	}
 

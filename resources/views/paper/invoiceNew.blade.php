@@ -57,8 +57,8 @@
                         <div class="first-label">請求先の設定</div>
                         <div class="first-content">
                             <select class="first-select" id="first_select">
-                                @foreach($members as $member)
-                                <option value="{{$member->name}}">{{$member->name}}</option>
+                                @foreach($contacts as $contact)
+                                <option value="{{$contact}}">{{$contact}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -186,7 +186,7 @@
                 </div>
                 <div class="flex mb1">
                 <div class="pro60">
-                    <div id="uNameDiv" class="t4 uline-grey pb-1"><input id="uName" class="input9 text-right" value="{{Auth::user()->name}}"> 様</div>
+                    <div id="uNameDiv" class="t4 uline-grey pb-1"><input id="uName" class="input9 text-center" value="{{Auth::user()->name}}"> 様</div>
                     <div id="uMethodDiv" class="uline-grey pb5 text-left t2 ufit"> 支払方法：<input id="uMethod" class="input1 w200" value="{{ $payment_method}}"></div>
                 </div>
                 <div class="flex-between p2">
@@ -240,7 +240,7 @@
 
             <div  id="main_table">
                 <div class = "blank_new_row">
-                    <img src="{{ asset('public/img/ic_add.png') }}" class="blank_new_row_img" alt="">
+                    <img src="{{ asset('public/img/edit_query_m.png') }}" class="blank_new_row_img" alt="">
                 </div>
                 <table cellpadding="1" cellspacing="0" class="main-table">
                     <thead>
@@ -282,12 +282,12 @@
                                             src="" onerror="this.onerror=null; this.onload=null; if (!this.attributes.src.value) this.attributes.src.value='{{ asset("public/img/blank-plus.png") }}';"
                                             class="td-a1-d2-img" />
                                     </div>             
-                                    <textarea class="td-a1-input" id="title_{{ $i }}">タイトル</textarea>
+                                    <div class="td-a1-input open-modal" id="title_{{ $i }}">タイトル</div>
                             </td>
 
                             @foreach($productOptions as $key=>$productOption)
                                 <td class="td-plus td-plus-{{$key}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>
-                                    <textarea class="td-subt-input td-input-{{$key}}" id="subt_{{$key}}_{{ $i }}"></textarea>
+                                    <div class="td-subt-input td-input-{{$key}} open-modal" id="subt_{{$key}}_{{ $i }}">&nbsp;</div>
                                 </td>
                             @endforeach
 
@@ -501,8 +501,17 @@
                 </div>
             </div>
         
-    
+            <div class="input-modal">
+                <div class="modal-layout">
+                    <img class="input-modal-check" src="{{ asset('public/img/ic_check.png')}}" alt="">
+                    <img class="input-modal-close" src="{{ asset('public/img/ic_modal_close.png') }}" alt="">
+                    <textarea  class="input-modal-content" name="" id="input_textarea" cols="30" rows="15"></textarea>
+                </div> 
+            </div>
         
+
+
+            
         <!-- Modal -->
         <div class="modal fade" id="modalImageView" tabindex="-1" role="dialog" aria-hidden="true" >
             <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 640px; min-width: 640px">
@@ -635,9 +644,8 @@
                 },
             });
         </script>
-    
-    
-    
+
+
 @endsection
 
 @section('js')

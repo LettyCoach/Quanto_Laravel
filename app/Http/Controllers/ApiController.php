@@ -446,4 +446,43 @@ class ApiController extends Controller
         }
         return json_encode($fileNames);
     }
+    public function update_inrow(Request $request){
+
+        $model = UserProduct::find($request->product_id);
+
+        //dd(json_encode($request->ar_options));
+        //dd(json_decode($model->options));
+        $re_array_names = [];
+        $re_array = $request->ar_options;
+        //dd($re_array);
+        foreach($re_array as $re_array_element){
+            array_push($re_array_names, $re_array_element['name']);
+        }
+
+        //dd($re_array_names);
+
+        $option_array = json_decode($model->options);
+        $option_array_tp = $option_array;
+        foreach($option_array as $key=>$option_element){
+            //dd($option_element->name);
+            if(array_search($option_element->name, $re_array_names) === false){
+                array_push($re_array, $option_element);
+            }
+        }
+
+        
+        //dd($re_array);
+        $model->name = $request->product_name;
+        $model->price = $request->product_price;
+        $model->options = json_encode($re_array);
+        
+        $model->save();
+        return;
+        //dd($model->options);
+
+        // $category_ids = $request->get('category_ids');
+        // $this->addCatetories($model->id, $category_ids);
+
+        // return redirect()->route('admin.userProducts');
+    }
 }

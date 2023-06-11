@@ -87,6 +87,9 @@
         tr{
             line-height: 50px;
         }
+        th{
+            text-align: center;
+        }
 
         tr:first-child th:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px;}
         tr:first-child th:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px;}

@@ -33,6 +33,7 @@ Route::post('v1/client/uploadImgWithPath', [ApiController::class, 'uploadImgWith
 Route::post('v1/client/uploadImgWithPathes', [ApiController::class, 'uploadImgWithPathes']);
 Route::post('v1/client/uploadProfile', [ApiController::class, 'uploadProfile']);
 Route::post('v1/client/uploadStamp', [ApiController::class, 'uploadStamp']);
+Route::post('v1/client/update_inrow', [ApiController::class, 'update_inrow']);
 
 
 //Auth
