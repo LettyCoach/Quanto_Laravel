@@ -28,12 +28,12 @@ input {
 }
 
 #uName {
-    min-width: 175px;
+    min-width: 120px;
     width: fit-content;
 }
 
 #uNameDiv {
-    min-width: 250px;
+    min-width: 160px;
     width: fit-content;
 }
 
