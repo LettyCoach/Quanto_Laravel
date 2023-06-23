@@ -35,8 +35,8 @@
                 @endif
                     <td><a class="btn btn-primary" href="{{ route('admin.lp.edit',['id'=>$lp->id]) }}">{{ $lp->title }}</a></td>
                     <td>
-                        <a class="btn btn-info clipboard" data-clipboard-text="{{ $adminHost }}/lp/{{ $lp->token }}"
-                        title="{{ $adminHost }}/lp/{{ $lp->token }}">共有</a>
+                        <a class="btn btn-info clipboard" data-clipboard-text="{{ $adminHost }}/lp/{{ $lp->id }}"
+                        title="{{ $adminHost }}/lp/{{ $lp->id }}">共有</a>
                         <a class="btn btn-danger" href="{{ route('admin.lp.delete',['id'=>$lp->id]) }}">削除</a>
                     </td>
                 </tr>

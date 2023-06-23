@@ -1,7 +1,8 @@
 @charset "UTF-8";
 @import url("grid.css");
 
-:root { /* 色変更される場合は、#以降のカラーコードを変更してください IE非対応 */
+:root {
+    /* 色変更される場合は、#以降のカラーコードを変更してください IE非対応 */
     --base-color: #000;
     --link-color: #666;
     --linkhover-color: #999;
@@ -11,42 +12,42 @@
 }
 
 img {
-	max-width:100%;
-	height: auto;/*高さ自動*/
+    max-width: 100%;
+    height: auto; /*高さ自動*/
 }
 a {
-    display:block;
+    display: block;
     color: var(--link-color);
     text-decoration-line: none;
 }
-a:hover { 
+a:hover {
     color: var(--linkhover-color);
 }
 
 /*ヘッダー
 -------------------------------------*/
 .header {
-	display: flex;
+    display: flex;
     flex-direction: row;
     padding: 2rem 0 0 0;
 }
 .header-box {
-	margin-left: auto;
-	margin-top: 8px;
+    margin-left: auto;
+    margin-top: 8px;
 }
 .contact-button {
-	padding: 1rem;
-	border: 2px solid var(--base-color);
+    padding: 1rem;
+    border: 2px solid var(--base-color);
 }
 nav ul {
-	display: flex;
+    display: flex;
     flex-direction: row;
     justify-content: space-around;
     list-style: none;
-	margin: 1rem 0 0 0;
+    margin: 1rem 0 0 0;
 }
 nav li {
-	flex: 1 0 auto;
+    flex: 1 0 auto;
 }
 nav li a {
     text-decoration: none;
@@ -54,70 +55,72 @@ nav li a {
     width: 100%;
 }
 nav a:hover {
-    background-color: var(--back-color);   
+    background-color: var(--back-color);
 }
 nav a {
     padding: 0.5rem;
 }
 
-@media screen and (min-width: 768px){
-/* PC時はMENUボタンを非表示 */
-#open,#close {
-    display: none !important;
+@media screen and (min-width: 768px) {
+    /* PC時はMENUボタンを非表示 */
+    #open,
+    #close {
+        display: none !important;
+    }
+
+    #navi {
+        display: block !important;
+    }
 }
 
-#navi {
-    display: block !important;
-}
+@media screen and (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+    .header #open,
+    #close {
+        position: absolute;
+        top: 20px;
+        right: 12px;
+    }
+    nav ul {
+        flex-direction: column;
+    }
+    .header li {
+        padding-top: 0;
+    }
+    /* スマホ時はMENUボタンを表示 */
+    #open {
+        display: block;
+        background: url(../img/button.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 50px;
+        height: 50px;
+        border: none;
+        position: absolute;
+        top: 20px;
+        right: 12px;
+    }
+    #close {
+        display: block;
+        background: url(../img/button2.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 50px;
+        height: 50px;
+        border: none;
+        position: absolute;
+        top: 20px;
+        right: 12px;
+    }
+    /* スマホ時はメニューを非表示 */
+    #navi {
+        display: none;
+    }
 }
 
-@media screen and (max-width: 768px){
-.header {
-	flex-direction: column;
-    margin-bottom: 10px;
-}
-.header #open,#close  {
-    position: absolute;
-    top: 20px;
-    right: 12px;
-}
-nav ul {
-	flex-direction: column;
-}
-.header li {
-	padding-top: 0;
-}
-/* スマホ時はMENUボタンを表示 */
-#open {
-    display: block;
-    background: url(../img/button.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 50px;
-    height: 50px;
-    border: none;
-    position: absolute;
-    top: 20px;
-    right: 12px;
-}
-#close  {
-    display: block;
-    background: url(../img/button2.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 50px;
-    height: 50px;
-    border: none;
-    position: absolute;
-    top: 20px;
-    right: 12px;
-}
-/* スマホ時はメニューを非表示 */
-#navi {
-    display: none;
-}
-}
-    
 /*メイン画像
 -------------------------------------*/
 .mainimg img {
@@ -130,9 +133,9 @@ main {
     margin: 5rem 0 0 0;
 }
 section {
-	margin: 5rem 0;
-	padding: 3rem 0;
-}/*
+    margin: 5rem 0;
+    padding: 3rem 0;
+} /*
 section:nth-child(2n + 1) {
 	background-color: var(--back-color);
 }*/
@@ -147,24 +150,24 @@ section:nth-child(2n + 1) {
 }
 .under {
     border-bottom: 0.4rem solid var(--base-color);
-    padding:0 1rem 1rem 1rem;
+    padding: 0 1rem 1rem 1rem;
 }
 .center {
-	text-align: center;
-	margin-bottom: 4rem;
+    text-align: center;
+    margin-bottom: 4rem;
 }
 
 /*申し込みの流れ
 -------------------------------------*/
 .sns-icons {
     margin-right: 10px;
-	width: 50px;
+    width: 50px;
 }
 
 /*フッター
 -------------------------------------*/
 footer {
-    background-color: var(--back-color); 
+    background-color: var(--back-color);
     padding: 5rem 0;
 }
 footer h4 {
@@ -174,15 +177,15 @@ footer h4 {
 /*お問い合わせ
 -------------------------------------*/
 .contact-box {
-	border: 1px solid var(--border-color);
-	text-align: center;
-	padding: 2rem 0;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    padding: 2rem 0;
 }
 .table {
-	margin: 4rem 0;
+    margin: 4rem 0;
 }
 .table th {
-	width: 250px;
+    width: 250px;
 }
 
 /*コピーライト
@@ -195,7 +198,7 @@ footer h4 {
 .copyright a {
     color: var(--white-color);
     text-decoration: none;
-	display: inline;
+    display: inline;
 }
 
 /*ページトップへ戻るボタン
@@ -219,19 +222,18 @@ footer h4 {
 
 /* 幅768px以下の表示
 -------------------------------------*/
-@media screen and (max-width: 768px){
-	
+@media screen and (max-width: 768px) {
     /*ヘッダー
     -------------------------------------*/
     .header-box {
         display: none;
-    }	
+    }
     /*お問い合わせ
     -------------------------------------*/
     .table th {
         width: 100%;
         display: block;
-    }	
+    }
     .table td {
         display: block;
     }
