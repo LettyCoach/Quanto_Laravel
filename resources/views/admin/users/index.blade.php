@@ -54,14 +54,10 @@
                             <td>
                                 <form method="GET" action="{{ route('admin.user.delete', ['id' => $user->id]) }}">
                                     @csrf
-
-                                    <div class="form-group">
-                                        <button type="submit" class="btn delete-button">
-                                            <img src="{{ asset('public/img/img_03/delete_client.png') }}" alt="">
-                                        </button>
-                                    </div>
+                                    <button type="submit" class="btn delete-button p-0">
+                                        <img src="{{ asset('public/img/img_03/delete_client.png') }}" alt="">
+                                    </button>
                                 </form>
-
                             </td>
                         </tr>
                     @endforeach
