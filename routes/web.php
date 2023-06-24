@@ -40,7 +40,10 @@ Route::post('/profile/member', [ProfileController::class, 'member']);
 //Route::get('/admin', [SurveyController::class,'index'])->name('admin.surveys');
 
 Route::get('/admin/users', [UserController::class, 'index'])->name('admin.users');
+Route::get('/admin/user/create', [UserController::class, 'create'])->name('admin.user.create');
+Route::post('/admin/user/store', [UserController::class, 'store'])->name('admin.user.store');
 Route::get('/admin/user/edit/{id}', [UserController::class, 'edit'])->name('admin.user.edit');
+Route::post('/admin/user/update', [UserController::class, 'update'])->name('admin.user.update');
 Route::get('/admin/user/delete/{id}', [UserController::class, 'delete'])->name('admin.user.delete');
 Route::post('/admin/user/save', [ClientController::class, 'save'])->name('admin.user.save');
 Route::post('admin/user/upload', [UserController::class, 'upload'])->name('admin.user.upload');
@@ -49,14 +52,14 @@ Route::get('/admin/clients', [ClientController::class, 'index'])->name('admin.cl
 Route::get('/admin/client/show/{id}', [ClientController::class, 'show'])->name('admin.client.show');
 Route::post('/admin/client/sendMail', [ClientController::class, 'clientSendMail'])->name('admin.client.sendMail');
 
-Route::get('/admin/lps', [LPController::class,'index'])->name('admin.lps');
-Route::get('/admin/lp/add', [LPController::class,'add'])->name('admin.lp.add');
-Route::get('/admin/lp/delete/{id}', [LPController::class,'delete'])->name('admin.lp.delete');
-Route::post('/admin/lp/save', [LPController::class,'save'])->name('admin.lp.save');
-Route::get('/admin/lp/edit/{id}', [LPController::class,'edit'])->name('admin.lp.edit');
-Route::post('admin/lp/upload', [LPController::class,'upload'])->name('admin.lp.upload');
-Route::post('admin/lp/content', [LPController::class,'content'])->name('admin.lp.content');
-Route::post('admin/lp/contentd', [LPController::class,'contentDelete'])->name('admin.lp.contentd');
+Route::get('/admin/lps', [LPController::class, 'index'])->name('admin.lps');
+Route::get('/admin/lp/add', [LPController::class, 'add'])->name('admin.lp.add');
+Route::get('/admin/lp/delete/{id}', [LPController::class, 'delete'])->name('admin.lp.delete');
+Route::post('/admin/lp/save', [LPController::class, 'save'])->name('admin.lp.save');
+Route::get('/admin/lp/edit/{id}', [LPController::class, 'edit'])->name('admin.lp.edit');
+Route::post('admin/lp/upload', [LPController::class, 'upload'])->name('admin.lp.upload');
+Route::post('admin/lp/content', [LPController::class, 'content'])->name('admin.lp.content');
+Route::post('admin/lp/contentd', [LPController::class, 'contentDelete'])->name('admin.lp.contentd');
 
 //Route::get('/admin/surveys', [SurveyController::class,'index'])->name('admin.surveys');
 Route::get('/admin/survey/add', [SurveyController::class, 'add'])->name('admin.survey.add');

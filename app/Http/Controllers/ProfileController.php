@@ -24,7 +24,7 @@ class ProfileController extends Controller
         $members = Member::where('user_id', Auth::user()->id)->get();
         $payment_methods = PaymentMethod::where('user_id', Auth::user()->id)->get();
 
-        return view('profile', [
+        return view('admin.users.profile', [
             'purposes' => $purposes,
             'members' => $members,
             'payment_methods' => $payment_methods,
