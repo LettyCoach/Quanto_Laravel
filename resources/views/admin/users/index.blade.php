@@ -52,9 +52,16 @@
                                 </a>
                             </td>
                             <td>
-                                <a href="{{ route('admin.user.delete', ['id' => $user->id]) }}">
-                                    <img src="{{ asset('public/img/img_03/delete_client.png') }}" alt="">
-                                </a>
+                                <form method="GET" action="{{ route('admin.user.delete', ['id' => $user->id]) }}">
+                                    @csrf
+
+                                    <div class="form-group">
+                                        <button type="submit" class="btn delete-button">
+                                            <img src="{{ asset('public/img/img_03/delete_client.png') }}" alt="">
+                                        </button>
+                                    </div>
+                                </form>
+
                             </td>
                         </tr>
                     @endforeach
@@ -64,4 +71,16 @@
             {{ $users->links() }}
         </div>
     </div>
+@endsection
+
+
+@section('js')
+    <script>
+        $(".delete-button").click(function(e) {
+            e.preventDefault();
+            if (confirm("本当に削除しますか？")) {
+                $(e.target).closest("form").submit();
+            }
+        });
+    </script>
 @endsection
