@@ -131,7 +131,7 @@
                 </a>
                 <ul class="" id="">
                     <li>
-                        <a class="nav-link" href="{{ route('admin.users') }}">
+                        <a class="nav-link" href="{{ route('admin.user.create') }}">
                             <i class="fas fa-user-friends"></i>
                         <span>{{ __('新規登録') }}</span></a>
                     </li>
