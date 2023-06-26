@@ -23,7 +23,6 @@
 }
 
 .user_product_img_pan {
-
     width: 780px;
     display: grid;
     grid-template-columns: auto auto auto auto auto auto auto;
@@ -44,6 +43,7 @@
     height: 232px;
     border-radius: 8px;
     border: 1px solid #d5d5d5;
+    object-fit: cover;
 }
 
 .user_product_img_first .delete_image {
@@ -71,6 +71,7 @@
     height: 111px;
     border: 1px solid #d5d5d5;
     border-radius: 8px;
+    object-fit: cover;
     /* box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; */
 }
 
@@ -103,9 +104,8 @@
     background-clip: padding-box;
     border: 1px solid #cbd5e0;
     border-radius: 4px;
-    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
-
 
 .form_pan .barcode_img {
     cursor: pointer;
@@ -175,12 +175,13 @@
     border-radius: 4px;
 }
 
-.option_edit, .option_delete {   
+.option_edit,
+.option_delete {
     display: flex;
     align-items: center;
 }
 
-.option_row img{
+.option_row img {
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -228,7 +229,6 @@
     padding-left: 30px;
     display: flex;
     align-items: center;
-
 }
 
 .category_pan input {
@@ -241,7 +241,6 @@
     padding-left: 10px;
 }
 
-
 .form-group {
     width: 100%;
     max-height: 480px;
@@ -253,7 +252,6 @@
     padding-left: 30px;
     display: flex;
     align-items: center;
-
 }
 
 .form-group input {
