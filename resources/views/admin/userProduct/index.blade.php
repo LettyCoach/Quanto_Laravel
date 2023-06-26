@@ -13,16 +13,16 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th style="width : 80px"></th>
-                    <th style="width: 12%">ブランド名</th>
-                    <th style="width: 20%">商品名</th>
-                    <th style="width: 12%">カテゴリー</th>
-                    <th style="width: 24%">オプション<br>（カラー/サイズ/素材）</th>
-                    <th style="width: 10%">単価(円)</th>
-                    <th style="width: 16%; min-width: 120px"></th>
-                </tr>
-            </thead>
+                    <th class="text-center">ID</th>
+                    <th class="text-center" style="width : 80px"></th>
+                    <th class="text-center" style="width: 12%">ブランド名</th>
+                    <th class="text-center" style="width: 20%">商品名</th>
+                    <th class="text-center" style="width: 12%">カテゴリー</th>
+                    <th class="text-center" style="width: 24%">オプション<br>（カラー/サイズ/素材）</th>
+                    <th class="text-center" style="width: 10%">単価(円)</th>
+                    <th class="text-center" style="width: 16%; min-width: 120px"></th>
+                </tr> 
+            </thead> 
             <tbody>
                 <tr>
                     <td colspan="8" class="firstTD">　</td>

@@ -119,6 +119,7 @@ tbody tr:first-child {
     height: 232px;
     border-radius: 8px;
     border: 1px solid #d5d5d5;
+    object-fit: cover;
 }
 
 .sub_image_pan {
@@ -131,7 +132,7 @@ tbody tr:first-child {
     height: 111px;
     border: 1px solid #d5d5d5;
     border-radius: 8px;
-    /* box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; */
+    object-fit: cover;
 }
 
 .img_view {
