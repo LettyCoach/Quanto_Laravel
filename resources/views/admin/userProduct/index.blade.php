@@ -209,17 +209,47 @@
                     $("#userProductImage_" + i).attr('src', "");
                 }
 
-                obj.img_urls.forEach((e, i) => {
-                    if (e.state !== '') {
-                        $("#userProductImage_div_" + i).css('display', 'none');
-                        return;
-                    }
-                    rlt += `<div class="swiper-slide"><img src="${e.url}" alt="" ></div>`;
-                    $("#userProductImage_" + i).attr('src', e.url);
-                    $("#userProductImage_div_" + i).css('display', 'block');
-                })
+                for (let i = 0; i < 8; i ++) {
+                    obj.img_urls.forEach((e, i) => {
+                        if (e.state !== '') {
+                            $("#userProductImage_div_" + i).css('display', 'none');
+                            return;
+                        }
+                        rlt += `<div class="swiper-slide"><img src="${e.url}" alt="" ></div>`;
+                        $("#userProductImage_" + i).attr('src', e.url);
+                        $("#userProductImage_div_" + i).css('display', 'block');
+                    })
+                }
+                
                 $('#slide_img_pan_main').html(rlt);
                 $('#slide_img_pan').html(rlt);
+
+                
+                var swiper_main = new Swiper("#mySwiper_main", {
+                    slidesPerView: 1,
+                    loop: true,
+                    spaceBetween: 30,
+                    freeMode: true,
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
+                });
+                
+                var swiper = new Swiper("#mySwiper", {
+                    slidesPerView: 4,
+                    loop: true,
+                    spaceBetween: 10,
+                    freeMode: true,
+                    navigation: {
+                        nextEl: ".swiper-button-next",
+                        prevEl: ".swiper-button-prev",
+                    },
+                    // autoplay: {
+                    //     delay: 2000,
+                    //     disableOnInteraction: false,
+                    // },
+                });
 
                 $('#name').html(obj.name);
                 $('#price').html(obj.price + '円');
@@ -285,30 +315,5 @@
 
         }
 
-        var swiper = new Swiper("#mySwiper_main", {
-            slidesPerView: 1,
-            loop: true,
-            spaceBetween: 30,
-            freeMode: true,
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-        });
-        
-        var swiper = new Swiper("#mySwiper", {
-            slidesPerView: 4,
-            loop: true,
-            spaceBetween: 30,
-            freeMode: true,
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            autoplay: {
-                delay: 2000,
-                disableOnInteraction: false,
-            },
-        });
     </script>
 @endsection

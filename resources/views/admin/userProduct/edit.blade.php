@@ -535,6 +535,7 @@
 
         new Tagify(document.getElementById('option_description_tag'));
 
+        $("html, body").animate({ scrollTop: 0 }, "slow");
     });
 
     $(document).on('click', "#add_option", function() {
