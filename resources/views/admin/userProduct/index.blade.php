@@ -10,19 +10,19 @@
         </div>
     </div>
     <div class="mt-2">
-        <table class="table">
+        <table class="table product_table">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th style="width : 80px"></th>
-                    <th style="width: 12%">ブランド名</th>
-                    <th style="width: 20%">商品名</th>
-                    <th style="width: 12%">カテゴリー</th>
-                    <th style="width: 24%">オプション<br>（カラー/サイズ/素材）</th>
-                    <th style="width: 10%">単価(円)</th>
-                    <th style="width: 16%; min-width: 120px"></th>
-                </tr>
-            </thead>
+                    <th class="text-center align-middle">ID</th>
+                    <th class="text-center align-middle" style="width : 80px"></th>
+                    <th class="text-center align-middle" style="width: 12%">ブランド名</th>
+                    <th class="text-center align-middle" style="width: 20%">商品名</th>
+                    <th class="text-center align-middle" style="width: 12%">カテゴリー</th>
+                    <th class="text-center align-middle" style="width: 24%">オプション<br>（カラー/サイズ/素材）</th>
+                    <th class="text-center align-middle" style="width: 10%">単価(円)</th>
+                    <th class="text-center align-middle" style="width: 16%; min-width: 120px"></th>
+                </tr> 
+            </thead> 
             <tbody>
                 <tr>
                     <td colspan="8" class="firstTD">　</td>
@@ -36,7 +36,7 @@
                     <td>{{ $model->brandName }}</td>
                     <td>{{ $model->name }}</td>
                     <td>{{ $model->getCategoryText() }}</td>
-                    <td><?php echo $model->getOptionsText(); ?></td>
+                    <td class="option_txt"><?php echo $model->getOptionsText(); ?></td>
                     <td>{{ number_format($model->price) }}円</td>
                     <td>
                         <a href="{{ route('admin.userProduct.edit',['id'=>$model->id]) }}">

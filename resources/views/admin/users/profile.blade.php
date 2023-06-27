@@ -62,7 +62,7 @@
                         @csrf
                         <label for="profile_path">
                             <figure class="avatar font-weight-bold" style="font-size: 60px; height: 180px; width: 180px;"
-                                data-initial="Photo">
+                                data-initial="Photo" style="border: 1px solid gray">
 
                                 @if ($profile_url != '')
                                     <img id="uploaded_url" src="{{ $profile_url }}">
@@ -334,6 +334,9 @@
                                 $('#uploaded_stamp_url').attr('src', `.${data.profile_url}`);
                                 $('#uploaded_stamp_url').css('display', 'block');
                             }
+
+                            $('figure').css('background-color', 'white');
+                            $('figure').css('border', '1px solid grey');
                         }
                     });
                 }

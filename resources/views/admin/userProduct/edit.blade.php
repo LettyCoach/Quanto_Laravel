@@ -17,7 +17,7 @@
                         <div class = "row m-0 flex flex-row justify-content-center">
                             <div class = "user_product_img_pan">
                                 <div class="user_product_img_first" id = "userProductImage_div_0">
-                                    <img src = "{{ url($model->getImageUrlFirst('add')) }}" id="userProductImage_0" alt = "img" >
+                                    <img src = "{{ url($model->getImageUrlFirst('add')) }}" id="userProductImage_0" alt = "img" class="upload_view_image" >
                                     <img src = "{{url('public/img/img_03/delete.png')}}" id="delete_image_0" onclick="deleteImage(0)" alt = "img" class = "delete_image">
                                 </div>
                             @php
@@ -29,7 +29,7 @@
                                     else $src = $listImageURL[$i]['url'];
                             @endphp
                                     <div id = "userProductImage_div_{{$i}}" class="sub_image_pan" style = "{{$style}}">
-                                        <img src = "{{url($src)}}" id="userProductImage_{{$i}}" alt = "img" class="view_image">
+                                        <img src = "{{url($src)}}" id="userProductImage_{{$i}}" alt = "img" class="view_image upload_view_image">
                                         <img src = "{{url('public/img/img_03/delete.png')}}" id="delete_image_{{$i}}" onclick="deleteImage({{$i}})" alt = "img" class = "delete_image">
                                     </div>
                             @php
@@ -336,18 +336,66 @@
         $(this).css('width', ($(this).val().length + 1) * 2 + 'ch');
     })
 
-    $(document).on('click', '#userProductImage_div_0', function() {
+    // $(document).on('click', '#userProductImage_div_0', function() {
+    //     var input = document.createElement('input');
+    //     input.type = 'file';
+
+    //     input.onchange = e => {
+    //         var file = e.target.files[0];
+    //         var formData = new FormData();
+    //         var filePath = "public/user_product/";
+    //         formData.append('file', file);
+    //         formData.append('filePath', filePath);
+
+    //         var postUrl = hostUrl + '/api/v1/client/uploadImgWithPath';
+
+    //         $.ajax({
+    //             type: 'POST',
+    //             url: postUrl,
+    //             data: formData,
+    //             contentType : false,
+    //             enctype: 'multipart/form-data',
+    //             cache: false,
+    //             processData : false,
+    //             success : function (data, status) {
+    //                 const img_url = `${filePath}${data}`;
+    //                 listImageURL[0] = {
+    //                     name: data,
+    //                     url: img_url,
+    //                     state: ''
+    //                 }
+    //                 displayImageList();
+    //             }
+    //         });
+    //     }
+    //     input.click();
+    // })
+    
+    $(document).on('click',".upload_view_image", function(){
         var input = document.createElement('input');
         input.type = 'file';
+        input.multiple="true";
+
+        let lastId = getNextImageId();
+
+        let id = $(this).attr('id').split("_")[1];
+        id = parseInt(id);
+
+        id = Math.min(id, lastId);
 
         input.onchange = e => {
-            var file = e.target.files[0];
+
             var formData = new FormData();
             var filePath = "public/user_product/";
-            formData.append('file', file);
             formData.append('filePath', filePath);
+            for (let i = 0; i < e.target.files.length; i ++) {
+                if (id + i >= fileLimit) break;
+                var file = e.target.files[i];
+                console.log(file);
+                formData.append('file[]', file);
+            }
 
-            var postUrl = hostUrl + '/api/v1/client/uploadImgWithPath';
+            var postUrl = hostUrl + '/api/v1/client/uploadImgWithPathes';
 
             $.ajax({
                 type: 'POST',
@@ -358,18 +406,25 @@
                 cache: false,
                 processData : false,
                 success : function (data, status) {
-                    const img_url = `${filePath}${data}`;
-                    listImageURL[0] = {
-                        name: data,
-                        url: img_url,
-                        state: ''
+                    let fileNames = JSON.parse(data);
+                    for (let i = 0; i < fileNames.length; i ++) {
+
+                        const fileName = fileNames[i];
+                        const img_url = `${filePath}${fileName}`;
+                        listImageURL[id] = {
+                            name: fileName,
+                            url: img_url,
+                            state: ''
+                        }
+                        id ++;
                     }
                     displayImageList();
+                    displayAddImage();
                 }
             });
         }
         input.click();
-    })
+    });
 
     $(document).on('click',"#img_upload_img", function(){
         var input = document.createElement('input');
@@ -534,7 +589,6 @@
         elementDisable('#form_add_option', 1, false);
 
         new Tagify(document.getElementById('option_description_tag'));
-
         $("html, body").animate({ scrollTop: 0 }, "slow");
     });
 
@@ -658,6 +712,8 @@
         elementDisable('#form_add_option', 1, false);
 
         new Tagify(document.getElementById('option_description_tag'));
+        
+        $("html, body").animate({ scrollTop: 0 }, "slow");
 
     }
 
