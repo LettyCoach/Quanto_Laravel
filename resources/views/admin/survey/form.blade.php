@@ -610,9 +610,9 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
 </div>
 </div>
 <?php
-$clientHost = \Illuminate\Support\Facades\Config::get('constants.clientHost');
-$cartHost = \Illuminate\Support\Facades\Config::get('constants.cartHost');
-$adminHost = \Illuminate\Support\Facades\Config::get('constants.adminHost');
+$clientHost = Config::get('constants.clientHost');
+$cartHost = Config::get('constants.cartHost');
+$adminHost = Config::get('constants.adminHost');
 ?>
 <div class="col-4">
 
