@@ -89,9 +89,9 @@ class UserProductController extends Controller
         $productID = sprintf("Q%05d%03d", Auth::user()->id, $max_id + 1);
 
         $categories = UserProductCategory::orderBy('name', 'asc');
-        if (!Auth::user()->isAdmin()) {
+        // if (!Auth::user()->isAdmin()) {
             $categories = $categories->where('user_id', Auth::user()->id);
-        }
+        // }
         $categories = $categories->get();
         
         return view('admin/userProduct/edit', [
@@ -108,9 +108,9 @@ class UserProductController extends Controller
         $model->getImageUrls();
         
         $categories = UserProductCategory::orderBy('name', 'asc');
-        if (!Auth::user()->isAdmin()) {
+        // if (!Auth::user()->isAdmin()) {
             $categories = $categories->where('user_id', Auth::user()->id);
-        }
+        // }
         $categories = $categories->get();
         
         $productID = $model->getProductID();

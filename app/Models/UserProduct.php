@@ -38,11 +38,13 @@ class UserProduct extends Model
         return $this->belongsToMany(User::class, 'save_items', 'product_id', 'user_id');
     }
 
-    public function getProductID() {
+    public function getProductID()
+    {
         return sprintf("Q%05d%03d", $this->user_id, $this->id);
     }
 
-    public function getShortName() {
+    public function getShortName()
+    {
         $name = $this->name;
 
         if (mb_strlen($name, 'UTF-8') > 7) {
@@ -51,12 +53,13 @@ class UserProduct extends Model
         return $name;
     }
 
-    public function getFullPath($url, $flag) {
+    public function getFullPath($url, $flag)
+    {
 
         if ($url == "" || !File::exists($this->imgPath . $url)) {
             if ($flag == "add")
                 return $this->addImgURL;
-            else if($flag == "blank") {
+            else if ($flag == "blank") {
                 return $this->blankImgURL;
             }
         }
@@ -73,8 +76,8 @@ class UserProduct extends Model
         $limit = 10;
         $cnt = count($rlt);
 
-        if($cnt < $limit) {
-            for ($i = 0; $i < $limit - $cnt; $i ++){
+        if ($cnt < $limit) {
+            for ($i = 0; $i < $limit - $cnt; $i++) {
                 array_push($rlt, [
                     'name' => '',
                     'url' => '',
@@ -85,7 +88,7 @@ class UserProduct extends Model
 
         $limit = 18;
         $cnt = count($rlt);
-        for ($i = $cnt; $i < $limit; $i ++){
+        for ($i = $cnt; $i < $limit; $i++) {
             array_push($rlt, [
                 'name' => '',
                 'url' => '',
@@ -94,14 +97,13 @@ class UserProduct extends Model
         }
 
 
-        foreach($rlt as $i => $e) {
-            
+        foreach ($rlt as $i => $e) {
+
             // if($e['state'] == '') continue;
 
             if ($i == 0) {
                 $rlt[$i]['url'] = $this->getFullPath($e['name'], "add");
-            }
-            else {
+            } else {
                 $rlt[$i]['url'] = $this->getFullPath($e['name'], "blank");
             }
         }
@@ -109,15 +111,15 @@ class UserProduct extends Model
         return $rlt;
     }
 
-    public function getImageUrlsFullPath() {
+    public function getImageUrlsFullPath()
+    {
 
         $rlt = $this->getImageUrls();
-        foreach($rlt as $i => $e) {
+        foreach ($rlt as $i => $e) {
 
             if ($i == 0) {
                 $rlt[$i]['url'] = url($this->getFullPath($e['name'], "add"));
-            }
-            else {
+            } else {
                 $rlt[$i]['url'] = url($this->getFullPath($e['name'], "blank"));
             }
         }
@@ -125,7 +127,8 @@ class UserProduct extends Model
         return $rlt;
     }
 
-    public function getImageUrls_JSON() {
+    public function getImageUrls_JSON()
+    {
         $rlt = $this->getImageUrls();
         return json_encode($rlt);
     }
@@ -133,14 +136,14 @@ class UserProduct extends Model
     public function getImageUrlFirst($flag = 'add')
     {
         $rlt = $this->getImageUrls();
-        
+
         return $this->getFullPath($rlt[0]['name'], $flag);
     }
 
     public function getImageUrlFirstFullPath($flag = 'add')
     {
         $rlt = $this->getImageUrls();
-        
+
         return url($this->getImageUrlFirst($flag));
     }
 
@@ -148,7 +151,7 @@ class UserProduct extends Model
     {
         $models = $this->categories;
         $rlt = "_";
-        foreach($models as $i => $model) {
+        foreach ($models as $i => $model) {
             $rlt .= $model->id . "_";
         }
 
@@ -169,7 +172,8 @@ class UserProduct extends Model
         return $rlt;
     }
 
-    static public function convert2encode($str) {
+    static public function convert2encode($str)
+    {
         $str = base64_encode($str);
         $str = str_replace('=', '_', $str);
         $str = str_replace('+', '_', $str);
@@ -179,41 +183,45 @@ class UserProduct extends Model
         return $str;
     }
 
-    public function getOptionsText() {
+    public function getOptionsText()
+    {
 
         $options = $this->getOptions();
         $rlt = "";
         $i = 0;
-        foreach($options as $name => $option) {
-            if ($i > 0) $rlt .= "<br>";
+        foreach ($options as $name => $option) {
             if ($name != 'カラー' && $name != 'サイズ' && $name != '素材') {
-                $rlt .= "<b>$name</b><br>";
+                $rlt .= "<div>$name</div>";
             }
-            $rlt .= $option;
-            $i ++;
+            $rlt .= "<div> $option </div>";
+            $i++;
         }
 
         return $rlt;
     }
 
-    public function getAllOptionNames() {
+    public function getAllOptionNames()
+    {
         $user_id = Auth::user()->id;
         $models = self::where('user_id', $user_id)->get();
         $rlt = ['カラー', 'サイズ', '素材'];
 
-        foreach($models as $model) {
-            if ($model->options == '') continue;
+        foreach ($models as $model) {
+            if ($model->options == '')
+                continue;
             $options = json_decode($model->options);
-            if (count($options) == 0) continue;
-            foreach($options as $option) {
+            if (count($options) == 0)
+                continue;
+            foreach ($options as $option) {
                 $name = $option->name;
-                if (array_search($name, $rlt) !== false) continue;
+                if (array_search($name, $rlt) !== false)
+                    continue;
                 array_push($rlt, $name);
             }
         }
 
         $rlts = [];
-        foreach($rlt as $e) {
+        foreach ($rlt as $e) {
             $key = self::convert2encode($e);
             $rlts[$key] = $e;
         }
@@ -221,18 +229,21 @@ class UserProduct extends Model
         return $rlts;
     }
 
-    public function getOptions() {
+    public function getOptions()
+    {
         $rlt = [];
         $options = $this->options;
-        if ($options == '') return $rlt;
+        if ($options == '')
+            return $rlt;
 
         $options = json_decode($options);
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $name = $option->name;
             $descriptions = $option->description;
             $dscString = "";
-            foreach($descriptions as $i => $description) {
-                if ($i > 0) $dscString .= ", ";
+            foreach ($descriptions as $i => $description) {
+                if ($i > 0)
+                    $dscString .= ", ";
                 $dscString .= $description;
             }
             $rlt[$name] = $dscString;
@@ -240,15 +251,17 @@ class UserProduct extends Model
 
         $names = $this->getAllOptionNames();
         $tmp = [];
-        foreach($names as $i => $name) {
-            if (isset($rlt[$name]) == false) continue;
+        foreach ($names as $i => $name) {
+            if (isset($rlt[$name]) == false)
+                continue;
             $tmp[$name] = $rlt[$name];
         }
 
         return $tmp;
     }
 
-    public function getOptions2() {
+    public function getOptions2()
+    {
         $tmp = $this->getOptions();
         $rlt = [];
         foreach ($tmp as $k => $e) {
@@ -259,18 +272,21 @@ class UserProduct extends Model
         return $rlt;
     }
 
-    public function getOptionsArray() {
+    public function getOptionsArray()
+    {
         $rlt = [];
         $options = $this->options;
-        if ($options == '') return $rlt;
+        if ($options == '')
+            return $rlt;
 
         $options = json_decode($options);
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $name = $option->name;
             $descriptions = $option->description;
             $dscString = "";
-            foreach($descriptions as $i => $description) {
-                if ($i > 0) $dscString .= ", ";
+            foreach ($descriptions as $i => $description) {
+                if ($i > 0)
+                    $dscString .= ", ";
                 $dscString .= $description;
             }
             array_push($rlt, [
@@ -282,28 +298,29 @@ class UserProduct extends Model
         return $rlt;
     }
 
-    public function txtPrice() {
-        
+    public function txtPrice()
+    {
+
     }
 
-    // public function getMaterials()
-    // {
-    //     $rlt = explode("_m_", $this->materials);
-    //     array_shift($rlt);
-    //     array_pop($rlt);
-    //     return $rlt;
-    // }
+// public function getMaterials()
+// {
+//     $rlt = explode("_m_", $this->materials);
+//     array_shift($rlt);
+//     array_pop($rlt);
+//     return $rlt;
+// }
 
-    // public function getMaterialsText()
-    // {
-    //     $tmp = $this->getMaterials();
-    //     $rlt = "";
-    //     if (count($tmp) > 0)
-    //         $rlt = $tmp[0];
-    //     for ($i = 1; $i < count($tmp); $i++) {
-    //         $rlt .= '、' . $tmp[$i];
-    //     }
+// public function getMaterialsText()
+// {
+//     $tmp = $this->getMaterials();
+//     $rlt = "";
+//     if (count($tmp) > 0)
+//         $rlt = $tmp[0];
+//     for ($i = 1; $i < count($tmp); $i++) {
+//         $rlt .= '、' . $tmp[$i];
+//     }
 
-    //     return $rlt;
-    // }
+//     return $rlt;
+// }
 }
