@@ -6,8 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <title>QUANTO</title>
 
@@ -174,6 +176,11 @@
         input[type='radio'] {
             transform: scale(2);
         }
+
+        .cart_img {
+            width: 48px;
+            height: 48px;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 </head>
@@ -181,7 +188,8 @@
 <body style="background-color:  <?php echo $query->background_color; ?>; min-height: 100vh">
 
     <div class="position-fixed" style="z-index: 1000;right:40px; top:30px">
-        <a class="btn btn-quanto py-3" style="padding-left:4.5rem; padding-right:4.5rem;" href="mypage/{{ $query->token }}">{{session('customer_name')}}さん</a>
+        <a class="btn btn-quanto py-3" style="padding-left:4.5rem; padding-right:4.5rem;"
+            href="mypage/{{ $query->token }}">{{ session('customer_name') }}さん</a>
     </div>
     <div class="container" style="max-width:1200px;">
         <div class="row">
@@ -189,7 +197,7 @@
                 <div class="brand-logo text-center">
                     <img src="<?php echo $query->profile_path; ?>" alt="brand-logo">
                 </div>
-                <div class="brand-name text-center text-dark fw-5">{{$query->title}}</div>
+                <div class="brand-name text-center text-dark fw-5">{{ $query->title }}</div>
             </div>
         </div>
 
@@ -197,7 +205,8 @@
 
             <div class="col-sm-12 col-md-6 col-lg-6">
                 <div class="card mb-5" style="border-radius:13px;">
-                    <div class="card-header text-center" style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
+                    <div class="card-header text-center"
+                        style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
                         <h4>ご注文内容</h4>
                     </div>
                     <div class="card-body p-5">
@@ -212,44 +221,55 @@
                                             $units += $each['quantity'];
                                 ?>
 
-                                            <div class="row">
-                                                <div class="col">
-                                                    {!! $each['products'] !!} x {{$each['quantity']}}
-                                                </div>
-                                                <div class="col">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <img src="../{{ $each['img'] }}" alt="" class="cart_img">
+                                    </div>
+                                    <div class="col-6">
+                                        {!! $each['products'] !!}({!! $each['price'] !!}円) x {{ $each['quantity'] }}
+                                    </div>
+                                    <div class="col-4">
 
 
-                                                    <div class="input-group">
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="update-quantity-left-minus btn btn-outline-primary btn-number" data-type="minus" data-field="" data-key="{{$each['id']}}">
-                                                                <span class="glyphicon glyphicon-minus"></span>
-                                                            </button>
-                                                        </span>
-                                                        <input type="text" id="quantity_{{$each['id']}}" name="quantity_{{$each['id']}}" class="form-control input-number" value="{{$each['quantity']}}" min="1" max="100" style="text-align: center">
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="update-quantity-right-plus btn btn-outline-primary btn-number" data-type="plus" data-field="" data-key="{{$each['id']}}">
-                                                                <span class="glyphicon glyphicon-plus"></span>
-                                                            </button>
-                                                        </span>
-                                                    </div>
+                                        <div class="input-group">
+                                            <span class="input-group-btn">
+                                                <button type="button"
+                                                    class="update-quantity-left-minus btn btn-outline-primary btn-number"
+                                                    data-type="minus" data-field="" data-key="{{ $each['id'] }}">
+                                                    <span class="glyphicon glyphicon-minus"></span>
+                                                </button>
+                                            </span>
+                                            <input type="text" id="quantity_{{ $each['id'] }}"
+                                                name="quantity_{{ $each['id'] }}" class="form-control input-number"
+                                                value="{{ $each['quantity'] }}" min="1" max="100"
+                                                style="text-align: center">
+                                            <span class="input-group-btn">
+                                                <button type="button"
+                                                    class="update-quantity-right-plus btn btn-outline-primary btn-number"
+                                                    data-type="plus" data-field="" data-key="{{ $each['id'] }}">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                            </span>
+                                        </div>
 
-                                                </div>
-                                            </div>
+                                    </div>
+                                </div>
 
-                                            <hr>
-                                        <?php }
+                                <hr>
+                                <?php }
                                     }
                                     if ($units < 1) {
                                         ?>
-                                        <script>
-                                            window.location.href = "show/<?php echo $query->token; ?>";
-                                        </script>
+                                <script>
+                                    window.location.href = "show/<?php echo $query->token; ?>";
+                                </script>
                                 <?php
                                     }
                                 }
                                 ?>
 
-                                <div class="row text-center item-line" style="max-width: 450px; margin: 0 auto; background-color: #6962FF; padding: 12px; border-radius: 13px">
+                                <div class="row text-center item-line"
+                                    style="max-width: 450px; margin: 0 auto; background-color: #6962FF; padding: 12px; border-radius: 13px">
                                     <div class="col text-light d-none d-sm-block">トータル</div>
                                     <div class="col">
                                         <div class="items_count text-light text-nowrap" id="items_count">
@@ -272,7 +292,7 @@
                                             if ($session_cart) {
                                                 $total = 0;
                                                 foreach ($session_cart as $key => $count) {
-                                                    $total += ($count['price'] * $count['quantity']);
+                                                    $total += $count['price'] * $count['quantity'];
                                                 }
                                                 echo number_format($total) . ' 円';
                                             } else {
@@ -290,190 +310,234 @@
             </div>
 
             <div class="col-sm-12 col-md-6 col-lg-6">
-                <form role="form" action="{{ route('stripe.post') }}" method="post" class="require-validation" data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}" id="payment-form">
+                <form role="form" action="{{ route('stripe.post') }}" method="post" class="require-validation"
+                    data-cc-on-file="false" data-stripe-publishable-key="{{ env('STRIPE_KEY') }}" id="payment-form">
                     @csrf
                     @if (Session::has('error_message'))
-                    <script>
-                        $(document).ready(function() {
-                            $('html,body').animate({
-                                scrollTop: $("#creditCard").offset().top
+                        <script>
+                            $(document).ready(function() {
+                                $('html,body').animate({
+                                    scrollTop: $("#creditCard").offset().top
+                                });
                             });
-                        });
-                    </script>
+                        </script>
                     @endif
                     @php
-                    $surveySettings = isset($query['settings']) ? json_decode($query['settings']) : [];
-                    $delivery_methods = isset($surveySettings->delivery_methods) ? json_decode($surveySettings->delivery_methods) : array();
-                    $pay_methods = isset($surveySettings->pay_methods) ? json_decode($surveySettings->pay_methods) : array();
+                        $surveySettings = isset($query['settings']) ? json_decode($query['settings']) : [];
+                        $delivery_methods = isset($surveySettings->delivery_methods) ? json_decode($surveySettings->delivery_methods) : [];
+                        $pay_methods = isset($surveySettings->pay_methods) ? json_decode($surveySettings->pay_methods) : [];
                     @endphp
-                    @if(count($delivery_methods)>0)
-                    <div class="card mb-5" style="border-radius:13px;">
-                        <div class="card-header text-center position-relative" style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
-                            <h4>受け取り方法</h4>
-                        </div>
-                        <div class="card-body p-5">
-                            <div class="row d-flex justify-content-center">
-                                @if ( in_array('店舗受取り' ,$delivery_methods)==true)
-                                <div class="col-6 col-sm-4 text-center my-2">
-                                    <label>
-                                        <input type="radio" class="selectDelivery required" name="delivery_method" value="1" @if(count($delivery_methods)==1) checked @endif>
-                                        <div class="shadow-lg p-4" style="width:120px; border-radius:10px;">
-                                            <span>Pick Up</span>
-                                            <div class="shadow-lg p-1 mt-2" style=" border-radius:10px;">
-                                                <div class="w-100">
-                                                    <img src="public/img/shop_icon.png" style="height:60px" alt="店舗受け取り">
-                                                </div>
-                                                <span style="font-size: 8px;">ピックアップ</span>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                                @endif
-                                @if ( in_array('デリバリー' ,$delivery_methods)==true)
-                                <div class="col-6 col-sm-4 text-center my-2">
-                                    <label>
-                                        <input type="radio" class="selectDelivery required" name="delivery_method" value="2" @if(count($delivery_methods)==1) checked @endif>
-                                        <div class="shadow-lg p-4" style="width:120px; border-radius:10px;">
-                                            <span>Delivery</span>
-                                            <div class="shadow-lg p-1 mt-2" style=" border-radius:10px;">
-                                                <div class="w-100">
-                                                    <img src="public/img/bike_icon.png" style="margin-top:5px; margin-bottom:5px; height:50px" alt="デリバリー">
-                                                </div>
-                                                <span style="font-size: 8px;">デリバリー</span>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                                @endif
-                                @if ( in_array('通販' ,$delivery_methods)==true)
-                                <div class="col-6 col-sm-4 text-center my-2">
-                                    <label>
-                                        <input type="radio" class="selectDelivery required" name="delivery_method" value="3" @if(count($delivery_methods)==1) checked @endif>
-                                        <div class="shadow-lg p-4" style="width:120px; border-radius:10px;">
-                                            <span>Ecommerce</span>
-                                            <div class="shadow-lg p-1 mt-2" style=" border-radius:10px;">
-                                                <div class="w-100">
-                                                    <img src="public/img/cart_icon.png" style=" height:60px" alt="通販">
-                                                </div>
-                                                <span style="font-size: 8px;">通販</span>
-                                            </div>
-                                        </div>
-                                    </label>
-                                </div>
-                                @endif
+                    @if (count($delivery_methods) > 0)
+                        <div class="card mb-5" style="border-radius:13px;">
+                            <div class="card-header text-center position-relative"
+                                style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
+                                <h4>受け取り方法</h4>
                             </div>
-                            <div class="form-group row py-2" id="dateTime" @if(count($delivery_methods)==1 && in_array('通販' ,$delivery_methods)==false) style="display: flex;" @else style="display: none;" @endif>
-                                <label for="email" class="col-12 col-form-label text-center my-3">ご希望のお時間帯をお選びください。</label>
-                                <div class="col-6">
-                                    <input type="text" class="form-control" id="date" style="width:140px; float:right;" placeholder="日付" name="date" value="{{  old('date') }}">
+                            <div class="card-body p-5">
+                                <div class="row d-flex justify-content-center">
+                                    @if (in_array('店舗受取り', $delivery_methods) == true)
+                                        <div class="col-6 col-sm-4 text-center my-2">
+                                            <label>
+                                                <input type="radio" class="selectDelivery required"
+                                                    name="delivery_method" value="1"
+                                                    @if (count($delivery_methods) == 1) checked @endif>
+                                                <div class="shadow-lg p-4" style="width:120px; border-radius:10px;">
+                                                    <span>Pick Up</span>
+                                                    <div class="shadow-lg p-1 mt-2" style=" border-radius:10px;">
+                                                        <div class="w-100">
+                                                            <img src="public/img/shop_icon.png" style="height:60px"
+                                                                alt="店舗受け取り">
+                                                        </div>
+                                                        <span style="font-size: 8px;">ピックアップ</span>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    @endif
+                                    @if (in_array('デリバリー', $delivery_methods) == true)
+                                        <div class="col-6 col-sm-4 text-center my-2">
+                                            <label>
+                                                <input type="radio" class="selectDelivery required"
+                                                    name="delivery_method" value="2"
+                                                    @if (count($delivery_methods) == 1) checked @endif>
+                                                <div class="shadow-lg p-4" style="width:120px; border-radius:10px;">
+                                                    <span>Delivery</span>
+                                                    <div class="shadow-lg p-1 mt-2" style=" border-radius:10px;">
+                                                        <div class="w-100">
+                                                            <img src="public/img/bike_icon.png"
+                                                                style="margin-top:5px; margin-bottom:5px; height:50px"
+                                                                alt="デリバリー">
+                                                        </div>
+                                                        <span style="font-size: 8px;">デリバリー</span>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    @endif
+                                    @if (in_array('通販', $delivery_methods) == true)
+                                        <div class="col-6 col-sm-4 text-center my-2">
+                                            <label>
+                                                <input type="radio" class="selectDelivery required"
+                                                    name="delivery_method" value="3"
+                                                    @if (count($delivery_methods) == 1) checked @endif>
+                                                <div class="shadow-lg p-4" style="width:120px; border-radius:10px;">
+                                                    <span>Ecommerce</span>
+                                                    <div class="shadow-lg p-1 mt-2" style=" border-radius:10px;">
+                                                        <div class="w-100">
+                                                            <img src="public/img/cart_icon.png" style=" height:60px"
+                                                                alt="通販">
+                                                        </div>
+                                                        <span style="font-size: 8px;">通販</span>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    @endif
                                 </div>
-                                <div class="col-6">
-                                    <input type="text" class="form-control" style="width:140px;" id="time" name="time" value="{{  old('time') }}">
+                                <div class="form-group row py-2" id="dateTime"
+                                    @if (count($delivery_methods) == 1 && in_array('通販', $delivery_methods) == false) style="display: flex;" @else style="display: none;" @endif>
+                                    <label for="email"
+                                        class="col-12 col-form-label text-center my-3">ご希望のお時間帯をお選びください。</label>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" id="date"
+                                            style="width:140px; float:right;" placeholder="日付" name="date"
+                                            value="{{ old('date') }}">
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" class="form-control" style="width:140px;"
+                                            id="time" name="time" value="{{ old('time') }}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     @endif
                     <div class="card mb-5" style="border-radius:13px;">
-                        <div class="card-header text-center position-relative" style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
+                        <div class="card-header text-center position-relative"
+                            style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
                             <h4>お客様情報</h4>
-                            @if(count($delivery_methods)==1 && in_array('店舗受取り' ,$delivery_methods)==true)
+                            @if (count($delivery_methods) == 1 && in_array('店舗受取り', $delivery_methods) == true)
                             @else
-                            <button type="button" class="btn btn-outline-quanto position-absolute" style="right:10px; top:10px" id="shippingAddress">発送先情報</button>
+                                <button type="button" class="btn btn-outline-quanto position-absolute"
+                                    style="right:10px; top:10px" id="shippingAddress">発送先情報</button>
                             @endif
                         </div>
                         <div class="card-body p-5">
                             <div class="form-group row py-2">
                                 <label for="email" class="col-sm-3 col-form-label">メールアドレス</label>
                                 <div class="col-sm-9">
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="test@mail.com" required value="{{  $customer->email }}">
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        placeholder="test@mail.com" required value="{{ $customer->email }}">
                                 </div>
                             </div>
 
                             <div class="form-group row py-2">
                                 <label for="name" class="col-sm-3 col-form-label">お名前</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="name" id="name" placeholder="山田 太郎" required value="{{ $customer->name }}">
+                                    <input type="text" class="form-control" name="name" id="name"
+                                        placeholder="山田 太郎" required value="{{ $customer->name }}">
                                 </div>
                             </div>
 
                             <div class="form-group row py-2 mb-5">
                                 <label for="name" class="col-sm-3 col-form-label">フリガナ</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" name="kana" id="kana" placeholder="ヤマダタロウ" required value="{{ $customer->kana }}">
+                                    <input type="text" class="form-control" name="kana" id="kana"
+                                        placeholder="ヤマダタロウ" required value="{{ $customer->kana }}">
                                 </div>
                             </div>
-                            @if(count($addresses) > 0)
-                            @foreach ($addresses as $address)
-                            @if($address->type==1)
-                            <div class="form-check mb-5 d-flex pe-2">
-                                <div class="me-2">
-                                    <input class="form-check-billing" type="radio" name="billingAddress" value="{{ $address->id }}" @if ($address->status==1) checked @endif >
+                            @if (count($addresses) > 0)
+                                @foreach ($addresses as $address)
+                                    @if ($address->type == 1)
+                                        <div class="form-check mb-5 d-flex pe-2">
+                                            <div class="me-2">
+                                                <input class="form-check-billing" type="radio"
+                                                    name="billingAddress" value="{{ $address->id }}"
+                                                    @if ($address->status == 1) checked @endif>
+                                            </div>
+                                            <div>
+                                                <label class="form-check-label ms-3">
+                                                    {{ $address->address }}{{ $address->address2 }}{{ $address->address3 }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                                <div class="form-check mb-5 d-flex pe-2">
+                                    <div class="me-2">
+                                        <input class="form-check-billing" type="radio" name="billingAddress"
+                                            value="0" id="newBillingAddress">
+                                    </div>
+                                    <div>
+                                        <label class="form-check-label ms-3">
+                                            新規ご請求先を追加する
+                                        </label>
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="form-check-label ms-3">
-                                        {{ $address->address }}{{ $address->address2 }}{{ $address->address3 }}
-                                    </label>
-                                </div>
-                            </div>
                             @endif
-                            @endforeach
-                            <div class="form-check mb-5 d-flex pe-2">
-                                <div class="me-2">
-                                    <input class="form-check-billing" type="radio" name="billingAddress" value="0" id="newBillingAddress">
-                                </div>
-                                <div>
-                                    <label class="form-check-label ms-3">
-                                        新規ご請求先を追加する
-                                    </label>
-                                </div>
-                            </div>
-                            @endif
-                            <div id="billingDetails" @if(count($addresses)> 0) style="display: none;" @else style="display: block;" @endif>
+                            <div id="billingDetails"
+                                @if (count($addresses) > 0) style="display: none;" @else style="display: block;" @endif>
                                 <div class="form-group row py-2">
                                     <label for="postcode" class="col-sm-3 col-form-label">郵便番号</label>
                                     <div class="col-sm-9 d-flex">
-                                        <input type="text" class="form-control d-inline me-2" style="width:55px; margin-top:2px" pattern="[0-9]{3,3}" maxlength="3" name="postcodeFirst" id="postcodeFirst" placeholder="111" value="{{old('postcodeFirst')}}" @if(count($addresses) < 1) required @endif>
-                                        <input type="text" class="form-control d-inline me-3" style="width:65px; margin-top:2px" pattern="[0-9]{4,4}" maxlength="4" name="postcodeLast" id="postcodeLast" placeholder="1111" value="{{old('postcodeLast')}}" @if(count($addresses) < 1) required @endif>
-                                        <button type="button" class="btn btn-outline-quanto d-inline mt-0" id="postcodeSearch">検索する</button>
+                                        <input type="text" class="form-control d-inline me-2"
+                                            style="width:55px; margin-top:2px" pattern="[0-9]{3,3}" maxlength="3"
+                                            name="postcodeFirst" id="postcodeFirst" placeholder="111"
+                                            value="{{ old('postcodeFirst') }}"
+                                            @if (count($addresses) < 1) required @endif>
+                                        <input type="text" class="form-control d-inline me-3"
+                                            style="width:65px; margin-top:2px" pattern="[0-9]{4,4}" maxlength="4"
+                                            name="postcodeLast" id="postcodeLast" placeholder="1111"
+                                            value="{{ old('postcodeLast') }}"
+                                            @if (count($addresses) < 1) required @endif>
+                                        <button type="button" class="btn btn-outline-quanto d-inline mt-0"
+                                            id="postcodeSearch">検索する</button>
                                     </div>
                                 </div>
 
                                 <div class="form-group row py-2">
                                     <label for="address" class="col-sm-3 col-form-label">住所</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="address" id="address" placeholder="都道府県 市区町村" value="{{old('address')}}" @if(count($addresses) < 1) required @endif>
+                                        <input type="text" class="form-control" name="address" id="address"
+                                            placeholder="都道府県 市区町村" value="{{ old('address') }}"
+                                            @if (count($addresses) < 1) required @endif>
                                     </div>
                                 </div>
                                 <div class="form-group row py-2">
                                     <label for="address" class="col-sm-3 col-form-label"></label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="address2" id="address2" placeholder="番地・部屋番号など" value="{{old('address2')}}" @if(count($addresses) < 1) required @endif>
+                                        <input type="text" class="form-control" name="address2" id="address2"
+                                            placeholder="番地・部屋番号など" value="{{ old('address2') }}"
+                                            @if (count($addresses) < 1) required @endif>
                                     </div>
                                 </div>
                                 <div class="form-group row py-2">
                                     <label for="address" class="col-sm-3 col-form-label"></label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="address3" id="address3" placeholder="建物名・マンション名（任意）" value="{{old('address3')}}">
+                                        <input type="text" class="form-control" name="address3" id="address3"
+                                            placeholder="建物名・マンション名（任意）" value="{{ old('address3') }}">
                                     </div>
                                 </div>
                                 <div class="form-group row py-2">
                                     <label for="cell" class="col-sm-3 col-form-label">電話番号</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="cell" name="phone" placeholder="03-1234-5678" value="{{old('phone')}}" @if(count($addresses) < 1) required @endif>
+                                        <input type="text" class="form-control" id="cell" name="phone"
+                                            placeholder="03-1234-5678" value="{{ old('phone') }}"
+                                            @if (count($addresses) < 1) required @endif>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card mb-5" style="border-radius:13px; display:none;" id="shippingDetails">
-                        <div class="card-header text-center position-relative" style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
+                        <div class="card-header text-center position-relative"
+                            style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
                             <h4>発送先情報</h4>
                         </div>
                         <div class="card-body p-5">
                             <div class="form-check mb-5 d-flex pe-2">
                                 <div class="me-2">
-                                    <input class="form-check-shipping" type="radio" name="shippingAddress" value="same" checked>
+                                    <input class="form-check-shipping" type="radio" name="shippingAddress"
+                                        value="same" checked>
                                 </div>
                                 <div>
                                     <label class="form-check-label ms-3">
@@ -482,22 +546,24 @@
                                 </div>
                             </div>
                             @foreach ($addresses as $address)
-                            @if($address->type == 2)
-                            <div class="form-check mb-5 d-flex pe-2">
-                                <div class="me-2">
-                                    <input class="form-check-shipping" type="radio" name="shippingAddress" value="{{ $address->id }}">
-                                </div>
-                                <div>
-                                    <label class="form-check-label ms-3">
-                                        {{ $address->address }}{{ $address->address2 }}{{ $address->address3 }}
-                                    </label>
-                                </div>
-                            </div>
-                            @endif
+                                @if ($address->type == 2)
+                                    <div class="form-check mb-5 d-flex pe-2">
+                                        <div class="me-2">
+                                            <input class="form-check-shipping" type="radio" name="shippingAddress"
+                                                value="{{ $address->id }}">
+                                        </div>
+                                        <div>
+                                            <label class="form-check-label ms-3">
+                                                {{ $address->address }}{{ $address->address2 }}{{ $address->address3 }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endif
                             @endforeach
                             <div class="form-check mb-5 d-flex pe-2">
                                 <div class="me-2">
-                                    <input class="form-check-shipping" type="radio" name="shippingAddress" value="0" id="newAddress">
+                                    <input class="form-check-shipping" type="radio" name="shippingAddress"
+                                        value="0" id="newAddress">
                                 </div>
                                 <div>
                                     <label class="form-check-label ms-3">
@@ -509,115 +575,147 @@
                                 <div class="form-group row py-2">
                                     <label for="postcode" class="col-sm-3 col-form-label">郵便番号</label>
                                     <div class="col-sm-9 d-flex">
-                                        <input type="text" class="form-control d-inline me-2" style="width:55px; margin-top:2px" pattern="[0-9]{3,3}" maxlength="3" name="postcodeFirstNew" id="postcodeFirstNew" placeholder="111" value="{{old('postcodeFirstNew')}}">
-                                        <input type="text" class="form-control d-inline me-3" style="width:65px; margin-top:2px" pattern="[0-9]{4,4}" maxlength="4" name="postcodeLastNew" id="postcodeLastNew" placeholder="1111" value="{{old('postcodeLastNew')}}">
-                                        <button type="button" class="btn btn-outline-quanto d-inline mt-0" id="postcodeSearchNew">検索する</button>
+                                        <input type="text" class="form-control d-inline me-2"
+                                            style="width:55px; margin-top:2px" pattern="[0-9]{3,3}" maxlength="3"
+                                            name="postcodeFirstNew" id="postcodeFirstNew" placeholder="111"
+                                            value="{{ old('postcodeFirstNew') }}">
+                                        <input type="text" class="form-control d-inline me-3"
+                                            style="width:65px; margin-top:2px" pattern="[0-9]{4,4}" maxlength="4"
+                                            name="postcodeLastNew" id="postcodeLastNew" placeholder="1111"
+                                            value="{{ old('postcodeLastNew') }}">
+                                        <button type="button" class="btn btn-outline-quanto d-inline mt-0"
+                                            id="postcodeSearchNew">検索する</button>
                                     </div>
                                 </div>
 
                                 <div class="form-group row py-2">
                                     <label for="address" class="col-sm-3 col-form-label">住所</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="addressNew" id="addressNew" placeholder="都道府県 市区町村" value="{{old('addressNew')}}">
+                                        <input type="text" class="form-control" name="addressNew" id="addressNew"
+                                            placeholder="都道府県 市区町村" value="{{ old('addressNew') }}">
                                     </div>
                                 </div>
                                 <div class="form-group row py-2">
                                     <label for="address" class="col-sm-3 col-form-label"></label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="addressNew2" id="addressNew2" placeholder="番地・部屋番号など" value="{{old('addressNew2')}}">
+                                        <input type="text" class="form-control" name="addressNew2"
+                                            id="addressNew2" placeholder="番地・部屋番号など"
+                                            value="{{ old('addressNew2') }}">
                                     </div>
                                 </div>
                                 <div class="form-group row py-2">
                                     <label for="address" class="col-sm-3 col-form-label"></label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="addressNew3" id="addressNew3" placeholder="建物名・マンション名（任意）" value="{{old('addressNew3')}}">
+                                        <input type="text" class="form-control" name="addressNew3"
+                                            id="addressNew3" placeholder="建物名・マンション名（任意）"
+                                            value="{{ old('addressNew3') }}">
                                     </div>
                                 </div>
                                 <div class="form-group row py-2">
                                     <label for="name" class="col-sm-3 col-form-label">お名前</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="nameNew" id="nameNew" placeholder="山田 太郎" value="{{ old('nameNew') }}">
+                                        <input type="text" class="form-control" name="nameNew" id="nameNew"
+                                            placeholder="山田 太郎" value="{{ old('nameNew') }}">
                                     </div>
                                 </div>
 
                                 <div class="form-group row py-2">
                                     <label for="name" class="col-sm-3 col-form-label">フリガナ</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="kanaNew" id="kanaNew" placeholder="ヤマダタロウ" value="{{ old('kanaNew') }}">
+                                        <input type="text" class="form-control" name="kanaNew" id="kanaNew"
+                                            placeholder="ヤマダタロウ" value="{{ old('kanaNew') }}">
                                     </div>
                                 </div>
 
                                 <div class="form-group row py-2">
                                     <label for="cell" class="col-sm-3 col-form-label">ご連絡先</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="cellNew" name="phoneNew" placeholder="03-1234-5678" value="{{old('phoneNew')}}">
+                                        <input type="text" class="form-control" id="cellNew" name="phoneNew"
+                                            placeholder="03-1234-5678" value="{{ old('phoneNew') }}">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card mb-5" style="border-radius:13px;">
-                        <div class="card-header text-center position-relative" style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
+                        <div class="card-header text-center position-relative"
+                            style="background:#DAE3F3;border-top-left-radius:13px;border-top-right-radius:13px;">
                             <h4>お支払い情報</h4>
-                            @if(count($pay_methods)>1 && in_array('クレジットカード' ,$pay_methods)==true)
-                            <button type="button" class="btn btn-outline-quanto position-absolute" id="changeMethod" style="right:10px; top:10px">変更する</button>
+                            @if (count($pay_methods) > 1 && in_array('クレジットカード', $pay_methods) == true)
+                                <button type="button" class="btn btn-outline-quanto position-absolute"
+                                    id="changeMethod" style="right:10px; top:10px">変更する</button>
                             @endif
                         </div>
                         <div class="card-body p-5">
-                            @if (in_array('クレジットカード' ,$pay_methods)==true)
-                            <div id="creditCard">
-                                @foreach ($cards as $card)
-                                <div class="form-check mb-5">
-                                    <input class="form-check-card" type="radio" name="card" value="{{ $card->id }}" @if ($card->status==1) checked @endif >
-                                    <label class="form-check-label ms-3">
-                                        XXXX-XXXX-XXXX-{{ $card->last }} {{ $card->expiry }}
-                                    </label>
+                            @if (in_array('クレジットカード', $pay_methods) == true)
+                                <div id="creditCard">
+                                    @foreach ($cards as $card)
+                                        <div class="form-check mb-5">
+                                            <input class="form-check-card" type="radio" name="card"
+                                                value="{{ $card->id }}"
+                                                @if ($card->status == 1) checked @endif>
+                                            <label class="form-check-label ms-3">
+                                                XXXX-XXXX-XXXX-{{ $card->last }} {{ $card->expiry }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                    <div
+                                        @if (count($cards) < 1) style="display: none;" @else style="display: block;" @endif>
+                                        <div class="form-check mb-5">
+                                            <input class="form-check-card" type="radio" name="card"
+                                                value="0" id="newCard">
+                                            <label class="form-check-label ms-3">
+                                                新規カード登録
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div id="cardDetails"
+                                        @if (count($cards) > 0) style="display: none;" @else style="display: block;" @endif>
+                                        <div class='form-row row'>
+                                            <div class='col-xs-12 form-group required'>
+                                                <label class='control-label'>カード名義</label>
+                                                <input name="card_name" class='form-control' size='4'
+                                                    type='text'>
+                                            </div>
+                                        </div>
+
+                                        <div class='form-row row'>
+                                            <div class='col-xs-12 form-group required'>
+                                                <label class='control-label'>カード番号</label> <input autocomplete='off'
+                                                    class='form-control card-number' size='20' type='text'>
+                                            </div>
+                                        </div>
+
+                                        <div class='form-row row'>
+                                            <div class='col-xs-12 col-md-4 form-group cvc required'>
+                                                <label class='control-label'>セキュリティーコード</label> <input
+                                                    autocomplete='off' type="password" class='form-control card-cvc'
+                                                    placeholder='例） 311' size='4' type='text'>
+                                            </div>
+                                            <div class='col-xs-12 col-md-4 form-group expiration required'>
+                                                <label class='control-label'>有効期限（月）</label> <input
+                                                    class='form-control card-expiry-month' placeholder='MM'
+                                                    size='2' type='text'>
+                                            </div>
+                                            <div class='col-xs-12 col-md-4 form-group expiration required'>
+                                                <label class='control-label'>有効期限（年）</label> <input
+                                                    class='form-control card-expiry-year' placeholder='YYYY'
+                                                    size='4' type='text'>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                @endforeach
-                                <div @if(count($cards) < 1) style="display: none;" @else style="display: block;" @endif>
+                            @endif
+                            <div class="mt-5 mb-2" id="payMethods"
+                                @if (in_array('クレジットカード', $pay_methods) == true) style="display: none;" @else style="display: block;" @endif>
+                                @foreach ($pay_methods as $pay_method)
                                     <div class="form-check mb-5">
-                                        <input class="form-check-card" type="radio" name="card" value="0" id="newCard">
+                                        <input class="form-check-method" type="radio" name="pay_method"
+                                            value="{{ $pay_method }}">
                                         <label class="form-check-label ms-3">
-                                            新規カード登録
+                                            {{ $pay_method }}
                                         </label>
                                     </div>
-                                </div>
-                                <div id="cardDetails" @if(count($cards)> 0) style="display: none;" @else style="display: block;" @endif>
-                                    <div class='form-row row'>
-                                        <div class='col-xs-12 form-group required'>
-                                            <label class='control-label'>カード名義</label>
-                                            <input name="card_name" class='form-control' size='4' type='text'>
-                                        </div>
-                                    </div>
-
-                                    <div class='form-row row'>
-                                        <div class='col-xs-12 form-group required'>
-                                            <label class='control-label'>カード番号</label> <input autocomplete='off' class='form-control card-number' size='20' type='text'>
-                                        </div>
-                                    </div>
-
-                                    <div class='form-row row'>
-                                        <div class='col-xs-12 col-md-4 form-group cvc required'>
-                                            <label class='control-label'>セキュリティーコード</label> <input autocomplete='off' type="password" class='form-control card-cvc' placeholder='例） 311' size='4' type='text'>
-                                        </div>
-                                        <div class='col-xs-12 col-md-4 form-group expiration required'>
-                                            <label class='control-label'>有効期限（月）</label> <input class='form-control card-expiry-month' placeholder='MM' size='2' type='text'>
-                                        </div>
-                                        <div class='col-xs-12 col-md-4 form-group expiration required'>
-                                            <label class='control-label'>有効期限（年）</label> <input class='form-control card-expiry-year' placeholder='YYYY' size='4' type='text'>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-                            <div class="mt-5 mb-2" id="payMethods" @if(in_array('クレジットカード' ,$pay_methods)==true) style="display: none;" @else style="display: block;" @endif>
-                                @foreach ($pay_methods as $pay_method)
-                                <div class="form-check mb-5">
-                                    <input class="form-check-method" type="radio" name="pay_method" value="{{ $pay_method }}">
-                                    <label class="form-check-label ms-3">
-                                        {{ $pay_method }}
-                                    </label>
-                                </div>
                                 @endforeach
                             </div>
 
@@ -627,36 +725,40 @@
                                 </div>
                             </div>
                             @if (Session::has('error_message'))
-                            <div class="col-12 my-4" id="errorBox">
-                                <div class="card border border-2 p-5 text-center" style="border-radius:15px;">
-                                    <div>
-                                        <div class="mx-auto mb-3" style="border-radius:50%; background:#fd0e0e; color:#ffffff;font-weight:600; font-size:24px; width:40px; height:40px;padding-top:4px">X</div>
+                                <div class="col-12 my-4" id="errorBox">
+                                    <div class="card border border-2 p-5 text-center" style="border-radius:15px;">
+                                        <div>
+                                            <div class="mx-auto mb-3"
+                                                style="border-radius:50%; background:#fd0e0e; color:#ffffff;font-weight:600; font-size:24px; width:40px; height:40px;padding-top:4px">
+                                                X</div>
+                                        </div>
+                                        <h4 class="mb-1">何らか事情で決済が出来ませんでした。</h4>
+                                        <h4 class="mb-1">お手数ですが、</h4>
+                                        <h4 class="mb-1">再度お手続きをお願い致します。</h4>
                                     </div>
-                                    <h4 class="mb-1">何らか事情で決済が出来ませんでした。</h4>
-                                    <h4 class="mb-1">お手数ですが、</h4>
-                                    <h4 class="mb-1">再度お手続きをお願い致します。</h4>
                                 </div>
-                            </div>
                             @endif
 
                             <div class="row">
                                 <div class="col-12 text-center mt-5">
-                                    <input type="hidden" name="pay_total" id="pay_total" value="<?php if ($session_cart) {
-                                                                                                    $total = 0;
-                                                                                                    foreach ($session_cart as $key => $count) {
-                                                                                                        $total += ($count['price'] * $count['quantity']);
-                                                                                                    }
-                                                                                                    echo $total;
-                                                                                                } else {
-                                                                                                    echo 0;
-                                                                                                } ?>">
-                                    <button class="btn btn-quanto px-5 py-3" type="submit">ご注文を確定する<span class="d-none" disabled>
+                                    <input type="hidden" name="pay_total" id="pay_total"
+                                        value="<?php if ($session_cart) {
+                                            $total = 0;
+                                            foreach ($session_cart as $key => $count) {
+                                                $total += $count['price'] * $count['quantity'];
+                                            }
+                                            echo $total;
+                                        } else {
+                                            echo 0;
+                                        } ?>">
+                                    <button class="btn btn-quanto px-5 py-3" type="submit">ご注文を確定する<span
+                                            class="d-none" disabled>
                                             (
                                             <?php
                                             if ($session_cart) {
                                                 $total = 0;
                                                 foreach ($session_cart as $key => $count) {
-                                                    $total += ($count['price'] * $count['quantity']);
+                                                    $total += $count['price'] * $count['quantity'];
                                                 }
                                                 echo '<span id="totalAmount">' . $total . '</span>';
                                             } else {
@@ -685,9 +787,11 @@
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
     </script>
     <script>
         $("#creditCard").click(function() {
@@ -996,8 +1100,10 @@
 
                             if ($('#cardDetails').is(":visible") == true) {
                                 var $form = $(".require-validation"),
-                                    inputSelector = ['input[type=email]', 'input[type=password]',
-                                        'input[type=text]', 'input[type=file]', 'input[type=radio]',
+                                    inputSelector = ['input[type=email]',
+                                        'input[type=password]',
+                                        'input[type=text]', 'input[type=file]',
+                                        'input[type=radio]',
                                         'textarea'
                                     ].join(', '),
                                     $inputs = $form.find('.required').find(inputSelector),
@@ -1017,7 +1123,8 @@
 
                                 if (!$form.data('cc-on-file')) {
                                     e.preventDefault();
-                                    Stripe.setPublishableKey($form.data('stripe-publishable-key'));
+                                    Stripe.setPublishableKey($form.data(
+                                        'stripe-publishable-key'));
                                     Stripe.createToken({
                                         number: $('.card-number').val(),
                                         cvc: $('.card-cvc').val(),

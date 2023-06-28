@@ -42,7 +42,7 @@
 
     <?php
     $survey_token = (isset($_GET['id'])) ? $_GET['id'] : -1;
-    $server_host = Config::get('constants.serverHost');
+    $server_host = "http://192.168.127.133:9016/";
     ?>
 
     <!-- css -->

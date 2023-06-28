@@ -97,8 +97,11 @@ class frontendController extends Controller
             Session::pull('cart');
         }
 
+
+
         $cartData = [
             'id' => $request->product_id,
+            'img' => $request->product_img,
             'products' => $request->product_name,
             'quantity' => $request->product_q,
             'price' => $request->product_p,
@@ -145,10 +148,13 @@ class frontendController extends Controller
             foreach ($session_cart as $key => $each) {
                 $units += $each['quantity'];
                 $items .= '<div class="row">
-                                <div class="col">
-                                    ' . $each['products'] . ' x ' . $each['quantity'] . '
+                                <div class="col-2">
+                                    <img src="../' . $each['img'] . '" class ="cart_img">
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
+                                    ' . $each['products'] . " (" . $each['price'] . "円) x " . $each['quantity'] . '
+                                </div>
+                                <div class="col-4">
                                     <div class="input-group">
                                         <span class="input-group-btn">
                                             <button type="button" class="update-quantity-left-minus btn btn-outline-primary btn-number" data-type="minus" data-field="" data-key="' . $each['id'] . '">
@@ -186,11 +192,11 @@ class frontendController extends Controller
 
         $items .= ' </div>';
 
-        $cart =    '<div class="col">
+        $cart = '<div class="col">
                     <div class="items_count text-light" id="items_count">';
 
 
-        $cart .=  $units . ' 点';
+        $cart .= $units . ' 点';
 
 
         $cart .= '</div>
@@ -207,7 +213,7 @@ class frontendController extends Controller
             }
             $cart .= number_format($total) . ' 円';
         } else {
-            $cart .=  0 . ' 円';
+            $cart .= 0 . ' 円';
         }
         $cart .= ' </div>
                 </div>';
@@ -243,7 +249,7 @@ class frontendController extends Controller
                 //product_idが同一であれば、フラグをtrueにする → 個数の合算処理、及びセッション情報更新。更新は一度のみ
                 if ($sessionData['id'] === $cartData['id']) {
                     $isSameProductId = true;
-                    $quantity =  $cartData['quantity'];
+                    $quantity = $cartData['quantity'];
                     //cartDataをrootとしたツリー状の多次元連想配列の特定のValueにアクセスし、指定の変数でValueの上書き処理
                     $request->session()->put('cart.' . $index . '.quantity', $quantity);
                     break;
@@ -271,10 +277,13 @@ class frontendController extends Controller
             foreach ($session_cart as $key => $each) {
                 $units = $units + $each['quantity'];
                 $items .= '<div class="row">
-                                <div class="col">
-                                    ' . $each['products'] . ' x ' . $each['quantity'] . '
+                                <div class="col-2">
+                                    <img src="../' . $each['img'] . '" class ="cart_img">
                                 </div>
-                                <div class="col">
+                                <div class="col-6">
+                                    ' . $each['products'] . " (" . $each['price'] . "円) x " . $each['quantity'] . '
+                                </div>
+                                <div class="col-4">
                                     <div class="input-group">
                                         <span class="input-group-btn">
                                             <button type="button" class="update-quantity-left-minus btn btn-outline-primary btn-number" data-type="minus" data-field="" data-key="' . $each['id'] . '">
@@ -314,11 +323,11 @@ class frontendController extends Controller
 
         $items .= ' </div>';
 
-        $cart =    '<div class="col">
+        $cart = '<div class="col">
                     <div class="items_count text-light" id="items_count">';
 
 
-        $cart .=  $units . ' 点';
+        $cart .= $units . ' 点';
 
         $cart .= '</div>
                 </div>
@@ -334,7 +343,7 @@ class frontendController extends Controller
             }
             $cart .= number_format($total) . ' 円';
         } else {
-            $cart .=  0 . ' 円';
+            $cart .= 0 . ' 円';
         }
         $cart .= ' </div>
                 </div>';
@@ -401,7 +410,7 @@ class frontendController extends Controller
                 //product_idが同一であれば、フラグをtrueにする → 個数の合算処理、及びセッション情報更新。更新は一度のみ
                 if ($sessionData['id'] === $cartData['id']) {
                     $isSameProductId = true;
-                    $quantity =  $cartData['quantity'];
+                    $quantity = $cartData['quantity'];
                     //cartDataをrootとしたツリー状の多次元連想配列の特定のValueにアクセスし、指定の変数でValueの上書き処理
                     $request->session()->put('cart.' . $index . '.quantity', $quantity);
                     break;
@@ -461,7 +470,7 @@ class frontendController extends Controller
                                 <div class="items_count text-light" id="items_count text-nowrap">';
 
 
-        $items .=  $units . ' 点';
+        $items .= $units . ' 点';
 
 
         $items .= '              </div>
@@ -477,9 +486,9 @@ class frontendController extends Controller
             foreach ($session_cart as $key => $count) {
                 $total += ($count['price'] * $count['quantity']);
             }
-            $items .=  number_format($total) . ' 円';
+            $items .= number_format($total) . ' 円';
         } else {
-            $items .=  0 . ' 円';
+            $items .= 0 . ' 円';
         }
 
         $items .= '          </div>
@@ -637,13 +646,13 @@ class frontendController extends Controller
 
             $status = 200;
 
-            $url= "https://" . request()->getHost() . "/customer/reset/" . $request->survey . "?id=" . $customer->id . "&token=" . $unique;
+            $url = "https://" . request()->getHost() . "/customer/reset/" . $request->survey . "?id=" . $customer->id . "&token=" . $unique;
 
             $email = Mail::where('name', 'パスワード再設定メール')->first();
 
             $content = nl2br($email->content);
-            $content = Str::replace('[[name]]', $customer->name , $content);
-            $content = Str::replace('[[url]]', $url, $content);            
+            $content = Str::replace('[[name]]', $customer->name, $content);
+            $content = Str::replace('[[url]]', $url, $content);
 
             $mail = new PHPMailer(true);
 
@@ -658,7 +667,7 @@ class frontendController extends Controller
             //Set this to true if SMTP host requires authentication to send email
             $mail->SMTPAuth = true;
             //Provide username and password     
-            $mail->Username =  env('MAIL_USERNAME');
+            $mail->Username = env('MAIL_USERNAME');
             $mail->Password = env('MAIL_PASSWORD');
             //If SMTP requires TLS encryption then set it
             $mail->SMTPSecure = 'ssl';
@@ -696,7 +705,7 @@ class frontendController extends Controller
                 //  Log::info("Mailer Error: " . $mail->ErrorInfo);
                 //echo "Mailer Error: " . $mail->ErrorInfo;
                 //return;
-            } 
+            }
 
         }
 
@@ -716,9 +725,9 @@ class frontendController extends Controller
         $customer = Customer::where('id', $id)->
             where('remember_token', $token)->first();
         if (empty($customer)) {
-            $status= 400;
-        } else{
-            $status= 200;
+            $status = 400;
+        } else {
+            $status = 200;
         }
 
         return view('frontend.reset', compact('query', 'status', 'customer'));
@@ -736,7 +745,7 @@ class frontendController extends Controller
             $status = 400;
         } else {
             $customer->password = $password;
-            $customer->remember_token =Str::random(60);
+            $customer->remember_token = Str::random(60);
             $customer->update();
             $status = 200;
         }
@@ -829,22 +838,22 @@ class frontendController extends Controller
                 $startDate = Str::substr($range, 0, 10) . " 00:00:00";
                 $endDate = Str::substr($range, 13, 23) . " 00:00:00";
             }
-            $orders = Order::where([['id', 'LIKE', "%{$search}%"], ['customer_id',$customer->id], ['created_at', '>', $startDate], ['created_at', '<', $endDate]])
-                ->orwhere([['name', 'LIKE', "%{$search}%"], ['customer_id',$customer->id], ['created_at', '>', $startDate], ['created_at', '<', $endDate]])
-                ->orwhere([['email', 'LIKE', "%{$search}%"], ['customer_id',$customer->id], ['created_at', '>', $startDate], ['created_at', '<', $endDate]])
+            $orders = Order::where([['id', 'LIKE', "%{$search}%"], ['customer_id', $customer->id], ['created_at', '>', $startDate], ['created_at', '<', $endDate]])
+                ->orwhere([['name', 'LIKE', "%{$search}%"], ['customer_id', $customer->id], ['created_at', '>', $startDate], ['created_at', '<', $endDate]])
+                ->orwhere([['email', 'LIKE', "%{$search}%"], ['customer_id', $customer->id], ['created_at', '>', $startDate], ['created_at', '<', $endDate]])
                 ->orwhere([['survey_title', 'LIKE', "%{$search}%"], ['customer_id', $customer->id], ['created_at', '>', $startDate], ['created_at', '<', $endDate]])
                 ->orderBy('id', 'DESC')->simplePaginate(20);
             $orders->appends($request->all());
         }
 
-        return view('frontend.mypage', compact('query' , 'customer', 'address' , 'addresses', 'orders'));
+        return view('frontend.mypage', compact('query', 'customer', 'address', 'addresses', 'orders'));
     }
 
     public function get(Request $request)
     {
 
         $order = Order::where('id', $request->get('order_id'))
-        ->where('customer_id', $request->session()->get('customer_id'))->first();
+            ->where('customer_id', $request->session()->get('customer_id'))->first();
         $products = Product::where('order_id', $request->get('order_id'))->get();
 
         if (empty($order)) {
@@ -856,7 +865,7 @@ class frontendController extends Controller
         $items = "";
 
         foreach ($products as $product) {
-            $items .= "<p>" . $product->product_name . "　X　" . $product->units . "点　＝　" . number_format($product->price * $product->units) . "円</p>";
+            $items .= "<p> $product->product_name ($product->price円) X $product->units点 = " . number_format($product->price * $product->units) . "円</p>";
         }
 
         return response()->json([
@@ -994,7 +1003,7 @@ class frontendController extends Controller
         $nameError = '';
         $kanaError = '';
 
-        $response =  Address::find($request->address_id)->delete();
+        $response = Address::find($request->address_id)->delete();
         if ($status = 200 and $response) {
             $status = 200;
         } else {
@@ -1011,7 +1020,8 @@ class frontendController extends Controller
         ]);
     }
 
-    public function saveSameAddress(Request $request) {
+    public function saveSameAddress(Request $request)
+    {
         $status = 400;
         $emailError = '';
         $passwordError = '';
@@ -1019,7 +1029,7 @@ class frontendController extends Controller
         $nameError = '';
         $kanaError = '';
 
-        $address =  Address::find($request->address_id);        
+        $address = Address::find($request->address_id);
         $customer = Customer::find($request->customer_id);
         if ($address and $customer) {
             $status = 200;
