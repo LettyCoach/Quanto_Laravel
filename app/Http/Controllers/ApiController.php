@@ -66,7 +66,8 @@ class ApiController extends Controller
         $this->surveySettingData = $survey_settings;
         if (isset($survey_settings['displayQrcode']) && $survey_settings['displayQrcode'] == 1) {
             $clientHost = Config::get('constants.clientHost');
-            $query['qr_code'] = 'data:image/png;base64,' . base64_encode(QrCode::format('png')->size(100)->generate($clientHost . '?id=' . $id));
+            // $query['qr_code'] = 'data:image/png;base64,' . base64_encode(QrCode::format('png')->size(100)->generate($clientHost . '?id=' . $id));
+            $query['qr_code'] = "";
         }
         $this->suveyData = $query;
         return response()->json($query);
@@ -355,8 +356,8 @@ class ApiController extends Controller
         $model->price2_txt = "";
         $model->price2 = 0;
         $model->flagPrice2 = "";
-        $model->main_img_url =  $filename;
-        $model->img_urls = '[{"name":"'. $filename. '","url":"public/user_product/'. $filename .'","state":""}]';
+        $model->main_img_url = $filename;
+        $model->img_urls = '[{"name":"' . $filename . '","url":"public/user_product/' . $filename . '","state":""}]';
         $model->options = '[]';
         $model->detail = '[]';
         $model->memo = "";
@@ -367,7 +368,7 @@ class ApiController extends Controller
         $model->user_id = $request->user_id;
         $model->other = "";
         $model->save();
-        return ['filename' => $filename, 'new_product_id'=>$model->id];
+        return ['filename' => $filename, 'new_product_id' => $model->id];
     }
     public function uploadProfile(Request $request)
     {
@@ -375,19 +376,19 @@ class ApiController extends Controller
         $profile_url = '';
         $user_id = $request->user_id;
         if ($profile_file != null) {
-            if (strtolower($profile_file->getClientOriginalExtension()) == 'png'
+            if (
+                strtolower($profile_file->getClientOriginalExtension()) == 'png'
                 || strtolower($profile_file->getClientOriginalExtension()) == 'jpg'
                 || strtolower($profile_file->getClientOriginalExtension()) == 'jpeg'
                 || strtolower($profile_file->getClientOriginalExtension()) == 'gif'
                 || strtolower($profile_file->getClientOriginalExtension()) == 'bmp'
             ) {
-                $profile_file->move('uploads/users', str_replace(' ','_', $profile_file->getClientOriginalName()));
-                $profile_url = '/uploads/users/' . str_replace(' ','_', $profile_file->getClientOriginalName());
+                $profile_file->move('uploads/users', str_replace(' ', '_', $profile_file->getClientOriginalName()));
+                $profile_url = '/uploads/users/' . str_replace(' ', '_', $profile_file->getClientOriginalName());
                 User::where('id', $user_id)->update([
-                    'profile_url'=>$profile_url,
+                    'profile_url' => $profile_url,
                 ]);
-            }
-            else {
+            } else {
                 return "image_error";
             }
         }
@@ -400,23 +401,23 @@ class ApiController extends Controller
         $stamp_url = '';
         $user_id = $request->user_id;
         if ($stamp_file != null) {
-            if (strtolower($stamp_file->getClientOriginalExtension()) == 'png'
+            if (
+                strtolower($stamp_file->getClientOriginalExtension()) == 'png'
                 || strtolower($stamp_file->getClientOriginalExtension()) == 'jpg'
                 || strtolower($stamp_file->getClientOriginalExtension()) == 'jpeg'
                 || strtolower($stamp_file->getClientOriginalExtension()) == 'gif'
                 || strtolower($stamp_file->getClientOriginalExtension()) == 'bmp'
             ) {
-                $stamp_file->move('uploads/users', str_replace(' ','_', $stamp_file->getClientOriginalName()));
-                $stamp_url = '/uploads/users/' . str_replace(' ','_', $stamp_file->getClientOriginalName());          
-                $user_setting_tp = User::find($user_id)->settings;             
+                $stamp_file->move('uploads/users', str_replace(' ', '_', $stamp_file->getClientOriginalName()));
+                $stamp_url = '/uploads/users/' . str_replace(' ', '_', $stamp_file->getClientOriginalName());
+                $user_setting_tp = User::find($user_id)->settings;
                 $user_setting = json_decode($user_setting_tp, true);
                 $user_setting['stamp_url'] = $stamp_url;
                 $user_setting_tp = json_encode($user_setting);
                 User::where('id', $user_id)->update([
-                    'settings'=>$user_setting_tp,
+                    'settings' => $user_setting_tp,
                 ]);
-            }
-            else {
+            } else {
                 return "image_error";
             }
         }
@@ -438,7 +439,7 @@ class ApiController extends Controller
         $files = $request->file;
 
         $fileNames = [];
-        for ($i = 0; $i < count($files); $i ++){
+        for ($i = 0; $i < count($files); $i++) {
             $file = $files[$i];
             $fileName = microtime(true) . ".png";
             $file->move($filePath, $fileName);
@@ -446,7 +447,8 @@ class ApiController extends Controller
         }
         return json_encode($fileNames);
     }
-    public function update_inrow(Request $request){
+    public function update_inrow(Request $request)
+    {
 
         $model = UserProduct::find($request->product_id);
 
@@ -455,7 +457,7 @@ class ApiController extends Controller
         $re_array_names = [];
         $re_array = $request->ar_options;
         //dd($re_array);
-        foreach($re_array as $re_array_element){
+        foreach ($re_array as $re_array_element) {
             array_push($re_array_names, $re_array_element['name']);
         }
 
@@ -463,19 +465,19 @@ class ApiController extends Controller
 
         $option_array = json_decode($model->options);
         $option_array_tp = $option_array;
-        foreach($option_array as $key=>$option_element){
+        foreach ($option_array as $key => $option_element) {
             //dd($option_element->name);
-            if(array_search($option_element->name, $re_array_names) === false){
+            if (array_search($option_element->name, $re_array_names) === false) {
                 array_push($re_array, $option_element);
             }
         }
 
-        
+
         //dd($re_array);
         $model->name = $request->product_name;
         $model->price = $request->product_price;
         $model->options = json_encode($re_array);
-        
+
         $model->save();
         return;
         //dd($model->options);

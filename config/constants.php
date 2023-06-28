@@ -9,7 +9,8 @@ return [
         'admin_email' => 'hosokawa@quanto.xbiz.jp',
         'admin_name' => 'hosokawa',
     ],
-    'clientHost' => 'http://192.168.113.30:9016/front/',
-    'cartHost' => 'http://192.168.113.30:9016/show/',
-    'adminHost' => 'https://quanto3.com'
+    'clientHost' => env('APP_URL') . "/front/",
+    'cartHost' => env('APP_URL') . "/show/",
+    'adminHost' => env('APP_URL'),
+    'serverHost' => env('APP_URL') . "/",
 ];
