@@ -182,17 +182,8 @@ class PaperController extends Controller
 		foreach($emails as $to_email){
 			$to_name = 'Lettycoach';
 			$data = array('name'=>"Letttyacach", "body" => "Test mail");
-			//Mail::to($to_email, $to_name)->send(new InvoiceMail($data));
+			Mail::to($to_email, $to_name)->send(new InvoiceMail($data));
 		}
-		//dd($request->mails_text);
-		// $to = 'takahasihideo.g@gmail.com';
-		// $subject = 'Test Email';
-		// $message = 'This is a test email';
-		// $headers = 'From: leopard.k.dev@gmail.com' . "\r\n" .
-		// 		'Reply-To: leopard.k.dev@gmail.com' . "\r\n" .
-		// 		'X-Mailer: PHP/' . phpversion();
-
-		// mail($to, $subject, $message, $headers);
 		return ;
 	}
 }
