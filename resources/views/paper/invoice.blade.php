@@ -113,7 +113,6 @@
         }
     })
     $(document).on('keyup', '#search_invoice', function () {
-        // alert($('#th_check').prop('checked'));
         var filter = $(this).val();
         $(".show_tr").each(function () {
             var title = $(this).find("td.send_name").text();
@@ -128,29 +127,6 @@
     $(document).on('click','.memoEdit', function(e){
         e.preventDefault();
         $(this).parent().submit();
-        
-        // ('<input type="submit" id="send_memo" style="display">');
-        // $("#send_memo").trigger( "click" );
-        // var ajaxUrl = "{{url('/').'/paper/invoice/memo_edit'}}";
-        // var ajaxText = $(this).parent().find("textarea").val();
-        // var ajaxId = $(this).parent().find("#paperid").val();
-        // var fd = new FormData();
-        // fd.append('memo_text', ajaxText);
-        // fd.append('paper_id', ajaxId);
-        // fd.append('X-CSRF-TOKEN', $('meta[name="csrf-token"]').attr('content'))
-        // $.ajax({
-        //     type: 'POST',
-        //     url: ajaxUrl,
-        //     data: fd,
-        //     contentType: false,
-        //     enctype: 'multipart/form-data',
-        //     cache: false,
-        //     processData: false,
-        //     success: function (data, status) {
-        //         alert('ok');
-
-        //     }
-        // });
     });
 </script>
 @endsection

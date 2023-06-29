@@ -15,6 +15,8 @@ use App\Models\UserProduct;
 use App\Models\Member;
 use App\Models\PaymentMethod;
 use App\Models\Purpose;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\InvoiceMail;
 
 class PaperController extends Controller
 {
@@ -172,5 +174,25 @@ class PaperController extends Controller
 				'memo_text'=>$memo_text,
 			]);
 		return redirect(route('paper.invoice'));
+	}
+
+	public function invoiceMailSend(Request $request){
+		//dd($request->mails_text);
+		$emails = explode("#", substr($request->mails_text,1));
+		foreach($emails as $to_email){
+			$to_name = 'Lettycoach';
+			$data = array('name'=>"Letttyacach", "body" => "Test mail");
+			//Mail::to($to_email, $to_name)->send(new InvoiceMail($data));
+		}
+		//dd($request->mails_text);
+		// $to = 'takahasihideo.g@gmail.com';
+		// $subject = 'Test Email';
+		// $message = 'This is a test email';
+		// $headers = 'From: leopard.k.dev@gmail.com' . "\r\n" .
+		// 		'Reply-To: leopard.k.dev@gmail.com' . "\r\n" .
+		// 		'X-Mailer: PHP/' . phpversion();
+
+		// mail($to, $subject, $message, $headers);
+		return ;
 	}
 }

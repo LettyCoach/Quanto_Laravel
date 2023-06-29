@@ -1,6 +1,7 @@
 @extends('layouts.paper')
 
 @section('main-content')
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 <style>
     .container-fluid{
@@ -373,6 +374,47 @@
         <input type="hidden" id="ic_link" src="{{ asset('public/img/ic_link.png')}}">
         <input type="hidden" id="ic_check" src="{{ asset('public/img/ic_check.png')}}">
         <input type="hidden" id="ic_newblank" src="{{ asset('public/img/blank.png')}}">
+
+
+        {{-- Mail modal --}}
+        <div class="modal fade show" id="mailModal" style="display: none;">
+            <div class="modal-dialog">
+                <div class="mail-modal-content">
+                    <div class="mail-modal-header" style="border-bottom: 0; padding: 0;">
+                        <div type="button" class="mail-close" style="opacity:1;">
+                            <img src="{{ asset('public/img/ic_modal_close.png') }}" 
+                            style="position: absolute; top: -33px; right: -30px; width: 40px; height: 40px; ">
+                        </div>
+                    </div>
+                    <div class="mail-first-items">
+                        <form action="{{route('paper.invoice.mail_send')}}" method="POST" id="mail_send_form">
+                            @csrf
+                            <input type="hidden" id="mails_text" name="mails_text" value="" required>
+                            <div class="mail-first-line" id="mail_line_0">
+                                <div class="mail-modal-mailIcon">
+                                    <img src="{{ asset('public/img/ic_mail1.png') }}" alt="">
+                                </div>
+                                <div class="mail-first-content">
+                                    <input type="text" class="mail-item-input" id="mail_address_0" name="mail_address_0" value="">
+                                </div>
+                                <div class="mail-modal-plusIcon">
+                                    <img class="m-add-ic" src="{{ asset('public/img/ic_add.png') }}" alt="">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="mail-div">
+                        <textarea class="mail-textarea" id="mail_textarea" name="mail_textarea"></textarea>
+                    </div>
+                    <div class="modal-footer justify-content-center" style="border-top: 0; padding: 10px;">
+                        <button id="first_ok" class="btn btn-primary m-auto" onclick="mail_send_one()"
+                        style="background-color: rgb(143, 1, 255); font-size: 14px;border:0; height: 32px; width: 80px; border-radius: 10px; font-weight: 600; opacity:1;">送信</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
         @foreach($models as $ii => $model)
         @endforeach
