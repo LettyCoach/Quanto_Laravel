@@ -62,11 +62,7 @@ input {
     width: 120px;
     word-break: break-all;
     font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-left: 0;
-    text-overflow: "---";
+    text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1179,6 +1175,101 @@ textarea {
     margin-bottom: 0;
 }
 
+
+
+.mail-first-line {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    align-items: center;
+    margin: 30px auto;
+    font-size: 18px;
+    font-weight: 600;
+    position: relative;
+}
+
+
+.mail-first-content {
+    width: 100%;
+
+    text-align: left;
+}
+.mail-first-content input{
+    width: 100%;
+    height: 40px;
+    padding-left: 45px;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 0;
+    /* box-shadow: 5px 5px 10px 1px grey; */
+    background: rgb(241 241 241);
+    border: 1px solid #dfdfdf;
+}
+
+.mail-first-items {
+    margin: 20px 20px;
+    margin-bottom: 0;
+}
+
+.mail-modal-mailIcon{
+    position: absolute;
+    z-index: 10;
+    width: 35px;
+    height: 30px;
+    top: 5px;
+    left: 5px;
+}
+.mail-modal-mailIcon img{
+    width: 100%;
+    height: 100%;
+}
+.mail-modal-plusIcon{
+    position: absolute;
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    top: 5px;
+    right: 5px;
+}
+.mail-modal-plusIcon img{
+    width: 100%;
+    height: 100%;
+}
+.mail-modal-header{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 1rem 1rem;
+    border-bottom: 1px solid #e6edf4;
+    border-top-left-radius: calc(0.3rem - 1px);
+    border-top-right-radius: calc(0.3rem - 1px);
+}
+.mail-modal-content{
+    top: 200px;
+    left: 40%;
+    border-radius: 20px;
+    box-shadow: 5px 5px 10px 1px grey;
+    padding-bottom: 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    outline: 0;
+    width: 500px;
+}
+
+.mail-textarea{
+    width: 100%;
+    height: 100%;
+}
+.mail-div{
+    height: 100px;
+    width: 90%;
+    margin: 15px auto;
+}
 .save-items{
     display: flex;
     justify-content: center;

@@ -1046,6 +1046,7 @@ $(document).ready(function () {
         $(".img-item-productName").css('justify-content', 'flex-start');
         $(".img-item-productName").css('width', '530px');
         $(".img-item-productName").css('font-size', '16px');
+        $(".img-item-productName").css('line-height', '70px');
 
         $(".img-modal-xbtn").css("background-image","url('../../public/img/img_03/grid_list.png')");
         $(".img-modal-xybtn").css("background-image","url('../../public/img/img_03/grid_mobile.png')");
@@ -1067,6 +1068,7 @@ $(document).ready(function () {
         $(".img-item-productName").css('justify-content', 'center');
         $(".img-item-productName").css('width', '120');
         $(".img-item-productName").css('font-size', '12px');
+        $(".img-item-productName").css('line-height', '16px');
 
         $(".img-modal-xbtn").css("background-image","url('../../public/img/img_03/grid_soting_1.png')");
         $(".img-modal-xybtn").css("background-image","url('../../public/img/img_03/grid_sorting.png')");
@@ -1201,6 +1203,53 @@ $(document).ready(function () {
         $('.input-modal').hide();
     });
     ///////////////////////////////////
+    $(document).on('click', '#btn_mail', function(){
+        $("#mailModal").css('display', 'block');
+    })
+    $(document).on('click', '.mail-close', function(){
+        $("#mailModal").css('display', 'none');
+        var tp_tp = $(".mail-first-line").first();
+        tp_tp.attr('id',"mail_line_"+0);
+        tp_tp.find("input").attr('id', 'mail_address_'+0);
+        tp_tp.find("input").attr('name', 'mail_address_'+0);
+        tp_tp.find("input").val('');
+        tp_tp.find(".m-add-ic").css('rotate', '0deg');
+        $(".mail-first-line").each(function(){
+            $(this).remove();
+        });
+        $("#mail_send_form").append(tp_tp);
+    })
+    $(document).on('click', '.mail-modal-plusIcon', function(){
+        $(".mail-first-line").each(function(){
+            $(this).find(".m-add-ic").css('rotate', '45deg');
+        });
+        let last_mail_line = parseInt($(".mail-first-line").last().attr('id').replaceAll('mail_line_',''));
+        let current_mail_line = parseInt($(this).parent().attr('id').replaceAll('mail_line_',''));
+        if(current_mail_line == last_mail_line){
+            var mail_input_tp = $(".mail-first-line").first().clone();
+            mail_input_tp.attr('id',"mail_line_"+(last_mail_line + 1));
+            mail_input_tp.find("input").attr('id', 'mail_address_'+(last_mail_line + 1));
+            mail_input_tp.find("input").attr('name', 'mail_address_'+(last_mail_line + 1));
+            mail_input_tp.find("input").val('');
+            $("#mail_send_form").append(mail_input_tp);
+        }
+        else{
+            $(this).parent().remove();
+        }
+        let mail_tp_text='';
+        $(".mail-first-line").each(function(){
+            mail_tp_text += '#' + $(this).find("input").val();
+        });
+        $("#mails_text").val(mail_tp_text);
+        $(".mail-first-line").last().find(".m-add-ic").css('rotate', '0deg');
+    })
+    $(document).on('change', ".mail-item-input", function(){
+        let mail_tp_text='';
+        $(".mail-first-line").each(function(){
+            mail_tp_text += '#' + $(this).find("input").val();
+        })
+        $("#mails_text").val(mail_tp_text);
+    })
 });
 
 function save_inrow_data(id_tpnum, cur_row_num){
@@ -1288,6 +1337,23 @@ function resize_main_title(_obj) {
 function myFunction() {
     if($("#varient_resize").css('display')=='none') $("#varient_resize").css('display', "block");
     else $("#varient_resize").css('display', "none");
+}
+function mail_send_one(){
+    if(mails_text = $("#mails_text").val() == null || $("#mails_text").val() == '' || $("#mails_text").val() == '#') return;
+    if(mails_text = $("#mail_textarea").val() == null || $("#mail_textarea").val() == '') return;
+    var hostUrl = $("#hostUrl").val();
+    var postUrl = $("#mail_send_form").attr('action');
+    var mails_text = $("#mails_text").val();
+    var mail_textarea = $("#mail_textarea").val();
+    $.ajax({
+        type: 'POST',
+        url: postUrl,
+        data: {'mails_text': mails_text, 'mail_textarea' : mail_textarea},
+        success: function (data, status) {
+            if(status == 'sucess') alert('メールを送信しました。');
+        }
+    }); // close ajax
+    $("#mailModal").css('display', 'none');
 }
 
   // Close the dropdown if the user clicks outside of it
