@@ -179,9 +179,10 @@ class PaperController extends Controller
 	public function invoiceMailSend(Request $request){
 		//dd($request->mails_text);
 		$emails = explode("#", substr($request->mails_text,1));
+		$mail_body = $request->mail_textarea;
 		foreach($emails as $to_email){
 			$to_name = 'Lettycoach';
-			$data = array('name'=>"Letttyacach", "body" => "Test mail");
+			$data = array('name'=>$to_name, "body" => $mail_body);
 			Mail::to($to_email, $to_name)->send(new InvoiceMail($data));
 		}
 		return ;

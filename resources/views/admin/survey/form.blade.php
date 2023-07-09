@@ -190,7 +190,7 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
             <div class="form-group row">
                 <label class="col-md-2 col-form-label" for="">タイトル: </label>
                 <div class="col-md-10 d-flex align-items-center">
-                    <input class="form-control" type="text" placeholder="タイトル" name="title" value="{{ isset($survey['title']) ? $survey['title'] : '' }}" required>
+                    <input class="form-control" type="text" placeholder="タイトル" name="title" id="survey_m_title" value="{{ isset($survey['title']) ? $survey['title'] : '' }}" required>
                 </div>
             </div>
             <div class="form-group row">
