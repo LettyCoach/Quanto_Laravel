@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
 use PHPMailer\PHPMailer\PHPMailer;
+use App\Mail\QuestionAnswer;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\HtmlString;
+use Illuminate\Mail\Message;
 
 class ClientController extends Controller
 {
@@ -77,21 +81,35 @@ class ClientController extends Controller
         }
         $mail = new PHPMailer(true);
         try {
-            $mail->isSMTP();
-            $mail->CharSet = "utf-8";
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = "ssl";
-            $mail->Host = Config::get('constants.mail.host');
-            $mail->Port = Config::get('constants.mail.port');
-            $mail->Username = Config::get('constants.mail.username');
-            $mail->Password = Config::get('constants.mail.password');
-            $mail->setFrom(Config::get('constants.mail.admin_email'), Config::get('constants.mail.admin_name'));
-            $mail->Timeout = 30;
-            $mail->Subject = "設問回答";
-            $mail->MsgHTML($content);
-            $mail->addAddress($email, $name);
+            // $mail->isSMTP();
+            // $mail->CharSet = "utf-8";
+            // $mail->SMTPAuth = true;
+            // $mail->SMTPSecure = "ssl";
+            // $mail->Host = Config::get('constants.mail.host');
+            // $mail->Port = Config::get('constants.mail.port');
+            // $mail->Username = Config::get('constants.mail.username');
+            // $mail->Password = Config::get('constants.mail.password');
+            // $mail->setFrom(Config::get('constants.mail.admin_email'), Config::get('constants.mail.admin_name'));
+            // $mail->Timeout = 30;
+            // $mail->Subject = "設問回答";
+            // $mail->MsgHTML($content);
+            // $mail->addAddress($email, $name);
 
-            $mail->send();
+			//$data = array('name'=>'設問回答', "body" => $content);
+			//Mail::to($email, $name)->send(new QuestionAnswer($data));
+            $data = [
+                'body' => new HtmlString($content),
+            ];
+            
+            Mail::send([], [], function (Message $message) use ($data, $email) {
+                $message->setBody($data['body'], 'text/html');
+                $message->subject('Answer Email');
+                $message->to($email);
+            });
+
+
+
+            //$mail->send();
             $client->send_mail_status = 1;
             $client->save();
         } catch (phpmailerException $e) {

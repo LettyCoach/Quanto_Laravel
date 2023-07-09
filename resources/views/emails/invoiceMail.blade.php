@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laravel Demo Email</title>
+    <title>Invoice Email</title>
 </head>
 <body>
     <h1>Hello {{ $data['name'] }}</h1>
