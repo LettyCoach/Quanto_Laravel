@@ -183,10 +183,11 @@ class UserProduct extends Model
         return $str;
     }
 
-    public function getOptionsText()
+    public function getOptionsText($user_id = null)
     {
+        $user_id = $user_id ?? Auth::user()->id;
 
-        $options = $this->getOptions();
+        $options = $this->getOptions($user_id);
         $rlt = "";
         $i = 0;
         foreach ($options as $name => $option) {
@@ -200,9 +201,11 @@ class UserProduct extends Model
         return $rlt;
     }
 
-    public function getAllOptionNames()
+    public function getAllOptionNames($user_id = null)
     {
-        $user_id = Auth::user()->id;
+
+        $user_id = $user_id ?? Auth::user()->id;
+
         $models = self::where('user_id', $user_id)->get();
         $rlt = ['カラー', 'サイズ', '素材'];
 
@@ -229,8 +232,10 @@ class UserProduct extends Model
         return $rlts;
     }
 
-    public function getOptions()
+    public function getOptions($user_id = null)
     {
+        $user_id = $user_id ?? Auth::user()->id;
+
         $rlt = [];
         $options = $this->options;
         if ($options == '')
@@ -249,7 +254,7 @@ class UserProduct extends Model
             $rlt[$name] = $dscString;
         }
 
-        $names = $this->getAllOptionNames();
+        $names = $this->getAllOptionNames($user_id);
         $tmp = [];
         foreach ($names as $i => $name) {
             if (isset($rlt[$name]) == false)

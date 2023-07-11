@@ -20,16 +20,24 @@ class UserProductController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $models = null;
         $user_id = Auth::user()->id;
+        $keyword = $request->keyword ?? '';
+        $models = UserProduct::where("name", "like", "%$keyword%");
         if (Auth::user()->isAdmin()) {
-            $models = UserProduct::orderby('id', 'desc')->simplePaginate(15);
+            $models = $models->orderby('id', 'desc')->simplePaginate(15);
         } else {
-            $models = UserProduct::where('user_id', $user_id)->orderby('id', 'desc')->simplePaginate(15);
+            $models = $models->where('user_id', $user_id)->orderby('id', 'desc')->simplePaginate(15);
         }
-        return view('admin/userProduct/index', ['models' => $models]);
+        return view(
+            'admin/userProduct/index',
+            compact(
+                'models',
+                'keyword'
+            )
+        );
     }
 
     public function show($id)
@@ -61,13 +69,13 @@ class UserProductController extends Controller
         } else {
             $models = UserProduct::where('user_id', $user_id)->orderby('id', 'desc')->simplePaginate(15);
         }
-        return view('admin/userProduct/showNew', ['models' => $models, 'id'=>$id]);
+        return view('admin/userProduct/showNew', ['models' => $models, 'id' => $id]);
     }
 
     public function setTag(Request $request)
     {
         $product_id = $request->get('product_id');
-        $user_id = Auth::user()->id;     
+        $user_id = Auth::user()->id;
         $flag = $request->get('flag');
 
         SaveItem::where('product_id', $product_id)->where('user_id', $user_id)->delete();
@@ -90,10 +98,10 @@ class UserProductController extends Controller
 
         $categories = UserProductCategory::orderBy('name', 'asc');
         // if (!Auth::user()->isAdmin()) {
-            $categories = $categories->where('user_id', Auth::user()->id);
+        $categories = $categories->where('user_id', Auth::user()->id);
         // }
         $categories = $categories->get();
-        
+
         return view('admin/userProduct/edit', [
             'caption' => "新規登録",
             'model' => $model,
@@ -106,13 +114,13 @@ class UserProductController extends Controller
     {
         $model = UserProduct::find($id);
         $model->getImageUrls();
-        
+
         $categories = UserProductCategory::orderBy('name', 'asc');
         // if (!Auth::user()->isAdmin()) {
-            $categories = $categories->where('user_id', Auth::user()->id);
+        $categories = $categories->where('user_id', Auth::user()->id);
         // }
         $categories = $categories->get();
-        
+
         $productID = $model->getProductID();
         return view('admin/userProduct/edit', [
             'caption' => "商品情報編集",
