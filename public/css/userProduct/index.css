@@ -2,6 +2,17 @@ a {
     text-decoration: none;
 }
 
+#search_keyword {
+    width: 400px;
+    padding: 8px 40px 8px 10px;
+    background: url("../../img/img_03/search_right.png") right center no-repeat;
+    border: 0;
+    border-radius: 4px;
+    margin: 8px;
+
+    box-shadow: 5px 5px 10px grey;
+}
+
 table {
     /* border-collapse: separate; */
     border-spacing: 0;
@@ -9,7 +20,7 @@ table {
     margin: 0 auto;
 }
 
-thead {
+.product_table thead {
     background: rgb(241, 242, 255);
     box-shadow: 5px 5px 10px grey;
     color: #6423fe;
@@ -45,6 +56,10 @@ tr:first-child th:last-child {
 tr:last-child td:first-child {
     border-bottom-left-radius: 10px;
     word-break: keep-all;
+}
+
+.product-id {
+    word-break: keep-all !important;
 }
 
 tr:last-child td:last-child {
@@ -217,4 +232,24 @@ tbody tr:first-child {
 
 #modalImageViewList > .madal-content {
     border: 0 !important;
+}
+
+.csv-image {
+    width: 32px;
+    cursor: pointer;
+}
+
+.csv-div {
+    width: 100%;
+    padding: 0 16px;
+    height: 640px;
+    overflow: scroll;
+}
+
+.div-td {
+    width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 4px;
 }
