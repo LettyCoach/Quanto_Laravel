@@ -38,20 +38,23 @@
                 @foreach ($models as $i => $model)
                     <tr>
                         <td>
-                            @php
-                                $tag1 = 'none';
-                                $tag2 = 'block';
-                                if ($model->users()->find(Auth::user()->id) == null) {
-                                    $tag1 = 'block';
-                                    $tag2 = 'none';
-                                }
-                            @endphp
-                            <img src="{{ url('public/img/img_03/tag_off.png') }}" alt=""
-                                id="tag_{{ $model->id }}_1" class="tag" style="display: {{ $tag1 }}"
-                                onclick="setTag({{ $model->id }}, 1)">
-                            <img src="{{ url('public/img/img_03/tag_on.png') }}" alt=""
-                                id="tag_{{ $model->id }}_2" class="tag" style="display: {{ $tag2 }}"
-                                onclick="setTag({{ $model->id }}, 0)">
+                            <div class="d-flex align-items-center">
+                                <input type="checkbox" name="" id="customCheckbox2" class="" style="width:24px; height: 24px">
+                                @php
+                                    $tag1 = 'none';
+                                    $tag2 = 'block';
+                                    if ($model->users()->find(Auth::user()->id) == null) {
+                                        $tag1 = 'block';
+                                        $tag2 = 'none';
+                                    }
+                                @endphp
+                                <img src="{{ url('public/img/img_03/tag_off.png') }}" alt=""
+                                    id="tag_{{ $model->id }}_1" class="tag" style="display: {{ $tag1 }}"
+                                    onclick="setTag({{ $model->id }}, 1)">
+                                <img src="{{ url('public/img/img_03/tag_on.png') }}" alt=""
+                                    id="tag_{{ $model->id }}_2" class="tag" style="display: {{ $tag2 }}"
+                                    onclick="setTag({{ $model->id }}, 0)">
+                            </div>
                         </td>
                         <td class="product-id">{{ $model->getProductID() }}</td>
                         <td>
@@ -61,7 +64,7 @@
                         <td>{{ $model->brandName }}</td>
                         <td>{{ $model->name }}</td>
                         <td>{{ $model->getCategoryText() }}</td>
-                        <td class="option_txt"><?php echo $model->getOptionsText(); ?></td>
+                        <td class="option_txt text-left"><?php echo $model->getOptionsText(); ?></td>
                         <td>{{ number_format($model->price) }}円</td>
                         <td>
                             <a href="{{ route('admin.userProduct.edit', ['id' => $model->id]) }}">
