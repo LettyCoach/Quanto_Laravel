@@ -135,7 +135,7 @@
     visibility: hidden;
     position: absolute;
     max-height: calc(var(--max-scroll) * 46px);
-    top: 40px;
+    top: -450px;
     left: 0;
     z-index: 1;
     right: 0;

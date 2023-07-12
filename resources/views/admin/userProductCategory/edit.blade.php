@@ -130,7 +130,7 @@
 
                     $this.each(function() {
                         var dropdown = $("<div />").addClass("f-dropdown selectDropdown");
-                        dropdown.css('--max-scroll', 8);
+                        dropdown.css('--max-scroll', 12);
 
                         if ($(this).is(':disabled'))
                             dropdown.addClass('disabled');
