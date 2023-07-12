@@ -104,7 +104,11 @@ class UserProductCategoryController extends Controller
         $model->other = "";
         $model->save();
 
-        $categories = UserProductCategory::orderBy('name', 'asc')->get();
+        $categories = UserProductCategory::orderBy('name', 'asc');
+        // if (!Auth::user()->isAdmin()) {
+        $categories = $categories->where('user_id', Auth::user()->id);
+        // }
+        $categories = $categories->get();
 
         return response()->json([
             'state' => 'SUCCESS',
