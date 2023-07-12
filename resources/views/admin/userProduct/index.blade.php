@@ -255,6 +255,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.2.0/papaparse.min.js"></script>
     <script>
         var product_id = 0;
+        var swiper_main;
+        var swiper
 
         function viewData(id) {
             product_id = id;
@@ -270,22 +272,29 @@
                 }
 
                 for (let i = 0; i < 8; i++) {
-                    obj.img_urls.forEach((e, i) => {
+                    obj.img_urls.forEach((e, j) => {
                         if (e.state !== '') {
-                            $("#userProductImage_div_" + i).css('display', 'none');
                             return;
                         }
-                        rlt += `<div class="swiper-slide"><img src="${e.url}" alt="" ></div>`;
-                        $("#userProductImage_" + i).attr('src', e.url);
-                        $("#userProductImage_div_" + i).css('display', 'block');
+                        rlt +=
+                            `<div class="swiper-slide"><img src="${e.url}" alt="" onclick="selectMainSlide(${j})" ></div>`;
                     })
                 }
+
+                obj.img_urls.forEach((e, i) => {
+                    if (e.state !== '') {
+                        $("#userProductImage_div_" + i).css('display', 'none');
+                        return;
+                    }
+                    $("#userProductImage_" + i).attr('src', e.url);
+                    $("#userProductImage_div_" + i).css('display', 'block');
+                })
 
                 $('#slide_img_pan_main').html(rlt);
                 $('#slide_img_pan').html(rlt);
 
 
-                var swiper_main = new Swiper("#mySwiper_main", {
+                swiper_main = new Swiper("#mySwiper_main", {
                     slidesPerView: 1,
                     loop: true,
                     spaceBetween: 30,
@@ -296,7 +305,7 @@
                     },
                 });
 
-                var swiper = new Swiper("#mySwiper", {
+                swiper = new Swiper("#mySwiper", {
                     slidesPerView: 4,
                     loop: true,
                     spaceBetween: 10,
@@ -305,6 +314,7 @@
                         nextEl: ".swiper-button-next",
                         prevEl: ".swiper-button-prev",
                     },
+
                     // autoplay: {
                     //     delay: 2000,
                     //     disableOnInteraction: false,
@@ -332,6 +342,12 @@
                 $('#modalAddQuestion').modal('toggle');
             })
 
+        }
+
+        const selectMainSlide = (index) => {
+            console.log(index)
+            swiper_main.slideTo(index)
+            // swiper_main.initialSlide = index;
         }
 
         const viewImageList = () => {
