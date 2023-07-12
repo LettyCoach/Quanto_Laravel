@@ -16,7 +16,7 @@
                         <h4>画像</h4>
                         <div class = "row m-0 flex flex-row justify-content-center">
                             <div class = "user_product_img_pan">
-                                <div class="user_product_img_first" id = "userProductImage_div_0">
+                                <div id = "userProductImage_div_0" class="user_product_img_first">
                                     <img src = "{{ url($model->getImageUrlFirst('add')) }}" id="userProductImage_0" alt = "img" class="upload_view_image" >
                                     <img src = "{{url('public/img/img_03/delete.png')}}" id="delete_image_0" onclick="deleteImage(0)" alt = "img" class = "delete_image">
                                 </div>
@@ -311,22 +311,28 @@
     const displayImageList = () => {
         listImageURL.forEach((e, i) => {
             const id_div = `userProductImage_div_${i}`;
+
             const id_img = `userProductImage_${i}`;
             const id_del = `delete_image_${i}`;
             const url = `${hostUrl}/${e.url}`;
             $(`#${id_img}`).attr("src", url);
 
+            console.log(e.state);
             let style_div = "block";
             let style_del = "block";
             if (e.state === "none") {
                 style_div = "none";
             }
+            if (e.state === "") {
+                $(`#${id_div}`).addClass("view-delete-image");
+            }
             if (e.state === "blank") {
+                $(`#${id_div}`).removeClass("view-delete-image");
                 style_del = "none";
             }
 
             $(`#${id_div}`).css("display", style_div);
-            $(`#${id_del}`).css("display", style_del);
+            // $(`#${id_del}`).css("display", style_del);
         })
     }
 
@@ -762,6 +768,13 @@
                 $('#categoryCheckAll').prop('checked', false);
             }
         });
+    });
+
+    $(document).on('mouseenter', '.view-delete-image', function (e) {
+        $(this).find(".delete_image").css("display", 'block');
+
+    }).on('mouseleave', '.view-delete-image', function (e) {
+        $(this).find(".delete_image").css("display", 'none');
     });
 
     $(document).on('click', '#btnSaveCategory', function() {
