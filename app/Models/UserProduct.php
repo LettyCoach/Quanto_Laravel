@@ -191,12 +191,14 @@ class UserProduct extends Model
         $rlt = "";
         $i = 0;
         foreach ($options as $name => $option) {
+            if ($option === "" || $option === " " || $option === " ")
+                continue;
             if ($name != 'カラー' && $name != 'サイズ' && $name != '素材') {
                 // $rlt .= "<div>$name</div>";
                 $rlt .= " $name:";
             }
             // $rlt .= "<div> $option </div>";
-            $rlt.= " $option;";
+            $rlt .= " $option;";
             $i++;
         }
 
