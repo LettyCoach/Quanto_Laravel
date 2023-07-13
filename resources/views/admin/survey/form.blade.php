@@ -715,21 +715,6 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
                         @php
                             $hasRadio = false;
                         @endphp
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
-                        ?>
                 </div>
                 <button class="btn btn-primary"
                     onclick="onNewField({{ $q_index }}, {{ $answer->type }}, {{ $q_index }})"><i

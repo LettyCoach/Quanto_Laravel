@@ -692,23 +692,33 @@
             <div class="row" style="margin-bottom: 125px;">
                 <?php
                     foreach ($query['answers'] as $key => $answer) {
-                        if ($question->id == $answer->question_id) { ?>
-                <div class="col-6 col-lg-4 col-md-4 ">
-                    <a class="pro-card load_content" data-survey="{{ $query->id }}" data-id="{{ $answer->id }}"
-                        data-title="{{ $answer->title }}" data-value={{ $answer->value }}
-                        data-image="{{ $answer->file_url }}" data-price="{{ $answer->value }}"
-                        data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                        <div class="title" class="mx-auto;" style="color: <?php echo $query->answer_char_color; ?>; text-align: left">
-                            {!! $answer->title !!}({!! $answer->value !!}円)
-                        </div>
-                        <div class="image-holder">
-                            <img class="image radius-bottom" src="../{{ $answer->file_url }}" alt="">
-                        </div>
-                    </a>
-                </div>
-                <?php }
+                        if ($question->id == $answer->question_id) { 
+                            $costDisp = "-";
+                            if (is_numeric($answer->value))
+                                $costDisp = number_format($answer->value);
+                            
+                ?>
+                            <div class="col-6 col-lg-4 col-md-4 ">
+                                <a class="pro-card load_content" data-survey="{{ $query->id }}" data-id="{{ $answer->id }}"
+                                    data-title="{{ $answer->title }}" data-value={{ $costDisp }}
+                                    data-image="{{ $answer->file_url }}" data-price="{{ $answer->value }}"
+                                    data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                    <div class="title d-flex justify-content-between" class="mx-auto;"
+                                        style="color: <?php echo $query->answer_char_color; ?>; text-align: left">
+                                        <p>{!! $answer->title !!}</p>
+                                        <p>
+                                            {!! $costDisp !!}円
+                                        </p>
+                                    </div>
+                                    <div class="image-holder">
+                                        <img class="image radius-bottom" src="../{{ $answer->file_url }}" alt="">
+                                    </div>
+                                </a>
+                            </div>
+                <?php 
+                        }
                     }
-                    ?>
+                ?>
             </div>
         </div>
         <?php
@@ -931,7 +941,7 @@
                     '<img class="product-image-full image radius-top" src="../' + $(this)
                     .data("image") + '" />');
                 $('.product-title').html('').prepend(
-                    `<P> ${$(this).data("title")} (${$(this).data('value')}円)  </P>`);
+                    `<P> ${$(this).data("title")}</p> <p>${$(this).data('value')}円</P>`);
                 $('#product_id').val($(this).data("id"));
                 $('#product_img').val($(this).data("image"));
                 $('#survey_id').val($(this).data("survey"));
