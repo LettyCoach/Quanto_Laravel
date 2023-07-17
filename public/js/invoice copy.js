@@ -1,12 +1,27 @@
+dis_data = dis_data.replaceAll('&quot;', '\"');
+dis_data = dis_data.replaceAll(':\"{', ':{');
+dis_data = dis_data.replaceAll('}\",', '},');
+dis_data = dis_data.replaceAll('\n', '');
+dis_data = dis_data.replaceAll('　', '');
+dis_data = dis_data.replaceAll('	', '');
+dis_data = dis_data.replaceAll(' ', '');
+dis_data = dis_data.replaceAll('\n', '');
+dis_data = dis_data.replaceAll('\r', '').replaceAll(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/<[^>]*>/g, '');
+
 //global values
 var like_flag = false;
 var count_option_checked = 3;
 var page_direction = true;
 var varient_array = [];
 var temp_text_element = document.createElement('div');
+$('[id^="varient_check_"]').each(function(){
+    let key = $(this).parent().parent().find("p").text();
+    let ar_vlaue = $(this).attr('id').replaceAll(/varient_check_/g, '');
+    varient_array.push({'name' : key , 'value' : ar_vlaue});
+});
 var update_product_flag = true;
 var selected_item_id = 0;
-var current_img_index = '';
+
 
 //Set main css properties
 var uMethodDivCss = 300;
@@ -16,7 +31,6 @@ var uNameDivCss = 220;
 var uTitleCss = 280;
 var iHtml = '';
 var inv_state='';
-
 //get ic Url
 var delUrl = $("#ic_del").attr('src');
 var addUrl = $("#ic_add").attr('src');
@@ -30,69 +44,45 @@ var profile = $("#profile").attr('src');
 var logoSrc = $("#logo").attr('src');
 var t_editUrl=$("#tooltip_edit_0").attr('src');
 var t_closeUrl=$("#tooltip_close_0").attr('src');
+dis_data = JSON.parse(dis_data);
+var iHtml = '';
+for (const [key, value] of Object.entries(dis_data)) {
+    for (const [kkey, answer] of Object.entries(value)) {
+        var hostUrl = $("#hostUrl").val();
+        var select_img_url = answer.file_url;
+        if (answer.file_url == null) select_img_url = blankUrl;
+        var item_productName = answer.product;
+        var item_brandName = answer.brand;
+        var item_productID = answer.productID;
+        var item_id = answer.id;
+        var item_price = answer.value;
+        var item_like = answer.productLike;
+        var out_product_name = item_productName
+        // if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
 
-function json_data_init(){
-    dis_data = dis_data.replaceAll('&quot;', '\"');
-    dis_data = dis_data.replaceAll(':\"{', ':{');
-    dis_data = dis_data.replaceAll('}\",', '},');
-    dis_data = dis_data.replaceAll('\n', '');
-    dis_data = dis_data.replaceAll('　', '');
-    dis_data = dis_data.replaceAll('	', '');
-    dis_data = dis_data.replaceAll(' ', '');
-    dis_data = dis_data.replaceAll('\n', '');
-    dis_data = dis_data.replaceAll('\r', '').replaceAll(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/<[^>]*>/g, '');    
-}
-
-function global_value_init(){
-}
-
-function get_option_array()
-{
-    $('[id^="varient_check_"]').each(function(){
-        let key = $(this).parent().parent().find("p").text();
-        let ar_vlaue = $(this).attr('id').replaceAll(/varient_check_/g, '');
-        varient_array.push({'name' : key , 'value' : ar_vlaue});
-    });
-}
-
-function make_production_select_modal(production_data){
-    var iHtml = '';
-    for (const [key, value] of Object.entries(production_data)) {
-        for (const [kkey, answer] of Object.entries(value)) {
-            var hostUrl = $("#hostUrl").val();
-            var select_img_url = answer.file_url;
-            if (answer.file_url == null) select_img_url = blankUrl;
-            var item_productName = answer.product;
-            var item_brandName = answer.brand;
-            var item_productID = answer.productID;
-            var item_id = answer.id;
-            var item_price = answer.value;
-            var item_like = answer.productLike;
-            var out_product_name = item_productName
-            // if (item_productName.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
-
-            var item_sub = answer.value;
-            iHtml += '<div class="img-view-item"><div class="img-item-img">';
-            iHtml += '<input type="hidden" id="img_upload_url_1" value="' + select_img_url + '">';
-            iHtml += '<input type="hidden" id="item_productID" value="' + item_productID + '">';
-            iHtml += '<input type="hidden" id="item_price" value="' + item_price + '">';
-            iHtml += '<input type="hidden" id="item_like" value="' + item_like + '">';
-            iHtml += '<input type="hidden" id="item_h_name" value="' + item_productName + '">';
-            iHtml += '<input type="hidden" id="item_id" value="' + item_id + '">';
-            for (const [kkkey, option] of Object.entries(answer.options)) {
-                iHtml += '<input type="hidden" id="item_'+ kkkey +'" value="' + option + '">';
-                out_product_name += option;
-            }
-            // if (out_product_name.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
-
-            iHtml += '<img alt="' + select_img_url + '" src="' + select_img_url + '" ></div>';
-            iHtml += '<div class="img-item-down"><div class="img-item-brandName">' + item_brandName + '</div><div class="img-item-productName">' + out_product_name + '</div><div class="img-item-price-sub">'+ item_price +'円</div><input type="hidden" class="img-item-sub" value="' + item_sub + '"></div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 30px;"></div></div>';
+        var item_sub = answer.value;
+        iHtml += '<div class="img-view-item"><div class="img-item-img">';
+        iHtml += '<input type="hidden" id="img_upload_url_1" value="' + select_img_url + '">';
+        iHtml += '<input type="hidden" id="item_productID" value="' + item_productID + '">';
+        iHtml += '<input type="hidden" id="item_price" value="' + item_price + '">';
+        iHtml += '<input type="hidden" id="item_like" value="' + item_like + '">';
+        iHtml += '<input type="hidden" id="item_h_name" value="' + item_productName + '">';
+        iHtml += '<input type="hidden" id="item_id" value="' + item_id + '">';
+        for (const [kkkey, option] of Object.entries(answer.options)) {
+            iHtml += '<input type="hidden" id="item_'+ kkkey +'" value="' + option + '">';
+            out_product_name += option;
         }
+        // if (out_product_name.length > 10) { item_productName = item_productName.slice(0, 7); item_productName += "..." }
+
+        iHtml += '<img alt="' + select_img_url + '" src="' + select_img_url + '" ></div>';
+        iHtml += '<div class="img-item-down"><div class="img-item-brandName">' + item_brandName + '</div><div class="img-item-productName">' + out_product_name + '</div><div class="img-item-price-sub">'+ item_price +'円</div><input type="hidden" class="img-item-sub" value="' + item_sub + '"></div><div class="img-upload-link-btn-1"><img src="' + checkUrl + '" style="height: 30px;"></div></div>';
     }
-    $("#img_view").html('');
-    $("#img_view").append(iHtml);
-    $("#img_view").append(makeNew_item_view());
 }
+$("#img_view").html('');
+$("#img_view").append(iHtml);
+$("#img_view").append(makeNew_item_view());
+
+
 
 function makeNew_item_view(){
     var new_item_html = '<div class="img-view-item" id="new_item_blank"><div class="img-item-img"><input type="hidden" id="img_upload_url_1" value="' + blankUrl + '"><img alt="' + blankUrl + '" src="' + newblankUrl + '" ></div>';
@@ -111,6 +101,7 @@ function getNumber(_str) {
     }
     return Number(out.join(''));
 }
+
 //num
 function updateTextView(_obj) {
     var num = getNumber(_obj.val());
@@ -120,6 +111,8 @@ function updateTextView(_obj) {
         _obj.val(num.toLocaleString());
     }
 }
+
+resize_main_title($('[id^="purpose_"]'));
 
 function css_re() {
     var rows = parseInt($("#select_resize").val());
@@ -141,6 +134,12 @@ function uDiv() {
         $("#uNameDiv").css('min-width', uNameDivCss);
     }
 }
+
+var current_img_index = '';
+
+$(document).on('click', ".img-close-btn", function (e) {
+    $(".q-modal").css("display", "none");
+});
 //make table row
 function make_tr(i, k, cId) {
     //set variables
@@ -173,11 +172,12 @@ function make_tr(i, k, cId) {
     rHtml += '<input class="td-ID-input" id="ID_'+ i +'" value="'+ product_tr_ID +'"><input type="hidden" id="productNum_'+ i +'" value="'+ productNum +'"></div>';
     rHtml += '</td>';
 
+
+
     rHtml += '<td class="td-a1">';
     rHtml += '<div class="flex-center"><img alt="product" id="timg_' + i + '"src="' + imgUrl + '" class="td-a1-d2-img" /></div><div class="td-a1-input open-modal" id="title_' + i + '">' + title + '</div></td>';
 
     rHtml += '';
-    console.log(varient_array);
     varient_array.forEach(varient_element=>{
         let ik = i-k;
         let varient_element_value = $("#subt_"+ varient_element.value + '_' + ik).text();
@@ -187,16 +187,21 @@ function make_tr(i, k, cId) {
         $('#subt_'+varient_element.value+ '_' + current_img_index).text($(this).parent().find('#item_'+varient_element).val());
     });
 
+
+
     rHtml += '<td class="td-a2"><input class="td-a2-input" id="price_' + i + '" value="' + price + '"><span>円</span></td><td class="td-a3"><input class="td-a3-input"   id="quantity_' + i + '" value="' + quantity + '"></td><td class="td-a4"> <input class="td-a4-input"  id="current_price_' + i + '" value="' + current_price + '">円</td>';
     rHtml += '<td class="td-a5 reduce-pro-td"><select name="pets" class="reduce-pro" id="reduce_pro_' + i + '">';
+    //////////////////////////////////////////////
     if (selk == 0) rHtml += '<option value="10" selected>10%</option><option value="8">8%(軽減税率)</option><option value="8">8%</option><option value="0">0%</option></select>';
     else if (selk == 1) rHtml += '<option value="10">10%</option><option value="8" selected>8%(軽減税率)</option><option value="8" >8%</option><option value="0">0%</option></select>';
     else if (selk == 2) rHtml += '<option value="10">10%</option><option value="8" >8%(軽減税率)</option><option value="8" selected>8%</option><option value="0">0%</option></select>';
     else rHtml += '<option value="10">10%</option><option value="8" >8%(軽減税率)</option><option value="8" >8%</option><option value="0" selected>0%</option></select>';
+    ////////////////////////
     rHtml += '<input  class="td-a5-input" id="reduce_plus_' + i + '" value="' + current_reduce + '">円</td></tr>';
+
+
     return rHtml;
 }
-
 function detail_make() {
     var subHtml = '';
     var memo_text_val = $("#memo_text").val();
@@ -240,10 +245,6 @@ function make_page2_top() {
     pdfHtml += '<div id="page2" class="page2"><div class="flex-between mb1"><div class="pro33"></div><div class="pro33 flex-center text-center p2 text-center t6 b8"><input id="purpose_2" class="input10" style="height: 60px;" value="' + purpose + '" readonly></div><div class="pro33 text-right t1 b2">発行日:<input id="cDate" class="input2 w125 text-right" value="' + cDate + '"> </div></div>';
     return pdfHtml;
 }
-
-$(document).on('click', ".img-close-btn", function (e) {
-    $(".q-modal").css("display", "none");
-});
 
 function make_page_break() {
     var pdfHtml = "";
@@ -409,135 +410,6 @@ function pdfRender(type, cId, tId, rows) {
     }
     update_product_flag = true;
 }
-
-function save_inrow_data(id_tpnum, cur_row_num){
-    if($("#q_modal").css('display') === 'block') return;
-    if(!update_product_flag) return;
-    if(id_tpnum < 0) return;
-    var ar_options = [];
-
-    varient_array.forEach(element => {
-        var ar_option = {};
-        ar_option['name'] = element.name;
-        ar_option['description'] = $("#subt_"+ element.value +'_'+cur_row_num).text().split(",");
-        ar_options.push(ar_option);      
-    });
-
-    var product_price = $("#price_"+cur_row_num).val();
-    product_price = product_price.replaceAll(',', '');
-
-    var product_name = $("#title_"+cur_row_num).text();
-
-    var hostUrl = $("#hostUrl").val();
-    var postUrl = hostUrl + '/api/v1/client/update_inrow';
-    $.ajax({
-        url: postUrl,
-        type: 'POST',
-        data: jQuery.param({
-            'product_id' : id_tpnum,
-            'ar_options' : ar_options,
-            'product_price' : product_price,
-            'product_name' : product_name
-        }) ,
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        success: function (response) {
-            //alert(response.status);
-        },
-        error: function () {
-            //alert("error");
-        }
-    });
-}
-
-function render_page_change(m_dir, m_ct){
-    $(".td-r1").attr('colspan', m_ct+2);
-    if(m_ct>3) m_dir = false;
-    else m_dir = true;
-    page_direction = m_dir;
-    render_direction_changed(page_direction);
-}
-
-function render_direction_changed(x_dir){
-    if(!x_dir){
-        let title_width = 300-(count_option_checked*30);
-        $('#page_style').text('@page { margin: 0; size: A4 landscape; }');
-        $(".form-body").css('width', '1400px');
-        $("#select_resize").val('15');
-        $("#select_resize").change();
-        $("#select_resize").val('8');
-        $("#select_resize").attr('disabled', true);
-    }
-    else{
-        let title_width = 130-(count_option_checked*20);
-        $(".form-body").css('width', '1000px');
-        $('#page_style').text('@page { margin: 0; size: A4; }');
-        $("#select_resize").attr('disabled', false);
-    }
-}
-
-function change_toEdit(toEdit_url){
-    if(inv_state=="edit") return;
-    to_router=toEdit_url.substr(0, toEdit_url.length-1);
-    to_router+=paper_id;
-    window.location.href = to_router;
-}
-
-function resize_main_title(_obj) {
-    $("#uTitle_font_size").change();
-}
-
-function myFunction() {
-    if($("#varient_resize").css('display')=='none') $("#varient_resize").css('display', "block");
-    else $("#varient_resize").css('display', "none");
-}
-
-function mail_send_one(){
-    if(mails_text = $("#mails_text").val() == null || $("#mails_text").val() == '' || $("#mails_text").val() == '#') return;
-    if(mails_text = $("#mail_textarea").val() == null || $("#mail_textarea").val() == '') return;
-    var hostUrl = $("#hostUrl").val();
-    var postUrl = $("#mail_send_form").attr('action');
-    var mails_text = $("#mails_text").val();
-    var mail_textarea = $("#mail_textarea").val();
-    $.ajax({
-        type: 'POST',
-        url: postUrl,
-        data: {'mails_text': mails_text, 'mail_textarea' : mail_textarea},
-        success: function (data, status) {
-            if(status == 'sucess') alert('メールを送信しました。');
-        }
-    }); // close ajax
-    $("#mailModal").css('display', 'none');
-}
-
-function update_total_price() {
-    updateTextView($("#total_price_sub"));
-    updateTextView($("#total_price"));
-    updateTextView($("#reduce_plus"));
-}
-
-  // Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-    if (!event.target.matches('.fix-dropbtn')) {
-        var dropdowns = document.getElementsByClassName("fix-dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
-        }
-    }
-    if (event.target.tagName != 'TEXTAREA' && !event.target.classList.contains('open-modal')) {
-        $(".input-modal").hide();
-    }
-}
-
-
-json_data_init();
-dis_data = JSON.parse(dis_data);
-make_production_select_modal(dis_data);
-resize_main_title($('[id^="purpose_"]'));
-get_option_array();
 $(document).ready(function () {
     $(document).on('keyup', '[id^="title_"]', function () {
         var txtrows = $(this).text().split("\n").length;
@@ -571,7 +443,6 @@ $(document).ready(function () {
     });
     //selector change
     $(document).on('change', '#select_resize', function () {
-        // alert('start');
         var rows = parseInt($("#select_resize").val());
         var tId = parseInt($("#rowCount").val());
         var cId = -2;
@@ -673,7 +544,6 @@ $(document).ready(function () {
 
     //捕獲 price
     $(document).on('change', '[id^="price_"]', function () {
-        //alert('dododo');
         var mPrice = $(this).val();
         var mId = $(this).attr('id').replaceAll(/price_/g, '');
         var current_price = parseInt($(this).val().replaceAll(',', '')) * $('#quantity_' + mId).val();
@@ -892,7 +762,7 @@ $(document).ready(function () {
                 }
             });
         });
-        var htmlElement = {};
+        var htmlElement = document.querySelector("html").innerHTML;
         var invoiceNameElement = $("#purpose_1").val();
         var invoice_cDateElement = $("#cDate").val();
         var invoice_eDateElement = $("#eDate").val();
@@ -900,59 +770,11 @@ $(document).ready(function () {
         var invoice_total_priceElement = parseInt($("#display_total_price").val().replaceAll(',', ''));
         var invoice_memoElement = $("#memo_text").val();
 
-        $("#form_body").find($("*")).each(function(){
-            if($(this).attr("id") != "" && $(this).attr("id") != undefined && ($(this).val() != '' || $(this).attr('src') != '')) {
-                let obj_property = $(this).attr("id");
-                let obj_value = ($(this).val() == '')?$(this).attr('src'):$(this).val();
-                htmlElement[obj_property] = obj_value;
-   
-            };
-            if($(this).attr("id") != "" && $(this).attr("id") && $(this).attr("id").length > 6){
-                if($(this).attr('id').toString().substring(0, 6) == 'title_'){
-                    let obj_property = $(this).attr("id");
-                    let obj_value = $(this).text();
-                    //alert(obj_value);
-                    htmlElement[obj_property] = obj_value;
-                }
-                if($(this).attr('id').toString().substring(0, 5) == 'subt_'){
-                    let obj_property = $(this).attr("id");
-                    let obj_value = $(this).text();
-                    htmlElement[obj_property] = obj_value;
-                }
-            }
-            if($(this).attr('id') == 'memo_text'){
-                let obj_property = $(this).attr("id");
-                let obj_value = $(this).text();
-                htmlElement[obj_property] = obj_value;
-            }
-
-        });
-        $('[id ^="reduce_pro_"]').each(function(){
-            let obj_property = $(this).attr("id");
-            let obj_value = $(this).val();
-            htmlElement[obj_property] = obj_value;
-        });
-        $(".top-bar").find($("*")).each(function(){
-            if($(this).attr('type') == 'checkbox' && $(this).is(':checked')){
-                let obj_property = $(this).attr("id");
-                let obj_value = 'checked';
-                htmlElement[obj_property] = obj_value;
-            }
-        });
-        $(".top-bar").find($("input")).each(function(){
-            let obj_property = $(this).attr("id");
-            let obj_value = $(this).val();
-            htmlElement[obj_property] = obj_value;
-        });
-
-        console.log(htmlElement);
-        htmlElement = JSON.stringify(htmlElement);
         //upload invoice html
         var hostUrl = $("#hostUrl").val();
         var postUrl = hostUrl + '/paper/invoice/save';
         var fd = new FormData();
         fd.append('file', htmlElement);
-
         fd.append('invoiceName', invoiceNameElement);
         fd.append('invoice_cDate', invoice_cDateElement);
         fd.append('invoice_eDate', invoice_eDateElement);
@@ -981,6 +803,7 @@ $(document).ready(function () {
     });
 
     //modal display
+
     $(document).on('click', "[id^='timg_']", function () {
         $(".q-modal").css("display", "block");
         current_img_index = $(this).attr('id').replaceAll(/timg_/g, '');
@@ -1122,7 +945,11 @@ $(document).ready(function () {
         input.click();
     });
 
-
+    function update_total_price() {
+        updateTextView($("#total_price_sub"));
+        updateTextView($("#total_price"));
+        updateTextView($("#reduce_plus"));
+    }
 
     $(document).on('click', '.img-upload-link-btn', function () {
         var display_img_url = $(this).parent().find('#img_upload_img').attr('src');
@@ -1144,7 +971,6 @@ $(document).ready(function () {
         // for(opt_i = 0; opt_i<varient_option_count; opt_i++){
         //     $(this).parent().find('#item_productID').val();
         // }
-        
         varient_array.forEach(varient_element=>{
             //var option_code = $(this).parent().find('#item_'+varient_element).val();
             var xxxt = $(this).parent().find('[id*="'+ varient_element.value +'"]').val();
@@ -1271,6 +1097,7 @@ $(document).ready(function () {
     });
 
     ///////////////////////////////////////////////
+
     $(document).on('click', '#first_ok', function () {
         var cd = $("#first_cDate").val().replace('-', '年').replace('-', '月') + '日';
         var ed = $("#first_eDate").val().replace('-', '年').replace('-', '月') + '日';
@@ -1280,13 +1107,11 @@ $(document).ready(function () {
         $("#previewModal").css('display', 'none');
         $("#uName").keyup();
     });
-
     $(document).on('click', '#save_close', function(){
         $("#saveModal").css('display', 'none');
         hostUrl = $("#hostUrl").val();
         location.href = hostUrl + "/paper/invoice";
     });
-
     $(document).on('click','[id^="link_"]', function(){
         current_img_index = $(this).attr('id').replaceAll(/link_/g, '');
         var hostUrl = $("#hostUrl").val();
@@ -1299,7 +1124,6 @@ $(document).ready(function () {
         //var product_id = $(this).parent().parent().parent();
         viewData(product_id);
     });
-
     $(document).on('click', '#bt_link_close', function(){
         $("#linkModal").css('display', 'none');
         $("#modalAddQuestion").css('display', 'none');
@@ -1330,7 +1154,6 @@ $(document).ready(function () {
         }
         render_page_change(page_direction, count_option_checked);
     });
-
     $(document).on('change','#style_resize', function(){
         if($(this).val() == '0') page_direction = true;
         else  page_direction = false;
@@ -1351,19 +1174,16 @@ $(document).ready(function () {
         var id_tpnum = $("#productNum_"+cur_row_num).val();
         save_inrow_data(id_tpnum, cur_row_num);
     });
-
-    // $(document).on('DOMSubtreeModified', '[id^="title_"]', function(){
-    //     var cur_row_num = parseInt($(this).find($('[id^="subt_"]')).attr('id').split("_").pop());
-    //     var id_tpnum = $("#productNum_"+cur_row_num).val();
-    //     save_inrow_data(id_tpnum, cur_row_num);
-    // });
-
+    $(document).on('DOMSubtreeModified', '[id^="title_"]', function(){
+        var cur_row_num = parseInt($(this).find($('[id^="subt_"]')).attr('id').split("_").pop());
+        var id_tpnum = $("#productNum_"+cur_row_num).val();
+        save_inrow_data(id_tpnum, cur_row_num);
+    });
     $(document).on('change', '[id^="price_"]', function(){
         var cur_row_num = parseInt($(this).attr('id').split("_").pop());
         var id_tpnum = $("#productNum_"+cur_row_num).val();
         save_inrow_data(id_tpnum, cur_row_num);
     });
-
     $(document).on('click', '.open-modal',function(e){
         e.preventDefault();
         //var top = $(this).offset().top + 50;
@@ -1372,24 +1192,20 @@ $(document).ready(function () {
         $('.input-modal-content').val($(this).text());
         $('.input-modal').css('top', top + 'px').show();
         $('.input-modal').css('left', left + 'px').show();
-        temp_text_element = $(this).find('[id^="subt_"]');
+        temp_text_element = $(this);
         $('.input-modal-content').select();
     });
-
     $(document).on('click', '.input-modal-close', function(){
         $('.input-modal').hide();
     });
-
     $(document).on('click', '.input-modal-check', function(){
         temp_text_element.text( $('.input-modal-content').val());
         $('.input-modal').hide();
     });
-
     ///////////////////////////////////
     $(document).on('click', '#btn_mail', function(){
         $("#mailModal").css('display', 'block');
-    });
-
+    })
     $(document).on('click', '.mail-close', function(){
         $("#mailModal").css('display', 'none');
         var tp_tp = $(".mail-first-line").first();
@@ -1402,8 +1218,7 @@ $(document).ready(function () {
             $(this).remove();
         });
         $("#mail_send_form").append(tp_tp);
-    });
-
+    })
     $(document).on('click', '.mail-modal-plusIcon', function(){
         $(".mail-first-line").each(function(){
             $(this).find(".m-add-ic").css('rotate', '45deg');
@@ -1427,16 +1242,85 @@ $(document).ready(function () {
         });
         $("#mails_text").val(mail_tp_text);
         $(".mail-first-line").last().find(".m-add-ic").css('rotate', '0deg');
-    });
-
+    })
     $(document).on('change', ".mail-item-input", function(){
         let mail_tp_text='';
         $(".mail-first-line").each(function(){
             mail_tp_text += '#' + $(this).find("input").val();
         })
         $("#mails_text").val(mail_tp_text);
-    });
+    })
 });
+
+function save_inrow_data(id_tpnum, cur_row_num){
+    if($("#q_modal").css('display') === 'block') return;
+    if(!update_product_flag) return;
+    if(id_tpnum < 0) return;
+    var ar_options = [];
+    varient_array.forEach(element => {
+        var ar_option = {};
+        ar_option['name'] = element.name;
+        ar_option['description'] = $("#subt_"+ element.value +'_'+cur_row_num).text().split(",");
+        ar_options.push(ar_option);      
+    });
+
+    var product_price = $("#price_"+cur_row_num).val();
+    product_price = product_price.replaceAll(',', '');
+
+    var product_name = $("#title_"+cur_row_num).text();
+
+    var hostUrl = $("#hostUrl").val();
+    var postUrl = hostUrl + '/api/v1/client/update_inrow';
+    $.ajax({
+        url: postUrl,
+        type: 'POST',
+        data: jQuery.param({
+            'product_id' : id_tpnum,
+            'ar_options' : ar_options,
+            'product_price' : product_price,
+            'product_name' : product_name
+        }) ,
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+        success: function (response) {
+            //alert(response.status);
+        },
+        error: function () {
+            //alert("error");
+        }
+    });
+}
+
+function render_page_change(m_dir, m_ct){
+    $(".td-r1").attr('colspan', m_ct+2);
+    if(m_ct>3) m_dir = false;
+    else m_dir = true;
+    page_direction = m_dir;
+    render_direction_changed(page_direction);
+}
+function render_direction_changed(x_dir){
+    if(!x_dir){
+        let title_width = 300-(count_option_checked*30);
+        $('#page_style').text('@page { margin: 0; size: A4 landscape; }');
+        $(".form-body").css('width', '1400px');
+        $("#select_resize").val('15');
+        $("#select_resize").change();
+        $("#select_resize").val('8');
+        $("#select_resize").attr('disabled', true);
+    }
+    else{
+        let title_width = 130-(count_option_checked*20);
+        $(".form-body").css('width', '1000px');
+        $('#page_style').text('@page { margin: 0; size: A4; }');
+        $("#select_resize").attr('disabled', false);
+    }
+}
+
+function change_toEdit(toEdit_url){
+    if(inv_state=="edit") return;
+    to_router=toEdit_url.substr(0, toEdit_url.length-1);
+    to_router+=paper_id;
+    window.location.href = to_router;
+}
 
 var modal = document.getElementById("q_modal");
 var input_modal = document.getElementById("input_textarea");
@@ -1446,11 +1330,45 @@ window.onclick = function (event) {
     }
 
 }
+function resize_main_title(_obj) {
+    $("#uTitle_font_size").change();
+}
 
+function myFunction() {
+    if($("#varient_resize").css('display')=='none') $("#varient_resize").css('display', "block");
+    else $("#varient_resize").css('display', "none");
+}
+function mail_send_one(){
+    if(mails_text = $("#mails_text").val() == null || $("#mails_text").val() == '' || $("#mails_text").val() == '#') return;
+    if(mails_text = $("#mail_textarea").val() == null || $("#mail_textarea").val() == '') return;
+    var hostUrl = $("#hostUrl").val();
+    var postUrl = $("#mail_send_form").attr('action');
+    var mails_text = $("#mails_text").val();
+    var mail_textarea = $("#mail_textarea").val();
+    $.ajax({
+        type: 'POST',
+        url: postUrl,
+        data: {'mails_text': mails_text, 'mail_textarea' : mail_textarea},
+        success: function (data, status) {
+            if(status == 'sucess') alert('メールを送信しました。');
+        }
+    }); // close ajax
+    $("#mailModal").css('display', 'none');
+}
 
-
-
-
-
-
-
+  // Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+    if (!event.target.matches('.fix-dropbtn')) {
+        var dropdowns = document.getElementsByClassName("fix-dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+    if (event.target.tagName != 'TEXTAREA' && !event.target.classList.contains('open-modal')) {
+        $(".input-modal").hide();
+    }
+}

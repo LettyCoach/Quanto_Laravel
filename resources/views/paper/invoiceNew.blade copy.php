@@ -1,6 +1,7 @@
-{{-- {{dd(json_decode($editData->content))}} --}}
 @extends('layouts.paper')
+
 @section('main-content')
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 <style>
     .container-fluid{
@@ -20,11 +21,8 @@
         </div>
     @endif
 
-<?php 
-$edit_content = json_decode($editData->content);
-//dd($edit_content);
 
-if (isset(Auth::user()->settings)) { 
+<?php if (isset(Auth::user()->settings)) { 
     $userSettings = json_decode(Auth::user()->settings);
     $invoice = isset($userSettings->invoice) ? $userSettings->invoice : '';
     $member = isset($userSettings->member) ? $userSettings->member : '';
@@ -33,9 +31,47 @@ if (isset(Auth::user()->settings)) {
     $stamp_url = isset($userSettings->stamp_url) ? $userSettings->stamp_url : '';
 } else { $invoice = ''; $member = ''; $purpose = ''; $payment_method = ''; $stamp_url = ''; } 
     $profile_url = Auth::user()->profile_url != null ? url(Auth::user()->profile_url) : '';
+    $dis_data=json_encode($answers);
 
 ?>    <script>var dis_data='{!! $dis_data !!}';</script>
 <input type="hidden" id="user_id" value="{{Auth::user()->id}}">
+    <div class="modal fade show" id="previewModal" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content" 
+            style="width: 520px; top: 200px; height: 300px; left: 20%; border-radius: 20px; min-height: 320px;background: rgb(241,242, 255); box-shadow: 5px 5px 10px 1px grey; padding-bottom: 10px;">
+                <div class="modal-header" style="border-bottom: 0; padding: 0;">
+                    <button type="button" class="close" data-dismiss="modal" style="opacity:1;">
+                        <img src="{{ asset('public/img/ic_modal_close.png') }}" 
+                        style="position: absolute; top: -33px; right: -30px; width: 40px; height: 40px; ">
+                    </button>
+                </div>
+                <div class="first-items">
+                    <div class="first-line">
+                        <div class="first-label">発行日の設定</div>
+                        <div class="first-content"><input type="date" id="first_cDate" name="publish" value="{{$cDate}}"></div>
+                    </div>
+                    <div class="first-line">
+                        <div class="first-label">有効日の設定</div>
+                        <div class="first-content"><input type="date" id="first_eDate" name="expire" value="{{$eDate}}"></div>
+                    </div>
+                    <div class="first-line">
+                        <div class="first-label">請求先の設定</div>
+                        <div class="first-content">
+                            <select class="first-select" id="first_select">
+                                @foreach($contacts as $contact)
+                                <option value="{{$contact}}">{{$contact}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-center" style="border-top: 0; padding: 0;">
+                    <button id="first_ok" class="btn btn-primary m-auto" 
+                    style="background-color: rgb(105, 55, 255); font-size: 16px; height: 35px; width: 80px; border-radius: 10px; box-shadow: 5px 5px 10px 1px grey; opacity:1;">登録</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade show" id="saveModal" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content" style="width: 500px; min-height: 200px;top: 150px; left: 40%;border-radius: 20px;background: rgb(241,242, 255); box-shadow: 5px 5px 10px 1px grey; padding-bottom: 10px;">
@@ -81,12 +117,12 @@ if (isset(Auth::user()->settings)) {
                             <div class="image-show" for="image_show">画像表示</div>
                         </div>
                         <div class="set-div">
-                            <input type='number' value="{{ $edit_content->uName_font_size }}" id="uName_font_size" class="set-font-size">
+                            <input type='number' value="28" id="uName_font_size" class="set-font-size">
                             <div style="font-size: 11px;font-weight: bold;padding-top:2px;">会社名</div>
                             <div class="set-font-size-px">px</div>
                         </div>
                         <div class="set-div">
-                            <input type='number' value="{{ $edit_content->uTitle_font_size }}" id="uTitle_font_size" class="set-font-size">
+                            <input type='number' value="40" id="uTitle_font_size" class="set-font-size">
                             <div style="font-size: 11px;font-weight: bold;padding-top:2px;">タイトル</div>
                             <div class="set-font-size-px">px</div>
                         </div>
@@ -117,7 +153,7 @@ if (isset(Auth::user()->settings)) {
                             @foreach($productOptions as $key=>$productOption)
                                 <div class="fix-dropdown-item">        
                                     <div>
-                                        <input type="checkbox" class="image-check-box-small" id="varient_check_{{$key}}" name="" value="" {{ isset( $edit_content->{ 'varient_check_'.$key } )?'checked' : '' }}>
+                                        <input type="checkbox" class="image-check-box-small" id="varient_check_{{$key}}" name="" value="" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'checked' : '' }}>
                                         <label class="image-show-small" for="color_show">&nbsp;</label>    
                                     </div>
                                     <p>{{$productOption}}</p>
@@ -147,7 +183,7 @@ if (isset(Auth::user()->settings)) {
                 <div class="flex-between mb1">
                     <div class="pro33"></div>
                     <div class="pro33 flex-center text-center p2 text-center t6 b8"><input id="purpose_1" class="input10" value="ご請求書"></div>
-                    <div class="pro33 text-right t1 b2">発行日:<input id="cDate" class="input2 w125 text-right" value="{{$edit_content->cDate}}"> </div>
+                    <div class="pro33 text-right t1 b2">発行日:<input id="cDate" class="input2 w125 text-right" value="{{$cDate}}"> </div>
                 </div>
                 <div class="flex mb1">
                 <div class="pro60">
@@ -198,7 +234,7 @@ if (isset(Auth::user()->settings)) {
                 </div>
             </div>
             <div>
-                <div class="t1"> 有効期間 <input id="eDate" class="input2 w200" value="{{$edit_content->eDate}}"></div>
+                <div class="t1"> 有効期間 <input id="eDate" class="input2 w200" value="{{$eDate}}"></div>
                 <hr style="border-top:2px solid blue">
                 <p class="text-center t2">内容明細</p>
             </div>
@@ -224,55 +260,54 @@ if (isset(Auth::user()->settings)) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $currentPrice=0; $i=0; ?>
-                        <?php $totalPrice=0; $totalCount=1;?>
-                            @for ($i = 0; $i < $edit_content->rowCount; $i++)
-                                <tr>
-                                    <td class="td-ID">
-                                        <div class="td-a1-d1 tooltipimg">
-                                                <img src="{{ asset('public/img/edit_query.png') }}" class="img1"/>
-                                                <div class="tooltiptext">
-                                                    <div><img src="{{ asset('public/img/ic_add.png') }}" id="row_{{ $i }}" class="img2 tooltip-row"/></div><p>画像追加</p>
-                                                    <div><img src="{{ asset('public/img/ic_link.png') }}" id="link_{{ $i }}" class="img2 tooltip-link"/></div><p>URLリンク</p>
-                                                    <div><img src="{{ asset('public/img/ic_delete.png')}}" id="del_{{ $i }}" class="img2 tooltip-del"/></div>
-                                                </div>
-                                                <img src="{{ asset('public/img/ic_modal_close.png') }}" id="tooltip_close_{{ $i }}" class="tooltip-close"/>
-                                                <div class="tooltip-edit-div"><img src="{{ asset('public/img/edit_query_m.png') }}" id="tooltip_edit_{{ $i }}" class="tooltip-edit"/><p>編集</p></div>
-                                                <input class="td-ID-input" id="ID_{{ $i }}" value="{{ $edit_content->{'ID_'.$i} }}">
-                                                <input type="hidden" id="productNum_{{ $i }}" value="{{ $edit_content->{'productNum_' . $i} }}">
+                        <tr>
+                            <?php $currentPrice=0; $i=0; ?>
+                            <?php $totalPrice=0; $totalCount=1;?>
+                            <td class="td-ID">
+                                <div class="td-a1-d1 tooltipimg">
+                                        <img src="{{ asset('public/img/edit_query.png') }}" class="img1"/>
+                                        <div class="tooltiptext">
+                                            <div><img src="{{ asset('public/img/ic_add.png') }}" id="row_{{ $i }}" class="img2 tooltip-row"/></div><p>画像追加</p>
+                                            <div><img src="{{ asset('public/img/ic_link.png') }}" id="link_{{ $i }}" class="img2 tooltip-link"/></div><p>URLリンク</p>
+                                            <div><img src="{{ asset('public/img/ic_delete.png')}}" id="del_{{ $i }}" class="img2 tooltip-del"/></div>
                                         </div>
-                                    </td>
-                                    <td class="td-a1"> &nbsp; 
-                                            
-                                            <div class="flex-center"><img alt="product" id="timg_{{ $i }}"
-                                                    src="{{ $edit_content->{'timg_'.$i} }}" onerror="this.onerror=null; this.onload=null; if (!this.attributes.src.value) this.attributes.src.value='{{ asset("public/img/blank-plus.png") }}';"
-                                                    class="td-a1-d2-img" />
-                                            </div>             
-                                            <div class="td-a1-input open-modal" id="title_{{ $i }}">{{ $edit_content->{ 'title_'.$i } }}</div>
-                                    </td>
-        
-                                    @foreach($productOptions as $key=>$productOption)
-                                        <td class="td-plus td-plus-{{$key}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>
-                                            <div class="td-subt-input td-input-{{$key}} open-modal" id="subt_{{$key}}_{{ $i }}">{{ isset($edit_content->{ "subt_".$key."_".$i })?$edit_content->{ "subt_".$key."_".$i } : '' }}</div>
-                                        </td>
-                                    @endforeach
-        
-                                    <td class="td-a2"><input class="td-a2-input" id="price_{{ $i }}" value="{{ $edit_content->{ 'price_'.$i } }}"><span>円</span></td>
-                                    <td class="td-a3"><input class="td-a3-input"   id="quantity_{{ $i }}" value="{{ $edit_content->{ 'quantity_'.$i } }}"></td>
-                                    <td class="td-a4"> <input class="td-a4-input"  id="current_price_{{ $i }}" value="{{ $edit_content->{ 'current_price_'.$i } }}">円</td>
-                                    <td class="td-a5 reduce-pro-td"> 
-                                        <select name="pets" class="reduce-pro" id="reduce_pro_0">
-                                            <option value="10">10%</option>
-                                            <option value="8">8%(軽減税率)</option>
-                                            <option value="8">8%</option>
-                                            <option value="0">0%</option>
-                                        </select>
-                                        <input  class="td-a5-input" id="reduce_plus_0" value="{{ ceil($totalPrice*0.08) }}">円
-                                    </td>
-                                </tr>
-                            @endfor
+                                        <img src="{{ asset('public/img/ic_modal_close.png') }}" id="tooltip_close_{{ $i }}" class="tooltip-close"/>
+                                        <div class="tooltip-edit-div"><img src="{{ asset('public/img/edit_query_m.png') }}" id="tooltip_edit_{{ $i }}" class="tooltip-edit"/><p>編集</p></div>
+                                        <input class="td-ID-input" id="ID_{{ $i }}" value="Q0000">
+                                        <input type="hidden" id="productNum_{{ $i }}" value="-1">
+                                </div>
+                            </td>
+                            <td class="td-a1"> &nbsp; 
+                                    
+                                    <div class="flex-center"><img alt="product" id="timg_{{ $i }}"
+                                            src="" onerror="this.onerror=null; this.onload=null; if (!this.attributes.src.value) this.attributes.src.value='{{ asset("public/img/blank-plus.png") }}';"
+                                            class="td-a1-d2-img" />
+                                    </div>             
+                                    <div class="td-a1-input open-modal" id="title_{{ $i }}">タイトル</div>
+                            </td>
+
+                            @foreach($productOptions as $key=>$productOption)
+                                <td class="td-plus td-plus-{{$key}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>
+                                    <div class="td-subt-input td-input-{{$key}} open-modal" id="subt_{{$key}}_{{ $i }}">&nbsp;</div>
+                                </td>
+                            @endforeach
 
 
+
+
+                            <td class="td-a2"><input class="td-a2-input" id="price_{{ $i }}" value="0"><span>円</span></td>
+                            <td class="td-a3"><input class="td-a3-input"   id="quantity_{{ $i }}" value="1"></td>
+                            <td class="td-a4"> <input class="td-a4-input"  id="current_price_{{ $i }}" value="0">円</td>
+                            <td class="td-a5 reduce-pro-td"> 
+                                <select name="pets" class="reduce-pro" id="reduce_pro_0">
+                                    <option value="10">10%</option>
+                                    <option value="8">8%(軽減税率)</option>
+                                    <option value="8">8%</option>
+                                    <option value="0">0%</option>
+                                </select>
+                                <input  class="td-a5-input" id="reduce_plus_0" value="{{ ceil($totalPrice*0.08) }}">円
+                            </td>
+                        </tr>
                         <tr>
                             <td class="td-r1" colspan="5">合計</td>
                             <td ></td>
@@ -285,7 +320,7 @@ if (isset(Auth::user()->settings)) {
             </div>
         </div>
         <div style="position: relative;">
-            <textarea style="width:680px; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-left: 10px;margin-top:30px; font-size: 20px;" placeholder="(備考)" text="afaefafe" id="memo_text">{{ $edit_content->memo_text }}</textarea>
+            <textarea style="width:680px; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-left: 10px;margin-top:30px; font-size: 20px;" placeholder="(備考)" text="afaefafe" id="memo_text"></textarea>
             <div class="detail_price">
                 <div>
                     <p>10%対象&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="sinput"id="totalAmount10" value="0">円</p>
@@ -331,7 +366,7 @@ if (isset(Auth::user()->settings)) {
         </div>
         <?php $i=1; ?>
         <input type="hidden" id="hostUrl" value="{{ url('/') }}">
-        <input type="hidden" id="rowCount" value="{{ $edit_content->rowCount }}">
+        <input type="hidden" id="rowCount" value="{{ $i }}">
         <input type="hidden" id="ic_add" src="{{ asset('public/img/ic_add.png') }}">
         <input type="hidden" id="ic_del" src="{{ asset('public/img/ic_delete.png')}}">
         <input type="hidden" id="ic_edit" src="{{ asset('public/img/edit_query.png')}}">
@@ -378,6 +413,8 @@ if (isset(Auth::user()->settings)) {
                 </div>
             </div>
         </div>
+
+
 
         @foreach($models as $ii => $model)
         @endforeach
@@ -470,7 +507,8 @@ if (isset(Auth::user()->settings)) {
                 </div>
             </div>
         </div>
-       
+    
+        
         <!-- Modal -->
         <div class="modal fade" id="modalImageViewList" tabindex="-1" role="dialog" aria-hidden="true" >
             <div class="modal-dialog modal-dialog-centered" role="document" style="max-width : 900px; min-width: 900px;">
@@ -553,7 +591,7 @@ if (isset(Auth::user()->settings)) {
                     $("#userProductImage_" + ii).attr('src', e.url);
                     $("#userProductImage_div_" + ii).css('display', 'block');
 		
-		            })
+		})
                     $('#slide_img_pan_main').html(rlt);
                     $('#slide_img_pan').html(rlt);
     
@@ -647,40 +685,13 @@ if (isset(Auth::user()->settings)) {
                     disableOnInteraction: false,
                 },
             });
-
         </script>
-        <script>paper_id='{{$editData->id}}'</script>
+
+
 @endsection
 
 @section('js')
-
+<script>var paper_id=0; </script>
 <script src="{{asset('public/js/invoice.js')}}"></script>
-<script>
-// function reload_screen(){
-$(document).ready(function(){
-    $('[id^="quantity_"]').each(function(){
-        $(this).change();
-    });
-    $('[id^="price_"]').each(function(){
-        $(this).change();
-    });
-    $('[id^="current_price_"]').each(function(){
-        $(this).change();
-    });
-    $("#select_resize").change();
-    $("#uName_font_size").change();
-    $("#uTitle_font_size").change();
-});
 
-// }
-// reload_screen();
-</script>
 @endsection
-
-
-
-
-<?php
-    //echo $editData->content;
-?>
-
