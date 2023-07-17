@@ -143,8 +143,67 @@ class PaperController extends Controller
 
 	public function invoiceEdit(Request $request, $id){
 		$editInvoice=Paper::where('id', $id)->first();
+		//dd(json_decode($editInvoice->content));
+
+		$answers=[];
+        $listModel = null;
+        $user_id = Auth::user()->id;
+        $listModel = null;
+		$models = null;
+        if (Auth::user()->isAdmin()) {
+            $listModel = UserProduct::orderby('id', 'desc')->get();
+        } else {
+            $listModel = UserProduct::where('user_id', $user_id)->orderby('id', 'desc')->get();
+        }
+
+
+
+		$user_model = User::find(Auth::user()->id);
+		$user_like_products = $user_model->productes;
+
+		$models = null;
+        if (Auth::user()->isAdmin()) {
+            $models = UserProduct::orderby('id', 'desc')->simplePaginate(15);
+        } else {
+            $models = UserProduct::where('user_id', $user_id)->orderby('id', 'desc')->simplePaginate(15);
+        }
+
+		$listDataTmp = array();
+		foreach($listModel as $i => $model) {
+			$listDataTmp[$i]['product'] = $model->name;
+			//add selections...
+			$listDataTmp[$i]['brand'] = $model->brandName;
+			$listDataTmp[$i]['file_url'] = $model->getImageUrlFirstFullPath('blank');
+			$listDataTmp[$i]['value'] = $model->price;
+			$listDataTmp[$i]['id'] = $model->id;
+			$listDataTmp[$i]['options'] = $model->getOptions2();
+			$listDataTmp[$i]['productID'] = $model->getProductID();
+			$tp_collection = $user_like_products->find($model->id);
+			if($tp_collection != null) $listDataTmp[$i]['productLike'] = 'LIKE';
+			else $listDataTmp[$i]['productLike'] = 'NOLIKE';
+		}
+		$answers[0]=$listDataTmp;
+
+		$productFormat = new UserProduct;
+		$productOptions = $productFormat->getAllOptionNames();
+
+		$contacts = [];
+		$contacts[0] = " "; 
+		$t_contacts = [];
+		$papers = Paper::where('user_id', Auth::user()->id)->get();
+		if(count($papers) > 0){
+			foreach($papers as $paper){
+				if ($paper->send_name == '') continue;
+				if (array_search($paper->send_name, $contacts) !== false) continue;
+				array_push($contacts, $paper->send_name);		
+			}
+		}
+
         return view('paper/invoiceEdit', [
 			'editData'=>$editInvoice,
+			'productOptions' => $productOptions,
+			'models' => $models,
+			'dis_data'=>json_encode($answers),
 		]);
 	}
 	public function duplicate_invoice(Request $request, $id){
