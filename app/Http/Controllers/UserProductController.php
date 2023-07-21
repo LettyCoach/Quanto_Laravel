@@ -198,4 +198,90 @@ class UserProductController extends Controller
         UserProduct::find($id)->delete();
         return redirect()->route('admin.userProducts');
     }
+
+    public function uploadCSV(Request $request)
+    {
+        $csv = $request->csv;
+        foreach ($csv['data'] as $item) {
+            if (isset($item['ID']) === false || strlen($item['ID']) < 1 || $item['ID'] === "")
+                continue;
+            $model = new UserProduct();
+
+            $model->brandName = "";
+            $model->name = "";
+            $model->sku = "";
+            $model->price_txt = "";
+            $model->price = 0;
+            $model->price2_txt = "";
+            $model->price2 = 0;
+            $model->flagPrice2 = "";
+            $model->main_img_url = "";
+            $model->img_urls = "";
+            $model->options = "[]";
+            $model->detail = "";
+            $model->memo = "";
+            $model->stock = 0;
+            $model->stockLimit = "";
+            $model->barcode = "";
+            $model->isDisplay = "";
+            $model->user_id = Auth::user()->id;
+            $model->other = "";
+
+
+            $model->brandName = $item['Brand'] ?? "";
+            $value = [['name' => '', 'url' => $item['Image URL'], 'state' => ""]];
+            $model->img_urls = json_encode($value, JSON_UNESCAPED_UNICODE);
+            $model->name = $item['Product Name'] ?? "";
+            $model->sku = $item['SKU'] ?? "";
+            $model->detail = $item['description'] ?? "";
+            $model->price = $item['Price'] ?? 0;
+            $model->price2 = $item['Sale-Price'] ?? 0;
+            $value = [
+                ['name' => "カラー", "description" => [$item['Color']]],
+                ['name' => "サイズ", "description" => [$item['Size']]],
+                ['name' => "素材", "description" => [$item['Material']]],
+            ];
+
+            $options = $item['Option'];
+            $options = explode(",", $options);
+            foreach ($options as $option) {
+                $key = explode(":", $option)[0];
+                $val = explode(":", $option)[1];
+                array_push($value, ['name' => $key, "description" => [$val]]);
+            }
+
+            $model->options = json_encode($value, JSON_UNESCAPED_UNICODE);
+
+            $model->barcode = $item['Barcode'] ?? "";
+            $model->save();
+
+
+            $categories = $item['Category'] ?? "";
+            $categories = explode(",", $categories);
+            foreach ($categories as $category) {
+                $user_id = Auth::user()->id;
+                $rlt = UserProductCategory::where('user_id', $user_id)->where('name', $category)->get();
+
+                $c_id = 0;
+                if (count($rlt) > 0) {
+                    $c_id = $rlt[0]->id;
+                } else {
+                    $modelC = new UserProductCategory();
+                    $modelC->main_img_url = "";
+                    $modelC->name = $category;
+                    $modelC->sub_name = "";
+                    $modelC->user_id = $user_id;
+                    $modelC->other = "";
+                    $modelC->save();
+                    $c_id = $modelC->id;
+                }
+
+                $modelT = new Product2Category();
+                $modelT->product_id = $model->id;
+                $modelT->category_id = $c_id;
+                $modelT->save();
+            }
+        }
+        // print_r($csv['data']);
+    }
 }
