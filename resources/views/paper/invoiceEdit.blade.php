@@ -117,7 +117,7 @@ if (isset(Auth::user()->settings)) {
                             @foreach($productOptions as $key=>$productOption)
                                 <div class="fix-dropdown-item">        
                                     <div>
-                                        <input type="checkbox" class="image-check-box-small" id="varient_check_{{$key}}" name="" value="" {{ isset( $edit_content->{ 'varient_check_'.$key } )?'checked' : '' }}>
+                                        <input type="checkbox" class="image-check-box-small" id="varient_check_{{$key}}" name="" value="" {{ $edit_content->{ 'varient_check_'.$key } }}>
                                         <label class="image-show-small" for="color_show">&nbsp;</label>    
                                     </div>
                                     <p>{{$productOption}}</p>
@@ -250,13 +250,11 @@ if (isset(Auth::user()->settings)) {
                                             </div>             
                                             <div class="td-a1-input open-modal" id="title_{{ $i }}">{{ $edit_content->{ 'title_'.$i } }}</div>
                                     </td>
-        
                                     @foreach($productOptions as $key=>$productOption)
                                         <td class="td-plus td-plus-{{$key}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>
-                                            <div class="td-subt-input td-input-{{$key}} open-modal" id="subt_{{$key}}_{{ $i }}">{{ isset($edit_content->{ "subt_".$key."_".$i })?$edit_content->{ "subt_".$key."_".$i } : '' }}</div>
+                                            <div class="td-subt-input td-input-{{$key}} open-modal" id="subt_{{$key}}_{{ $i }}">{{ isset($edit_content->{ "subt_".$key."_".$i })?$edit_content->{ "subt_".$key."_".$i } : "　" }}</div>
                                         </td>
                                     @endforeach
-        
                                     <td class="td-a2"><input class="td-a2-input" id="price_{{ $i }}" value="{{ $edit_content->{ 'price_'.$i } }}"><span>円</span></td>
                                     <td class="td-a3"><input class="td-a3-input"   id="quantity_{{ $i }}" value="{{ $edit_content->{ 'quantity_'.$i } }}"></td>
                                     <td class="td-a4"> <input class="td-a4-input"  id="current_price_{{ $i }}" value="{{ $edit_content->{ 'current_price_'.$i } }}">円</td>
@@ -657,6 +655,8 @@ if (isset(Auth::user()->settings)) {
 <script src="{{asset('public/js/invoice.js')}}"></script>
 <script>
 // function reload_screen(){
+    count_option_checked = {{$edit_content->count_option_checked}};
+    console.log(count_option_checked);
 $(document).ready(function(){
     $('[id^="quantity_"]').each(function(){
         $(this).change();
@@ -682,5 +682,6 @@ $(document).ready(function(){
 
 <?php
     //echo $editData->content;
+    
 ?>
 

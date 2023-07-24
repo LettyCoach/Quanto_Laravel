@@ -79,7 +79,7 @@ class ClientController extends Controller
         if ($content == '') {
             return redirect()->route('admin.client.show', ['id' => $clientID, 'message' => '送信が失敗しました。メール内容が空白です。']);
         }
-        $mail = new PHPMailer(true);
+        //$mail = new PHPMailer(true);
         try {
             // $mail->isSMTP();
             // $mail->CharSet = "utf-8";
@@ -103,7 +103,7 @@ class ClientController extends Controller
             
             Mail::send([], [], function (Message $message) use ($data, $email) {
                 $message->setBody($data['body'], 'text/html');
-                $message->subject('Answer Email');
+                $message->subject('設問回答');
                 $message->to($email);
             });
 

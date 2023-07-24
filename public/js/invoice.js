@@ -177,12 +177,12 @@ function make_tr(i, k, cId) {
     rHtml += '<div class="flex-center"><img alt="product" id="timg_' + i + '"src="' + imgUrl + '" class="td-a1-d2-img" /></div><div class="td-a1-input open-modal" id="title_' + i + '">' + title + '</div></td>';
 
     rHtml += '';
-    console.log(varient_array);
     varient_array.forEach(varient_element=>{
         let ik = i-k;
         let varient_element_value = $("#subt_"+ varient_element.value + '_' + ik).text();
-        if (typeof(varient_element_value) == "undefined") varient_element_value = '';
-        rHtml += '<td class="td-plus td-plus-'+ varient_element.value +' open-modal">';
+        if (varient_element_value == "") varient_element_value = "　";
+        console.log(typeof(varient_element_value));
+        rHtml += '<td class="td-plus td-plus-'+ varient_element.value +'">';
         rHtml += '<div class="td-subt-input td-input-'+ varient_element.value +' open-modal" id="subt_'+ varient_element.value +'_'+ i +'">'+ varient_element_value +'</div></td>';
         $('#subt_'+varient_element.value+ '_' + current_img_index).text($(this).parent().find('#item_'+varient_element).val());
     });
@@ -932,20 +932,19 @@ $(document).ready(function () {
             let obj_value = $(this).val();
             htmlElement[obj_property] = obj_value;
         });
-        $(".top-bar").find($("*")).each(function(){
-            if($(this).attr('type') == 'checkbox' && $(this).is(':checked')){
-                let obj_property = $(this).attr("id");
-                let obj_value = 'checked';
-                htmlElement[obj_property] = obj_value;
-            }
-        });
+
         $(".top-bar").find($("input")).each(function(){
             let obj_property = $(this).attr("id");
             let obj_value = $(this).val();
+            if($(this).is(':checked')) obj_value = 'checked';
             htmlElement[obj_property] = obj_value;
         });
+        
+        let obj_property = "count_option_checked";
+        let obj_value = count_option_checked;
+        htmlElement[obj_property] = obj_value;
 
-        console.log(htmlElement);
+
         htmlElement = JSON.stringify(htmlElement);
         //upload invoice html
         var hostUrl = $("#hostUrl").val();
@@ -1347,7 +1346,8 @@ $(document).ready(function () {
     });
     ///////////////////////////////////////////
     $(document).on('DOMSubtreeModified', '.td-plus', function(){
-        var cur_row_num = parseInt($(this).find($('[id^="subt_"]')).attr('id').split("_").pop());
+        console.log($(this).find('[id^="subt_"]').attr('id'));
+        var cur_row_num = parseInt($(this).find('[id^="subt_"]').attr('id').split("_").pop());
         var id_tpnum = $("#productNum_"+cur_row_num).val();
         save_inrow_data(id_tpnum, cur_row_num);
     });
@@ -1372,7 +1372,7 @@ $(document).ready(function () {
         $('.input-modal-content').val($(this).text());
         $('.input-modal').css('top', top + 'px').show();
         $('.input-modal').css('left', left + 'px').show();
-        temp_text_element = $(this).find('[id^="subt_"]');
+        temp_text_element = $(this);
         $('.input-modal-content').select();
     });
 
