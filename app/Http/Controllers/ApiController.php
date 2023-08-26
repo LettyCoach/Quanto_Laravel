@@ -187,33 +187,39 @@ class ApiController extends Controller
             $content .= "<tr><td>$q_item</td><td>$a_item</td></tr>";
         }
         $content .= "</tbody></table>";
-        $mail = new PHPMailer(true);
+        // $mail = new PHPMailer(true);
         try {
-            $mail->isSMTP();
-            $mail->CharSet = "utf-8";
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = "ssl";
-            $mail->Host = Config::get('constants.mail.host');
-            $mail->Port = Config::get('constants.mail.port');
-            $mail->Username = Config::get('constants.mail.username');
-            $mail->Password = Config::get('constants.mail.password');
-            $mail->setFrom(Config::get('constants.mail.admin_email'), Config::get('constants.mail.admin_name'));
-            $mail->Timeout = 30;
-            $mail->Subject = "設問回答";
-            $mail->MsgHTML($content);
-            $mail->addAddress($client->email, $client->full_name);
-            $users = User::all();
-            foreach ($users as $user) {
-                $mail->addAddress($user->email, $user->full_name);
-            }
-            $mail->send();
+            // $mail->isSMTP();
+            // $mail->CharSet = "utf-8";
+            // $mail->SMTPAuth = true;
+            // $mail->SMTPSecure = "ssl";
+            // $mail->Host = Config::get('constants.mail.host');
+            // $mail->Port = Config::get('constants.mail.port');
+            // $mail->Username = Config::get('constants.mail.username');
+            // $mail->Password = Config::get('constants.mail.password');
+            // $mail->setFrom(Config::get('constants.mail.admin_email'), Config::get('constants.mail.admin_name'));
+            // $mail->Timeout = 30;
+            // $mail->Subject = "設問回答";
+            // $mail->MsgHTML($content);
+            // $mail->addAddress($client->email, $client->full_name);
+            // $users = User::all();
+            // foreach ($users as $user) {
+            //     $mail->addAddress($user->email, $user->full_name);
+            // }
+            // $mail->send();
+            $data = [
+                'body' => new HtmlString($content),
+            ];
+            $email = $client->email;
+            Mail::send([], [], function (Message $message) use ($data, $email) {
+                $message->setBody($data['body'], 'text/html');
+                $message->subject('設問回答');
+                $message->to($email);
+            });
+
             $client->send_mail_status = 1;
             $client->save();
-        } catch (phpmailerException $e) {
-            $client->send_mail_status = 0;
-            $client->save();
-            dd($e);
-        } catch (Exception $e) {
+        }catch (Exception $e) {
             $client->send_mail_status = 0;
             $client->save();
             dd($e);

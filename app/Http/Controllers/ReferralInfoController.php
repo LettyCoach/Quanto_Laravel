@@ -16,7 +16,7 @@ class ReferralInfoController extends Controller
 
     public function index(Request $request){
         
-        $referralInfo = ReferralInfo::where('id', 0)->simplePaginate(20);;
+        $referralInfo = ReferralInfo::where('user_id', Auth::user()->id)->simplePaginate(20);
         if(Auth::user()->isAdmin()) {
             $referralInfo = ReferralInfo::simplePaginate(20);
         }
@@ -24,8 +24,9 @@ class ReferralInfoController extends Controller
     }
 
     public function save(Request $request) {
-        $referralInfoList = ReferralInfo::where('id', 0)->simplePaginate(20);;
-        if(Auth::user()->isAdmin()) {
+
+        //$referralInfoList = ReferralInfo::where('id', 0)->simplePaginate(20);;
+        //if(Auth::user()->isAdmin()) {
             if($request->post('id') != null) {
                 $referralInfo = ReferralInfo::find($request->post('id'));
             } else {
@@ -34,12 +35,14 @@ class ReferralInfoController extends Controller
 
             $referralInfo->name = $request->post('name');
             $referralInfo->info = htmlspecialchars($request->post('info'));
-
+            $referralInfo->user_id = Auth::user()->id;
             $referralInfo->save();
 
-
-            $referralInfoList = ReferralInfo::simplePaginate(20);
-        }
+            $referralInfoList = ReferralInfo::where('user_id', Auth::user()->id)->simplePaginate(20);
+            if(Auth::user()->isAdmin()) {
+                $referralInfoList = ReferralInfo::simplePaginate(20);
+            }
+        //}
         return view('admin/referralInfo/index', ['infos' => $referralInfoList]);
     }
 
@@ -51,11 +54,11 @@ class ReferralInfoController extends Controller
     public function delete(Request $request, $id)
     {
         $result = ReferralInfo::where('id',$id)->delete();
+        $referralInfo = ReferralInfo::where('user_id', Auth::user()->id)->simplePaginate(20);
         if(Auth::user()->isAdmin()) {
             $referralInfo = ReferralInfo::simplePaginate(20);
         }
         return view('admin/referralInfo/index', ['infos' => $referralInfo]);
     }
-
 
 }

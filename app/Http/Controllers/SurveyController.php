@@ -82,7 +82,7 @@ class SurveyController extends Controller
 		$question_types = QuestionType::all();
 		$answer_types = AnswerType::all();
 		$answer_options = AnswerOption::all();
-		$referral_info = ReferralInfo::all();
+        $referral_info = ReferralInfo::where('user_id', Auth::user()->id)->get();
         $purposes = Purpose::where('user_id', Auth::user()->id)->get();
         $members = Member::where('user_id', Auth::user()->id)->get();
         $payment_methods = PaymentMethod::where('user_id', Auth::user()->id)->get();
@@ -102,7 +102,7 @@ class SurveyController extends Controller
 		$question_types = QuestionType::all();
 		$answer_types = AnswerType::all();
 		$answer_options = AnswerOption::all();
-        $referral_info = ReferralInfo::all();
+        $referral_info = ReferralInfo::where('user_id', Auth::user()->id)->get();
 		$questions = Question::where('survey_id', $survey->id)->get()->sortBy("ord");
 		$answers = Answer::where('survey_id', $survey->id)->get();
         $purposes = Purpose::where('user_id', Auth::user()->id)->get();
