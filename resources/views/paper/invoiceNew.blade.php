@@ -404,7 +404,7 @@
                         </form>
                     </div>
                     <div class="mail-div">
-                        <textarea class="mail-textarea" id="mail_textarea" name="mail_textarea"></textarea>
+                        <textarea class="mail-textarea" id="mail_textarea" name="mail_textarea">お世話になっております。&#13;&#10;添付にて、インボイスをお送りさせていただきたくよろしくお願い致します。</textarea>
                     </div>
                     <div class="modal-footer justify-content-center" style="border-top: 0; padding: 10px;">
                         <button id="first_ok" class="btn btn-primary m-auto" onclick="mail_send_one()"
