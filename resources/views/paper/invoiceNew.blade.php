@@ -222,7 +222,10 @@
                         <div>
                         <input id="zipCode" class="input2 w200" value="〒{{ Auth::user()->zip_code }}">
                         <input id="adress" class="input2 w200" value="{{ Auth::user()->address }}">
-                        <input id="phone" class="input2 w200" value="Tel：{{ Auth::user()->phone_number }}">
+                        <div style="display: flex; align-items: center">
+                            <span>Tel：</span><input id="phone" class="input2 w200" value="{{ Auth::user()->phone_number }}">
+                        </div>
+                        
                         </div>
                     </div>
                     <div class="flex-center p3">
