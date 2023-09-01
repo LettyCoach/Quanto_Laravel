@@ -21,10 +21,11 @@ var isModified = false;
 
     $('#btnAddQuestion').click(async function () {
         if($("#survey_m_title").val() == "" || $("#survey_m_title").val() == null){
-            $("#modalAddQuestion .close").click();
-            $("#saveSurvey").click();
-            $('#edit-buttons-spinner').css('display', 'none');
-            return;
+            // $("#modalAddQuestion .close").click();
+            // $("#saveSurvey").click();
+            // $('#edit-buttons-spinner').css('display', 'none');
+            // return;
+            // $("#survey_m_title").val(" ");
         }
         if ($(`#question_${currentQuestionId}_wrapper`).length > 0){
         } else {
