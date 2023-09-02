@@ -221,7 +221,7 @@
                     <div class="profile-sub-block flex p2">
                         <div>
                         <input id="zipCode" class="input2 w200" value="〒{{ Auth::user()->zip_code }}">
-                        <input id="adress" class="input2 w200" value="{{ Auth::user()->address }}">
+                        <textarea id = "adress" style="width: 235px; height:48px; font-size: 14px; border: 0; overflow: hidden" >{{ Auth::user()->address }}</textarea>
                         <div style="display: flex; align-items: center">
                             <span>Tel：</span><input id="phone" class="input2 w200" value="{{ Auth::user()->phone_number }}">
                         </div>

@@ -95,7 +95,7 @@ tbody tr:first-child {
     height: 100px;
     border: 1px solid #d5d5d5;
     border-radius: 8px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .img_pan_main {
@@ -110,7 +110,7 @@ tbody tr:first-child {
     height: 420px;
     border: 1px solid #d5d5d5;
     border-radius: 8px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .img_pan {
@@ -123,7 +123,7 @@ tbody tr:first-child {
     height: 100px;
     border: 1px solid #d5d5d5;
     border-radius: 4px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .user_product_img_pan {
@@ -145,7 +145,7 @@ tbody tr:first-child {
     height: 232px;
     border-radius: 8px;
     border: 1px solid #d5d5d5;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .sub_image_pan {
@@ -158,7 +158,7 @@ tbody tr:first-child {
     height: 111px;
     border: 1px solid #d5d5d5;
     border-radius: 8px;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .img_view {

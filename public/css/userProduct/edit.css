@@ -43,7 +43,7 @@
     height: 232px;
     border-radius: 8px;
     border: 1px solid #d5d5d5;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .user_product_img_first .delete_image {
@@ -72,7 +72,7 @@
     height: 111px;
     border: 1px solid #d5d5d5;
     border-radius: 8px;
-    object-fit: cover;
+    object-fit: contain;
     cursor: pointer;
     /* box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px; */
 }
