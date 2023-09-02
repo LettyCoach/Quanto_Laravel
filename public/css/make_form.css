@@ -752,6 +752,7 @@ th {
     border-radius: 15px;
     width: 120px;
     height: 120px;
+    object-fit: contain;
 }
 
 .img-item-url {
@@ -902,6 +903,7 @@ th {
     border-width: 1px;
     height: 55px;
     width: 55px;
+    object-fit: contain;
 }
 
 .reduce-pro {
