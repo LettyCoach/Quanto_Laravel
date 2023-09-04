@@ -935,6 +935,7 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
         }
 
         function fadeSaveTime() {
+            location.reload();
             document.getElementById("timeModal").style.display = "none";
             if (pathGlobe.length > 0) {
                 location.href = pathGlobe;
