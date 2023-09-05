@@ -5,7 +5,7 @@ function newline(str) {
     return str;
 }
 
-var serverHost = 'http://192.168.127.196:9016';
+var serverHost = 'http://192.168.146.10:9016';
 var currentTab = 0;
 var formular = '';
 var prefix = '';
