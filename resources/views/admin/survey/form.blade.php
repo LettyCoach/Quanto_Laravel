@@ -67,17 +67,30 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
     <div class="modal fade show" id="timeModal" style="z-index : 1000000; display: none;">
         <div class="modal-dialog">
             <div class="modal-content"
-                style="width: 300px; min-height: 100px;top: 70px; left: 40%;border-radius: 20px;background: rgb(241,242, 255); box-shadow: 5px 5px 10px 1px grey; padding-bottom: 10px;">
-                <div class="time-items">
-                    <div id="save_line" class="save-line"
-                        style="color: blueviolet; font-weight: bold;   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 18px;  text-align: center;  padding: 25px 5px; padding-bottom: 10px;">
-
+                style="width: 400px; min-height: 100px;top: 70px; left:50%; transform: translate(-50%, 50%); border-radius: 20px;background: rgb(241,242, 255); box-shadow: 5px 5px 10px 1px grey; padding-bottom: 10px;">
+                <div class="d-flex" style="justify-content:center;">
+                    <div id="edit-buttons-spinner" style="display: none;" class="loadingio-spinner-ellipsis-tf43i957w4">
+                        <div class="ldio-fweak2gcswn">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer justify-content-center" style="border-top: 0; padding-bottom: 5px;">
-                    <button class="btn btn-primary m-auto"
-                        style="background-color: rgb(105, 55, 255); font-size: 14px; width: 80px; height: 30px; border-radius: 15px; box-shadow: 2px 2px 5px 1px grey;padding: 3px;"
-                        id="save_close" onclick="fadeSaveTime();">閉じる</button>
+                <div id="time_part">
+                    <div class="time-items">
+                        <div id="save_line" class="save-line"
+                            style="color: blueviolet; font-weight: bold;   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 18px;  text-align: center;  padding: 25px 5px; padding-bottom: 10px;">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-center" style="border-top: 0; padding-bottom: 5px;">
+                        <button class="btn btn-primary m-auto"
+                            style="background-color: rgb(105, 55, 255); font-size: 14px; width: 80px; height: 30px; border-radius: 15px; box-shadow: 2px 2px 5px 1px grey;padding: 3px;"
+                            id="save_close" onclick="fadeSaveTime();">閉じる</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -930,7 +943,10 @@ $surveySettings = isset($survey['settings']) ? json_decode($survey['settings']) 
 
         function viewResult(path, saved) {
             document.getElementById("save_line").innerHTML = saved;
-            document.getElementById("timeModal").style.display = "block";
+
+            $("#timeModal").css("display", "block");
+            $("#edit-buttons-spinner").css("display", "none");
+            $("#time_part").css("display", "block");
             pathGlobe = path;
         }
 
