@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyMail;
 use Illuminate\Support\Str;
 use PDF;
 
@@ -99,15 +100,11 @@ class AppApiController extends Controller
         $user->verifyCode = $verifyCode;
         $user->save();
 
-        // Mail::send(
-        //     [],
-        //     [],
-        //     function ($message) {
-        //         $message->to($email)
-        //             ->subject('Reset Password')
-        //             ->setBody('<h1>' . $verifyCode . '</h1>', 'text/html');
-        //     }
-        // );
+        $mail_body = $verifyCode;
+
+        $to_name = '';
+        $data = array('name' => $to_name, "body" => $mail_body);
+        Mail::to($email, $to_name)->send(new VerifyMail($data));
 
         return response()->json([
             'status' => 'successful',
@@ -515,7 +512,17 @@ class AppApiController extends Controller
             'name' => 'invoice',
             'pdf_url' => $filePath,
         ]);
+    }
 
+    public function productView($id)
+    {
+        $model = UserProduct::find($id);
 
+        return view(
+            'admin/userProduct/productView',
+            compact(
+                'model',
+            )
+        );
     }
 }

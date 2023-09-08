@@ -221,8 +221,11 @@
                     <div class="profile-sub-block flex p2">
                         <div>
                         <input id="zipCode" class="input2 w200" value="〒{{ Auth::user()->zip_code }}">
-                        <input id="adress" class="input2 w200" value="{{ Auth::user()->address }}">
-                        <input id="phone" class="input2 w200" value="Tel：{{ Auth::user()->phone_number }}">
+                        <textarea id = "adress" style="width: 235px; height:48px; font-size: 14px; border: 0; overflow: hidden" >{{ Auth::user()->address }}</textarea>
+                        <div style="display: flex; align-items: center">
+                            <span>Tel：</span><input id="phone" class="input2 w200" value="{{ Auth::user()->phone_number }}">
+                        </div>
+                        
                         </div>
                     </div>
                     <div class="flex-center p3">
@@ -404,7 +407,7 @@
                         </form>
                     </div>
                     <div class="mail-div">
-                        <textarea class="mail-textarea" id="mail_textarea" name="mail_textarea"></textarea>
+                        <textarea class="mail-textarea" id="mail_textarea" name="mail_textarea">お世話になっております。&#13;&#10;添付にて、インボイスをお送りさせていただきたくよろしくお願い致します。</textarea>
                     </div>
                     <div class="modal-footer justify-content-center" style="border-top: 0; padding: 10px;">
                         <button id="first_ok" class="btn btn-primary m-auto" onclick="mail_send_one()"

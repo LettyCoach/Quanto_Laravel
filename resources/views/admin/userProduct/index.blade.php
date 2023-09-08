@@ -3,6 +3,10 @@
     <link href="{{ asset('public/css/userProduct/index.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 
+    @php
+        $adminHost = Config::get('constants.adminHost');
+    @endphp
+
     <div class=" row d-flex align-items-center">
         <div class="col">
             <a class="btn btn-primary" href="{{ route('admin.userProduct.create') }}">新規作成</a>
@@ -10,11 +14,9 @@
                 onchange="viewList(this.value)">
         </div>
         <div class="col d-flex justify-content-end pr-5">
-            <img src="{{ url('public/img/csv.png') }}" alt="CSV" id="UTF-8" class="csv-image">
-            <img src="{{ url('public/img/csv.png') }}" alt="CSV" id="SJIS" class="csv-image">
+            <img src="{{ url('public/img/csv.png') }}" alt="CSV" id="SJIS" class="csv-image" title="SJIS">
+            <img src="{{ url('public/img/csv.png') }}" alt="CSV" id="UTF-8" class="csv-image" title="UTF8">
         </div>
-
-
     </div>
     <div class="mt-2">
         <table class="table product_table">
@@ -39,7 +41,8 @@
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                <input type="checkbox" name="" id="customCheckbox2" class="" style="width:24px; height: 24px">
+                                <input type="checkbox" name="" id="customCheckbox2" class=""
+                                    style="width:24px; height: 24px">
                                 @php
                                     $tag1 = 'none';
                                     $tag2 = 'block';
@@ -67,6 +70,9 @@
                         <td class="option_txt text-left"><?php echo $model->getOptionsText(); ?></td>
                         <td>{{ number_format($model->price) }}円</td>
                         <td>
+                            <a href="{{ $adminHost }}/product-view/{{ $model->id }}" target="_blank">
+                                <img src="{{ url('public/img/ic_link.png') }}" alt='edit' style="width:28px" />
+                            </a>
                             <a href="{{ route('admin.userProduct.edit', ['id' => $model->id]) }}">
                                 <img src="{{ url('public/img/img_03/pen.png') }}" alt='edit' style="width:28px" />
                             </a>
@@ -153,7 +159,7 @@
                                 </div>
                             </div>
                             <div class="row m-0 mt-4" id="product_detail">商品説明</div>
-                            <div class="row m-0 mt-3" id="detail">デザインTシャツブラック</div>
+                            <div class="row m-0 mt-3" id="detail" style="white-space: pre-line;">デザインTシャツブラック</div>
                             <div class="row m-0 mt-3" id="product_info">商品詳細</div>
                             <div class="row m-0 mt-3 info">
                                 <div class="col-3 p-0">ブランド名</div>
@@ -407,6 +413,8 @@
             location.href = url;
         }
 
+        var csvData = {};
+
         $(document).on('click', '.csv-image', function() {
             var input = document.createElement('input');
             input.type = 'file';
@@ -421,6 +429,8 @@
                     encoding: encoding,
                     header: true,
                     complete: function(results) {
+
+                        csvData = results;
 
                         $('.csv-modal-header').html(`CSVアップロード(${encoding})`);
 
@@ -460,7 +470,15 @@
         });
 
         $(document).on('click', '#csv_upload', function() {
-            $('#modalCSV').modal('toggle');
+            console.log(csvData)
+            const _token = "{{ csrf_token() }}"
+            $.post("{{ route('admin.userProduct.csv') }}", {
+                _token: _token,
+                csv: csvData
+            }, function(data) {
+                location.href = "{{ route('admin.userProducts') }}";
+            })
+            // $('#modalCSV').modal('toggle');
         });
     </script>
 @endsection

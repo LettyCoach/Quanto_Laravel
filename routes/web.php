@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AppApiController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\frontendController;
 use App\Http\Controllers\LPController;
@@ -28,7 +29,13 @@ use Illuminate\Support\Facades\Route;
 */
 Auth::routes();
 
+
+
 Route::get('/test', [RandomController::class, 'index']);
+Route::get('/product-view/{id}', [AppApiController::class, 'productView']);
+
+
+
 Route::get('/', [SurveyController::class, 'index'])->name('admin.surveys');
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -103,6 +110,7 @@ Route::post('/admin/userProduct/save', [UserProductController::class, 'save'])->
 Route::get('/admin/userProduct/duplicate/{id}', [UserProductController::class, 'duplicate'])->name('admin.userProduct.duplicate');
 Route::get('/admin/userProduct/delete/{id}', [UserProductController::class, 'delete'])->name('admin.userProduct.delete');
 Route::get('/admin/userProduct/showNew/{id}', [UserProductController::class, 'showNew'])->name('admin.userProduct.showNew');
+Route::post('/admin/userProduct/csv', [UserProductController::class, 'uploadCSV'])->name('admin.userProduct.csv');
 
 //Invoice
 Route::get('/paper', [PaperController::class, 'index'])->name('paper');

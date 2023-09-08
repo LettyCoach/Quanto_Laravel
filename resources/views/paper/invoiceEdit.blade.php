@@ -81,12 +81,12 @@ if (isset(Auth::user()->settings)) {
                             <div class="image-show" for="image_show">画像表示</div>
                         </div>
                         <div class="set-div">
-                            <input type='number' value="{{ $edit_content->uName_font_size }}" id="uName_font_size" class="set-font-size">
+                            <input type='number' value="{{ $edit_content->uName_font_size ?? 10 }}" id="uName_font_size" class="set-font-size">
                             <div style="font-size: 11px;font-weight: bold;padding-top:2px;">会社名</div>
                             <div class="set-font-size-px">px</div>
                         </div>
                         <div class="set-div">
-                            <input type='number' value="{{ $edit_content->uTitle_font_size }}" id="uTitle_font_size" class="set-font-size">
+                            <input type='number' value="{{ $edit_content->uTitle_font_size ?? 10 }}" id="uTitle_font_size" class="set-font-size">
                             <div style="font-size: 11px;font-weight: bold;padding-top:2px;">タイトル</div>
                             <div class="set-font-size-px">px</div>
                         </div>
@@ -117,7 +117,7 @@ if (isset(Auth::user()->settings)) {
                             @foreach($productOptions as $key=>$productOption)
                                 <div class="fix-dropdown-item">        
                                     <div>
-                                        <input type="checkbox" class="image-check-box-small" id="varient_check_{{$key}}" name="" value="" {{ $edit_content->{ 'varient_check_'.$key } }}>
+                                        <input type="checkbox" class="image-check-box-small" id="varient_check_{{$key}}" name="" value="" {{ $edit_content->{ 'varient_check_'.$key } ?? '' }}>
                                         <label class="image-show-small" for="color_show">&nbsp;</label>    
                                     </div>
                                     <p>{{$productOption}}</p>
@@ -147,20 +147,20 @@ if (isset(Auth::user()->settings)) {
                 <div class="flex-between mb1">
                     <div class="pro33"></div>
                     <div class="pro33 flex-center text-center p2 text-center t6 b8"><input id="purpose_1" class="input10" value="ご請求書"></div>
-                    <div class="pro33 text-right t1 b2">発行日:<input id="cDate" class="input2 w125 text-right" value="{{$edit_content->cDate}}"> </div>
+                    <div class="pro33 text-right t1 b2">発行日:<input id="cDate" class="input2 w125 text-right" value="{{$edit_content->cDate ?? ''}}"> </div>
                 </div>
                 <div class="flex mb1">
                 <div class="pro60">
-                    <div id="uNameDiv" class="t4 uline-grey pb-1"><input id="uName" class="input9 text-center" value="{{Auth::user()->name}}"> 様</div>
-                    <div id="uMethodDiv" class="uline-grey pb5 text-left t2 ufit"> 支払方法：<input id="uMethod" class="input1 w200" value="{{ $payment_method}}"></div>
+                    <div id="uNameDiv" class="t4 uline-grey pb-1"><input id="uName" class="input9 text-center" value="{{$edit_content->uName ?? ''}}">様</div>
+                    <div id="uMethodDiv" class="uline-grey pb5 text-left t2 ufit"> 支払方法：<input id="uMethod" class="input1 w200" value="{{ $edit_content->uMethod ?? ''}}"></div>
                 </div>
                 <div class="flex-between p2">
                     <div class="p2">
                         <img id="profile" alt="profile" src="{{  Auth::user()->profile_url }}" style="border-style:solid; border-width:1px; height:50px; width:50px" />
                     </div>
                     <div class="t1-col">
-                        <input id="serial" class="input2 w200" value="請求書No,Q{{ Auth::user()->id + 1000 }}---------">
-                        <input id="company" class="input2 w200" value="{{ Auth::user()->full_name }}">
+                        <input id="serial" class="input2 w200" value="{{$edit_content->serial ?? ''}}">
+                        <input id="company" class="input2 w200" value="{{ $edit_content->company ?? '' }}">
                         <div id="invoice_num">{{ $invoice}}</div>
                     </div>
                 </div>
@@ -184,9 +184,9 @@ if (isset(Auth::user()->settings)) {
                     </div>
                     <div class="profile-sub-block flex p2">
                         <div>
-                        <input id="zipCode" class="input2 w200" value="〒{{ Auth::user()->zip_code }}">
-                        <input id="adress" class="input2 w200" value="{{ Auth::user()->address }}">
-                        <input id="phone" class="input2 w200" value="Tel：{{ Auth::user()->phone_number }}">
+                        <input id="zipCode" class="input2 w200" value="{{ $edit_content->zipCode ?? '' }}">
+                        <input id="adress" class="input2 w200" value="{{ $edit_content->adress ?? '' }}">
+                        <input id="phone" class="input2 w200" value="{{ $edit_content->phone ?? '' }}">
                         </div>
                     </div>
                     <div class="flex-center p3">
@@ -198,7 +198,7 @@ if (isset(Auth::user()->settings)) {
                 </div>
             </div>
             <div>
-                <div class="t1"> 有効期間 <input id="eDate" class="input2 w200" value="{{$edit_content->eDate}}"></div>
+                <div class="t1"> 有効期間 <input id="eDate" class="input2 w200" value="{{$edit_content->eDate ?? ''}}"></div>
                 <hr style="border-top:2px solid blue">
                 <p class="text-center t2">内容明細</p>
             </div>
@@ -238,26 +238,26 @@ if (isset(Auth::user()->settings)) {
                                                 </div>
                                                 <img src="{{ asset('public/img/ic_modal_close.png') }}" id="tooltip_close_{{ $i }}" class="tooltip-close"/>
                                                 <div class="tooltip-edit-div"><img src="{{ asset('public/img/edit_query_m.png') }}" id="tooltip_edit_{{ $i }}" class="tooltip-edit"/><p>編集</p></div>
-                                                <input class="td-ID-input" id="ID_{{ $i }}" value="{{ $edit_content->{'ID_'.$i} }}">
-                                                <input type="hidden" id="productNum_{{ $i }}" value="{{ $edit_content->{'productNum_' . $i} }}">
+                                                <input class="td-ID-input" id="ID_{{ $i }}" value="{{ $edit_content->{'ID_'.$i} ?? 0 }}">
+                                                <input type="hidden" id="productNum_{{ $i }}" value="{{ $edit_content->{'productNum_' . $i} ?? '' }}">
                                         </div>
                                     </td>
                                     <td class="td-a1"> &nbsp; 
                                             
                                             <div class="flex-center"><img alt="product" id="timg_{{ $i }}"
-                                                    src="{{ $edit_content->{'timg_'.$i} }}" onerror="this.onerror=null; this.onload=null; if (!this.attributes.src.value) this.attributes.src.value='{{ asset("public/img/blank-plus.png") }}';"
+                                                    src="{{ $edit_content->{'timg_'.$i} ?? '' }}" onerror="this.onerror=null; this.onload=null; if (!this.attributes.src.value) this.attributes.src.value='{{ asset("public/img/blank-plus.png") }}';"
                                                     class="td-a1-d2-img" />
                                             </div>             
-                                            <div class="td-a1-input open-modal" id="title_{{ $i }}">{{ $edit_content->{ 'title_'.$i } }}</div>
+                                            <div class="td-a1-input open-modal" id="title_{{ $i }}">{{ $edit_content->{ 'title_'.$i } ?? '' }}</div>
                                     </td>
                                     @foreach($productOptions as $key=>$productOption)
                                         <td class="td-plus td-plus-{{$key}}" {{ ($productOption == "カラー" || $productOption == "サイズ" || $productOption == "素材")?'' : 'style=display:none;' }}>
                                             <div class="td-subt-input td-input-{{$key}} open-modal" id="subt_{{$key}}_{{ $i }}">{{ isset($edit_content->{ "subt_".$key."_".$i })?$edit_content->{ "subt_".$key."_".$i } : "　" }}</div>
                                         </td>
                                     @endforeach
-                                    <td class="td-a2"><input class="td-a2-input" id="price_{{ $i }}" value="{{ $edit_content->{ 'price_'.$i } }}"><span>円</span></td>
-                                    <td class="td-a3"><input class="td-a3-input"   id="quantity_{{ $i }}" value="{{ $edit_content->{ 'quantity_'.$i } }}"></td>
-                                    <td class="td-a4"> <input class="td-a4-input"  id="current_price_{{ $i }}" value="{{ $edit_content->{ 'current_price_'.$i } }}">円</td>
+                                    <td class="td-a2"><input class="td-a2-input" id="price_{{ $i }}" value="{{ $edit_content->{ 'price_'.$i } ?? 0 }}"><span>円</span></td>
+                                    <td class="td-a3"><input class="td-a3-input"   id="quantity_{{ $i }}" value="{{ $edit_content->{ 'quantity_'.$i } ?? 0 }}"></td>
+                                    <td class="td-a4"> <input class="td-a4-input"  id="current_price_{{ $i }}" value="{{ $edit_content->{ 'current_price_'.$i } ?? 0 }}">円</td>
                                     <td class="td-a5 reduce-pro-td"> 
                                         <select name="pets" class="reduce-pro" id="reduce_pro_0">
                                             <option value="10">10%</option>
@@ -283,7 +283,7 @@ if (isset(Auth::user()->settings)) {
             </div>
         </div>
         <div style="position: relative;">
-            <textarea style="width:680px; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-left: 10px;margin-top:30px; font-size: 20px;" placeholder="(備考)" text="afaefafe" id="memo_text">{{ $edit_content->memo_text }}</textarea>
+            <textarea style="width:680px; height: 100px; border: 1px solid grey; padding: 5px; box-sizing: border-box; margin-left: 10px;margin-top:30px; font-size: 20px;" placeholder="(備考)" text="afaefafe" id="memo_text">{{ $edit_content->memo_text ?? '' }}</textarea>
             <div class="detail_price">
                 <div>
                     <p>10%対象&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input class="sinput"id="totalAmount10" value="0">円</p>
@@ -329,7 +329,7 @@ if (isset(Auth::user()->settings)) {
         </div>
         <?php $i=1; ?>
         <input type="hidden" id="hostUrl" value="{{ url('/') }}">
-        <input type="hidden" id="rowCount" value="{{ $edit_content->rowCount }}">
+        <input type="hidden" id="rowCount" value="{{ $edit_content->rowCount ?? 1 }}">
         <input type="hidden" id="ic_add" src="{{ asset('public/img/ic_add.png') }}">
         <input type="hidden" id="ic_del" src="{{ asset('public/img/ic_delete.png')}}">
         <input type="hidden" id="ic_edit" src="{{ asset('public/img/edit_query.png')}}">
@@ -367,7 +367,7 @@ if (isset(Auth::user()->settings)) {
                         </form>
                     </div>
                     <div class="mail-div">
-                        <textarea class="mail-textarea" id="mail_textarea" name="mail_textarea"></textarea>
+                        <textarea class="mail-textarea" id="mail_textarea" name="mail_textarea">お世話になっております。&#13;&#10;添付にて、インボイスをお送りさせていただきたくよろしくお願い致します。</textarea>
                     </div>
                     <div class="modal-footer justify-content-center" style="border-top: 0; padding: 10px;">
                         <button id="first_ok" class="btn btn-primary m-auto" onclick="mail_send_one()"
@@ -655,7 +655,7 @@ if (isset(Auth::user()->settings)) {
 <script src="{{asset('public/js/invoice.js')}}"></script>
 <script>
 // function reload_screen(){
-    count_option_checked = {{$edit_content->count_option_checked}};
+    count_option_checked = {{$edit_content->count_option_checked ?? 0}};
     console.log(count_option_checked);
 $(document).ready(function(){
     $('[id^="quantity_"]').each(function(){
