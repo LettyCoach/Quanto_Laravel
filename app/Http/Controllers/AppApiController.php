@@ -512,7 +512,17 @@ class AppApiController extends Controller
             'name' => 'invoice',
             'pdf_url' => $filePath,
         ]);
+    }
 
+    public function productView($id)
+    {
+        $model = UserProduct::find($id);
 
+        return view(
+            'admin/userProduct/productView',
+            compact(
+                'model',
+            )
+        );
     }
 }

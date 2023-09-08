@@ -3,6 +3,10 @@
     <link href="{{ asset('public/css/userProduct/index.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
 
+    @php
+        $adminHost = Config::get('constants.adminHost');
+    @endphp
+
     <div class=" row d-flex align-items-center">
         <div class="col">
             <a class="btn btn-primary" href="{{ route('admin.userProduct.create') }}">新規作成</a>
@@ -13,8 +17,6 @@
             <img src="{{ url('public/img/csv.png') }}" alt="CSV" id="SJIS" class="csv-image" title="SJIS">
             <img src="{{ url('public/img/csv.png') }}" alt="CSV" id="UTF-8" class="csv-image" title="UTF8">
         </div>
-
-
     </div>
     <div class="mt-2">
         <table class="table product_table">
@@ -68,7 +70,7 @@
                         <td class="option_txt text-left"><?php echo $model->getOptionsText(); ?></td>
                         <td>{{ number_format($model->price) }}円</td>
                         <td>
-                            <a href="{{ route('admin.userProduct.edit', ['id' => $model->id]) }}">
+                            <a href="{{ $adminHost }}/product-view/{{ $model->id }}" target="_blank">
                                 <img src="{{ url('public/img/ic_link.png') }}" alt='edit' style="width:28px" />
                             </a>
                             <a href="{{ route('admin.userProduct.edit', ['id' => $model->id]) }}">
@@ -157,7 +159,7 @@
                                 </div>
                             </div>
                             <div class="row m-0 mt-4" id="product_detail">商品説明</div>
-                            <div class="row m-0 mt-3" id="detail">デザインTシャツブラック</div>
+                            <div class="row m-0 mt-3" id="detail" style="white-space: pre-line;">デザインTシャツブラック</div>
                             <div class="row m-0 mt-3" id="product_info">商品詳細</div>
                             <div class="row m-0 mt-3 info">
                                 <div class="col-3 p-0">ブランド名</div>

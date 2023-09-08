@@ -3,9 +3,17 @@
 <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.8/tagify.css">
 <link href="{{ asset('public/css/userProduct/edit.css') }}" rel="stylesheet">
+    
+    @php
+        $adminHost = Config::get('constants.adminHost');
+    @endphp
 
 <div class="product_mana_pan">
-    <h2 class="product_add_title">{{ $caption }}</h2>
+    <div style="display: flex; align-items:center; padding:12px">
+        <h2 class="product_add_title" style="margin: 0">{{ $caption }}</h2>
+        <input type = "text" class = "form-control" value="{{$adminHost}}/product-view/{{ $model->id }}" style="width: 480px; margin-left:24px" readonly>
+    </div>
+    
     <form class="" id="userProduct" method="post" action="{{ route('admin.userProduct.save') }}" enctype="multipart/form-data" onsubmit="return checkData()">
         @csrf
 
@@ -870,11 +878,6 @@
 
     }
 
-
-
-
 </script>
-
-
 
 @endsection
