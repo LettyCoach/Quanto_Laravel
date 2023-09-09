@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Invoice Email</title>
+    <title>請求書送信のお知らせ</title>
 </head>
 <body>
-    <h1>Hello {{ $data['name'] }}</h1>
+    <h1>{{$clientName}}様</h1>
     <p>{{ $data['body'] }}</p>
+    <h5>{{$sendName}}</h5>
 </body>
 </html>

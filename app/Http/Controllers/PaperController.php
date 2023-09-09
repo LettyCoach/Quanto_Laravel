@@ -239,10 +239,16 @@ class PaperController extends Controller
 		//dd($request->mails_text);
 		$emails = explode("#", substr($request->mails_text,1));
 		$mail_body = $request->mail_textarea;
+		$sendName = Auth::user()->full_name;
 		foreach($emails as $to_email){
 			$to_name = 'Lettycoach';
+			$clients = User::where('email', $to_email)->get();
+			$clientName = "";
+			if (count($clients) > 0) {
+				$clientName = $clients[0]->full_name;
+			}
 			$data = array('name'=>$to_name, "body" => $mail_body);
-			Mail::to($to_email, $to_name)->send(new InvoiceMail($data));
+			Mail::to($to_email, $to_name)->send(new InvoiceMail($clientName, $sendName, $data));
 		}
 		return ;
 	}

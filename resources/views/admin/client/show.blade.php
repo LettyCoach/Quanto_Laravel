@@ -122,7 +122,7 @@
     $title = '';
     
     if (json_decode($client, true)['survey'] != null) {
-        $title = "json_decode($client, true)['survey']['title']";
+        $title = json_decode($client, true)['survey']['title'];
     }
     ?>
     <div id="sendMailForm" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -174,15 +174,15 @@
                                 }
                                 $content .=
                                     "</tbody>
-                                                                                                <thead>
-                                                                                                    <tr>
-                                                                                                        <th>小計</th>
-                                                                                                        <th>" .
-                                    $client->total .
-                                    "</th>
-                                                                                                    </tr>
-                                                                                                </thead>
-                                                                                                </table>\n";
+                                        <thead>
+                                            <tr>
+                                                <th>小計</th>
+                                                <th>" .
+                                                    $client->total .
+                                                "</th>
+                                            </tr>
+                                        </thead>
+                                        </table>\n";
                                 ?>
                                 <textarea type="text" rows="20" name="content">
                                      <?php echo htmlspecialchars($content); ?>
