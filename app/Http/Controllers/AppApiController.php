@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\FollowClient;
+use App\Models\Paper;
 use App\Models\SaveItem;
 use App\Models\Survey;
 use App\Models\UserProduct;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VerifyMail;
@@ -468,25 +470,124 @@ class AppApiController extends Controller
     public function makeInvoice(Request $request)
     {
 
-        $user_id = 2;
+        $datas = $request->json()->all();
+
+        $user_id = $datas["userId"];
         $survey_id = '9MRO7H6RZVNVaTjsqZ7b';
-        $date = "2022/03/08";
-        $expire = "2022/03/10";
-        $invoiceUserName = "user1"; //user name
+
+
+        $date = date("Y年n月j日");
+        $expire = date("Y年n月j日", strtotime(' +1 day'));
 
         $user = User::findOrFail($user_id);
+        $invoiceUserName = $user->name; //user name
         $survey = Survey::where('token', $survey_id)->first();
-        $date = date('Y年n月j日', strtotime($date));
-        $expire = date('Y年n月j日', strtotime($expire));
+        // $date = date('Y年n月j日', strtotime($date));
+        // $expire = date('Y年n月j日', strtotime($expire));
 
         $invoiceNumber = "Q1002-38-11";
 
-        $invoiceData = $request->json()->all();
+        $invoiceData = $datas["invoiceData"];
 
         $totalMoney = 0;
+        $totalCount = 0;
         foreach ($invoiceData as $item) {
             $totalMoney += $item['price'] * $item['amount'];
+            $totalCount += $item['amount'];
         }
+
+        $jsonInvoiceData = [];
+        $tModel = new UserProduct();
+        $allCategories = $tModel->getAllOptionNames($user->id);
+
+        $jsonInvoiceData["purpose_1"] = "ご請求書";
+        $jsonInvoiceData["cDate"] = $date;
+        $jsonInvoiceData["uName"] = "";
+        $jsonInvoiceData["profile"] = $user->profile_url;
+        $jsonInvoiceData["serial"] = "請求書No,Q" . ($user->id + 1000). "-----------";
+        $jsonInvoiceData["company"] = $user->full_name;
+        $jsonInvoiceData["display_total_price"] = $totalMoney;
+        $jsonInvoiceData["display_reduce"] = round($totalMoney * 0.1);
+        $jsonInvoiceData["zipCode"] = $user->zip_code;
+        $jsonInvoiceData["adress"] = $user->address;
+        $jsonInvoiceData["phone"] = $user->phone_number;
+        $jsonInvoiceData["stamp"] = json_decode($user->settings)->stamp_url ?? "";
+        $jsonInvoiceData["eDate"] = $expire;
+        
+        $adminHost = Config::get('constants.adminHost');
+        $jsonInvoiceData["row_0"] = "$adminHost/img/ic_add.png";
+        $jsonInvoiceData["link_0"] = "$adminHost/img/ic_link.png";
+        $jsonInvoiceData["del_0"] = "$adminHost/img/ic_delete.png";
+        $jsonInvoiceData["tooltip_edit_0"] = "$adminHost/img/edit_query_m.png";
+        $jsonInvoiceData["tooltip_close_0"] = "$adminHost/img/ic_modal_close.png";
+
+        foreach ($invoiceData as $key => $p) {
+            $pId = $p["id"];
+            $product = UserProduct::findOrFail($pId);
+            $jsonInvoiceData["ID_$key"] = $product->getProductID();
+            $jsonInvoiceData["productNum_$key"] = $product->id;
+            $jsonInvoiceData["timg_$key"] = "$adminHost/" . $product->getImageUrlFirst();
+            $jsonInvoiceData["title_$key"] = $product->name;
+            $crtOptions = $product->getOptions2($user->id);
+            foreach($allCategories as $k => $c) {
+                $jsonInvoiceData["subt_" . $k . "_$key"] = $crtOptions[$k] ?? "";
+            }
+
+
+            $jsonInvoiceData["price_$key"] = $p["price"];
+            $jsonInvoiceData["quantity_$key"] = $p["amount"];
+            $jsonInvoiceData["current_price_$key"] = $p["price"] * $p["amount"];
+            $jsonInvoiceData["reduce_pro_$key"] = 10;
+            $jsonInvoiceData["reduce_plus_$key"] = round($p["price"] * $p["amount"] * 0.1);
+        }
+
+        $jsonInvoiceData["total_count"] = $totalCount;
+        $jsonInvoiceData["total_price"] = $totalMoney;
+        $jsonInvoiceData["reduce_price"] = round($totalMoney * 0.1);
+        $jsonInvoiceData["memo_text"] = "";
+        $jsonInvoiceData["totalAmount10"] = $totalMoney;
+        $jsonInvoiceData["totalAmount10s"] = round($totalMoney * 0.1);
+        $jsonInvoiceData["totalAmount88"] = 0;
+        $jsonInvoiceData["totalAmount88s"] = 0;
+        $jsonInvoiceData["totalAmount8"] = 0;
+        $jsonInvoiceData["totalAmount8s"] = 0;
+
+        $jsonInvoiceData["img_upload_url_1"] = "$adminHost/public/img/blank-plus.png";
+        $jsonInvoiceData["item_productID"] = "Q00066088";
+        $jsonInvoiceData["item_price"] = "81,728";
+        $jsonInvoiceData["item_like"] = "NOLIKE";
+        $jsonInvoiceData["item_h_name"] = "";
+        $jsonInvoiceData["item_id"] = "88";
+        $jsonInvoiceData["item__44Kr44Op44O8"] = "";
+        $jsonInvoiceData["item__57Sg5p2Q"] = "";
+
+        $jsonInvoiceData["img_upload_img"] = "$adminHost/public/img/blank.png";
+        $jsonInvoiceData["img_upload_url"] = "blank.png";
+        $jsonInvoiceData["hostUrl"] = "https://quanto3.com";
+        $jsonInvoiceData["rowCount"] = count($invoiceData);
+        $jsonInvoiceData["ic_add"] = "$adminHost/public/img/ic_add.png";
+        $jsonInvoiceData["ic_del"] = "$adminHost/public/img/ic_delete.png";
+        $jsonInvoiceData["ic_edit"] = "$adminHost/public/img/edit_query.png";
+        $jsonInvoiceData["ic_blank"] = "$adminHost/public/img/blank-plus.png";
+        $jsonInvoiceData["ic_link"] = "$adminHost/public/img/ic_link.png";
+        $jsonInvoiceData["ic_check"] = "$adminHost/public/img/ic_check.png";
+        $jsonInvoiceData["ic_newblank"] = "$adminHost/public/img/blank.png";
+
+        $jsonInvoiceData["price"] = "0";
+        $jsonInvoiceData["count_product"] = "0";
+        $jsonInvoiceData["tag_1"] = "$adminHost/public/img/img_03/tag_off.png";
+        $jsonInvoiceData["tag_2"] = "$adminHost/public/img/img_03/tag_on.png";
+        $jsonInvoiceData["image_show"] = "checked";
+        $jsonInvoiceData["uName_font_size"] = "28";
+        $jsonInvoiceData["uTitle_font_size"] = "40";
+
+        $i = 0;
+        foreach($allCategories as $k => $c) {
+            $i ++;
+            $jsonInvoiceData["varient_check_$k"] = $i <= 3 ? "checked" : "";
+        }
+        $jsonInvoiceData["count_option_checked"] = "3";
+
 
         $invoicePDF = PDF::loadView(
             'invoicePDF',
@@ -502,6 +603,18 @@ class AppApiController extends Controller
             )
         );
 
+        $pModel = new Paper();
+        $pModel->user_id = $user->id;
+        $pModel->subject = "ご請求書";
+        $pModel->category = "invoice";
+        $pModel->content = json_encode($jsonInvoiceData);
+        $pModel->cDate = $date;
+        $pModel->eDate = $expire;
+        $pModel->total_price = $totalMoney;
+        $pModel->memo_text = "";
+        $pModel->send_name = "Admin";
+        $pModel->save();
+
         // return $invoicePDF->stream();
         $fileName = microtime(true) . ".pdf";
         $filePath = url("/uploads/products") . '/' . $fileName;
@@ -512,7 +625,11 @@ class AppApiController extends Controller
             'name' => 'invoice',
             'pdf_url' => $filePath,
         ]);
+
+        
+
     }
+
 
     public function productView($id)
     {

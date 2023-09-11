@@ -269,9 +269,9 @@ class UserProduct extends Model
         return $tmp;
     }
 
-    public function getOptions2()
+    public function getOptions2($user_id = null)
     {
-        $tmp = $this->getOptions();
+        $tmp = $this->getOptions($user_id);
         $rlt = [];
         foreach ($tmp as $k => $e) {
             $key = self::convert2encode($k);
